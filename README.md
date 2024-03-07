@@ -1,3 +1,4 @@
 ## Velkommen 
-## Sunniva was here - med riktig brukernavn?
+## Sunniva was here
 ## Hilde was here!
+## riktig nå da?
