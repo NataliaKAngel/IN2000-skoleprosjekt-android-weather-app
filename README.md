@@ -1,6 +1,3 @@
 ## Velkommen 
-## Sunniva was here
-## Andre forsok
+## Sunniva was here!
 ## Hilde was here!
-## Siste forsok
-## Aller siste forsok
