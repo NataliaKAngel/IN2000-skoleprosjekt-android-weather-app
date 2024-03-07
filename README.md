@@ -1,2 +1,4 @@
 ## Velkommen 
-## Sunniva was her!!!
+## Sunniva was here
+## Andre forsok
+## Hilde was here!
