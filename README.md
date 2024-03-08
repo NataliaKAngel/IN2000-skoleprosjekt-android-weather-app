@@ -1,6 +1,6 @@
 ## Velkommen 
 # INGRID!!!!
-## Sunniva var her... igjen...
+## Sunniva var her...
 
 
 
