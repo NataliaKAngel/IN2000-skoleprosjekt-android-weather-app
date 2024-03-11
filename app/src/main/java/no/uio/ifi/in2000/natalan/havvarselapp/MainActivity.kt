@@ -8,9 +8,15 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.theme.HavvarselAppTheme
+import io.ktor.client.*
+import io.ktor.client.engine.cio.*
+import io.ktor.client.request.*
+import io.ktor.client.statement.*
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,11 +29,30 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     Greeting("Android")
+
+                    // Launch a coroutine to execute internetCheck
+                    LaunchedEffect(Unit) {
+                        try {
+                            internetCheck()
+                            println("Internet is available")
+                        } catch (e: Exception) {
+                            println("No internet connection")
+                        }
+                    }
+
                 }
             }
         }
     }
 }
+
+suspend fun internetCheck() {
+    val client = HttpClient(CIO)
+    val response: HttpResponse = client.get("https://ktor.io/")
+    println(response.status)
+    client.close()
+}
+
 
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
