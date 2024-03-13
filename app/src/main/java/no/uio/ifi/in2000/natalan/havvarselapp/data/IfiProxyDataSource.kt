@@ -1,18 +1,12 @@
 package no.uio.ifi.in2000.natalan.havvarselapp.data
 
 import io.ktor.client.HttpClient
-import io.ktor.client.engine.cio.CIO
-import io.ktor.client.*
-import io.ktor.client.engine.cio.*
-import io.ktor.client.plugins.contentnegotiation.*
-import io.ktor.serialization.kotlinx.json.*
-import io.ktor.client.call.*
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.request.*
 import io.ktor.client.statement.HttpResponse
 import io.ktor.util.appendIfNameAbsent
 
-class MetAlertsDataSource {
+class IfiProxyDataSource {
 
     private val client = HttpClient() {
         defaultRequest {
@@ -21,7 +15,7 @@ class MetAlertsDataSource {
         }
     }
 
-    suspend fun fetchMetAlerts(): HttpResponse {
+    suspend fun fetchIfiProxy(): HttpResponse {
         val partiesUrl = "weatherapi/"
         val results = client.get(partiesUrl)
         return results

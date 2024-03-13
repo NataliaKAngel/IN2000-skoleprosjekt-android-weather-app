@@ -16,13 +16,13 @@ import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
-import no.uio.ifi.in2000.natalan.havvarselapp.data.MetAlertsDataSource
-import no.uio.ifi.in2000.natalan.havvarselapp.data.MetAlertsRepository
+import no.uio.ifi.in2000.natalan.havvarselapp.data.IfiProxyDataSource
+import no.uio.ifi.in2000.natalan.havvarselapp.data.IfiProxyRepository
 
 
 class MainActivity : ComponentActivity() {
 
-    private val metAlertsRepository = MetAlertsRepository(MetAlertsDataSource()) // Testing MetAlerts
+    private val ifiProxyRepository = IfiProxyRepository(IfiProxyDataSource()) // Testing MetAlerts
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -47,7 +47,7 @@ class MainActivity : ComponentActivity() {
                     // Call getMetAlerts function inside a coroutine scope
                     LaunchedEffect(Unit) {
                         try {
-                            val response = metAlertsRepository.getMetAlerts()
+                            val response = ifiProxyRepository.getIfiProxy()
                             println("Met alerts response status: ${response.status}")
                         } catch (e: Exception) {
                             println("Error fetching met alerts: ${e.message}")
