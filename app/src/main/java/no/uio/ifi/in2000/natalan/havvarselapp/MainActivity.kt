@@ -16,9 +16,13 @@ import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
+import no.uio.ifi.in2000.natalan.havvarselapp.data.MetAlertsDataSource
+import no.uio.ifi.in2000.natalan.havvarselapp.data.MetAlertsRepository
 
 
 class MainActivity : ComponentActivity() {
+
+    private val metAlertsRepository = MetAlertsRepository(MetAlertsDataSource()) // Testing MetAlerts
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -37,6 +41,16 @@ class MainActivity : ComponentActivity() {
                             println("Internet is available")
                         } catch (e: Exception) {
                             println("No internet connection")
+                        }
+                    }
+
+                    // Call getMetAlerts function inside a coroutine scope
+                    LaunchedEffect(Unit) {
+                        try {
+                            val response = metAlertsRepository.getMetAlerts()
+                            println("Met alerts response status: ${response.status}")
+                        } catch (e: Exception) {
+                            println("Error fetching met alerts: ${e.message}")
                         }
                     }
 
