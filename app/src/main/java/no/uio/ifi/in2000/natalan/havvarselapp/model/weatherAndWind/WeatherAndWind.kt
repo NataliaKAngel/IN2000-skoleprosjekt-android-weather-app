@@ -1,4 +1,4 @@
-package no.uio.ifi.in2000.natalan.havvarselapp.model.metAlerts
+package no.uio.ifi.in2000.natalan.havvarselapp.model.weatherAndWind
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Text
