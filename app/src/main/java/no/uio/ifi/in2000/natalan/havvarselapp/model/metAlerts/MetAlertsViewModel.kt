@@ -9,11 +9,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
+
 public class MetAlertsViewModel : ViewModel() {
     @Composable
-    fun HomeScreen(){
+    fun MetAlertsScreen(){
         Column {
-            Text("Her kommer API informasjon")
+            Text("Her kommer MetAlerts API informasjon")
             Button(
                 onClick = {  },
                 modifier = Modifier.padding(top = 16.dp)
@@ -25,7 +26,9 @@ public class MetAlertsViewModel : ViewModel() {
 
     @Preview
     @Composable
-    fun PreviewHomeScreen(){
-        HomeScreen()
+    fun PreviewMetAlertsScreen(){
+        MetAlertsScreen()
     }
+
 }
+

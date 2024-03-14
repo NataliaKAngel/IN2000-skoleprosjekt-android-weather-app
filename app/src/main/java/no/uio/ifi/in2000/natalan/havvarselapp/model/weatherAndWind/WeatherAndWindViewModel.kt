@@ -12,9 +12,9 @@ import androidx.lifecycle.ViewModel
 
 class WeatherAndWindViewModel : ViewModel() {
     @Composable
-    fun HomeScreen(){
+    fun WeatherAndWindScreen(){
         Column {
-            Text("Her kommer API informasjon")
+            Text("Her kommer  WeatherAndWind API informasjon")
             Button(
                 onClick = {  },
                 modifier = Modifier.padding(top = 16.dp)
@@ -26,8 +26,8 @@ class WeatherAndWindViewModel : ViewModel() {
 
     @Preview
     @Composable
-    fun PreviewHomeScreen(){
-       HomeScreen()
+    fun PreviewWeatherAndWindScreen(){
+        WeatherAndWindScreen()
     }
 }
 
