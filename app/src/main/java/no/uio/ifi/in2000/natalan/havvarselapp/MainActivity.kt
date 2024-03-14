@@ -3,6 +3,7 @@ package no.uio.ifi.in2000.natalan.havvarselapp
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -11,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.theme.HavvarselAppTheme
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
@@ -18,9 +20,19 @@ import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import no.uio.ifi.in2000.natalan.havvarselapp.data.IfiProxyDataSource
 import no.uio.ifi.in2000.natalan.havvarselapp.data.IfiProxyRepository
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import no.uio.ifi.in2000.natalan.havvarselapp.model.metAlerts.MetAlertsScreen
+import no.uio.ifi.in2000.natalan.havvarselapp.model.metAlerts.MetAlertsViewModel
+import no.uio.ifi.in2000.natalan.havvarselapp.model.weatherAndWind.WeatherAndWindScreen
+import no.uio.ifi.in2000.natalan.havvarselapp.model.weatherAndWind.WeatherAndWindViewModel
 
 
 class MainActivity : ComponentActivity() {
+
+    private val metAlertsViewModel by viewModels<MetAlertsViewModel>()
+    private val weatherAndWindViewModel by viewModels<WeatherAndWindViewModel>()
 
     private val ifiProxyRepository = IfiProxyRepository(IfiProxyDataSource()) // Testing MetAlerts
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,7 +44,6 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Greeting("Android")
 
                     // Launch a coroutine to execute internetCheck
                     LaunchedEffect(Unit) {
@@ -54,6 +65,8 @@ class MainActivity : ComponentActivity() {
                         }
                     }
 
+                    HavvarselApp(metAlertsViewModel, weatherAndWindViewModel)
+
                 }
             }
         }
@@ -67,19 +80,14 @@ suspend fun internetCheck() {
     client.close()
 }
 
-
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    HavvarselAppTheme {
-        Greeting("Android")
+fun HavvarselApp(
+    metAlertsViewModel: MetAlertsViewModel = viewModel(),
+    weatherAndWindViewModel: WeatherAndWindViewModel = viewModel()
+) {
+    val navController = rememberNavController()
+    NavHost(navController = navController, startDestination = "metAlerts") {
+        composable("metAlerts") { MetAlertsScreen(navController) }
+        composable("weatherAndWind") { WeatherAndWindScreen(navController) }
     }
 }

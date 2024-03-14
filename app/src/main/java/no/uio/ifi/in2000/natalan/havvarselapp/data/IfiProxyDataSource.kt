@@ -11,7 +11,7 @@ class IfiProxyDataSource {
     private val client = HttpClient() {
         defaultRequest {
             url("https://gw-uio.intark.uh-it.no/in2000/")
-            headers.appendIfNameAbsent("X-Gravitee-API-Key", "b4e9a8e7-469d-499e-822a-7df85483df8c")
+            headers.appendIfNameAbsent("X-Gravitee-API-Key", "ab4e9a8e7-469d-499e-822a-7df85483df8c")
         }
     }
 
