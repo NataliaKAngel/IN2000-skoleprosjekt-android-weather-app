@@ -65,6 +65,17 @@ class MainActivity : ComponentActivity() {
                         }
                     }
 
+                    LaunchedEffect(Unit) {
+                        try {
+
+                            val allVariables = ifiProxyRepository.getAllVariables()
+                            println("All Variables: $allVariables")
+
+                        } catch (e: Exception) {
+                            println("Error fetching data: ${e.message}")
+                        }
+                    }
+
                     HavvarselApp(metAlertsViewModel, weatherAndWindViewModel)
 
                 }
