@@ -77,4 +77,8 @@ dependencies {
     implementation("io.ktor:ktor-client-content-negotiation:$ktor_version")
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
+
+    implementation("androidx.navigation:navigation-compose:2.7.6")
+
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.12.5")
 }
