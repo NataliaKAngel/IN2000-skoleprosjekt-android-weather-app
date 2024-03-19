@@ -31,7 +31,7 @@ fun MetAlertsScreen(
         Text("Her kommer MetAlerts API informasjon")
         Button(
             onClick = {
-                navController.navigate("weatherAndWind")
+                navController.navigate("locationForcast")
             },
             modifier = Modifier.padding(top = 16.dp)
         ) {

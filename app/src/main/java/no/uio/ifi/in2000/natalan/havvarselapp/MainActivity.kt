@@ -6,11 +6,9 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.theme.HavvarselAppTheme
 import io.ktor.client.*
@@ -74,11 +72,11 @@ suspend fun internetCheck() {
 @Composable
 fun HavvarselApp(
     metAlertsViewModel: MetAlertsViewModel = viewModel(),
-    weatherAndWindViewModel: LocationForestViewModel = viewModel()
+    locationForcastViewModel: LocationForestViewModel = viewModel()
 ) {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = "metAlerts") {
         composable("metAlerts") { MetAlertsScreen(navController) }
-        composable("weatherAndWind") { LocationForestScreen(navController) }
+        composable("locationForcast") { LocationForestScreen(navController) }
     }
 }

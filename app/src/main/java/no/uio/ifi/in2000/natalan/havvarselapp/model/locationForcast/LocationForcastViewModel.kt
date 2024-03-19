@@ -1,22 +1,18 @@
 package no.uio.ifi.in2000.natalan.havvarselapp.model.locationForcast
 
-import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import no.uio.ifi.in2000.natalan.havvarselapp.data.locationForcast.LocationForecastDataSource
-import no.uio.ifi.in2000.natalan.havvarselapp.data.locationForcast.LocationForecastRepository
-import no.uio.ifi.in2000.natalan.havvarselapp.model.metAlerts.MetAlertsViewModel
+
 class LocationForestViewModel : ViewModel() {
     // Example LiveData for Weather and Wind
     private val _weatherAndWindLiveData = MutableLiveData<String>()
