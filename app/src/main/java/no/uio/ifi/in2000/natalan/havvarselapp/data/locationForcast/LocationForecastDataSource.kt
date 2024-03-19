@@ -27,7 +27,7 @@ class LocationForecastDataSource {
         }
     }
 
-    suspend fun getLocationForecast(latitude: String, longitude: String? = null, altitude: String?): WeatherResponse? {
+    /*suspend fun getLocationForecast(latitude: String?, longitude: String?, altitude: String? = null): WeatherResponse? {
         var coordinates = "lat=$latitude&lon=$longitude"
         if (altitude != null) {
             coordinates += "&altitude=$altitude"
@@ -40,54 +40,23 @@ class LocationForecastDataSource {
             println("Error during HTTP request for locationforecast: $e")
             null
         }
-    }
+    }*/
 
+    suspend fun getLocationForecast(latitude: String?, longitude: String?, altitude: String? = null): WeatherResponse? {
+        var coordinates = "lat=$latitude&lon=$longitude"
+        if (altitude != null) {
+            coordinates += "&altitude=$altitude"
+        }
+        Log.d("LocationForecastDataSource", "Requesting weather data for coordinates: $coordinates")
+
+        return try {
+            val response = client.get("https://api.met.no/weatherapi/locationforecast/2.0/complete?$coordinates")
+            val weatherResponse = response.body<WeatherResponse>()
+            Log.d("LocationForecastDataSource", "Weather response: $weatherResponse")
+            weatherResponse
+        } catch (e: Exception) {
+            Log.e("LocationForecastDataSource", "Error during HTTP request for locationforecast", e)
+            null
+        }
+    }
 }
-
-// Hvis details er ment å være en liste, bør koden se ut noe slik:
-
-/*suspend fun main() {
-    val lfds = LocationForecastDataSource()
-    val liste = lfds.getLocationForecast("68.18", "18", null)
-    println(liste?.type)
-
-    liste?.properties?.timeseries?.get(0)?.data?.instant?.details?.forEach { details ->
-        println("Details: $details")
-    }
-}*/
-
-// Hvis details ikke er en liste, men heller et enkelt objekt, kan du endre koden slik:
-/*suspend fun main() {
-    val lfds = LocationForecastDataSource()
-    val liste = lfds.getLocationForecast("68.18", "18", null)
-    println(liste?.type)
-
-    val details = liste?.properties?.timeseries?.get(0)?.data?.instant?.details
-    if (details != null) {
-        println("Details: $details")
-    }
-}*/
-
-/*suspend fun main(){
-    val lfds = LocationForecastDataSource()
-    val liste = lfds.getLocationForecast("68.18","18", null)
-    println(liste?.type)
-
-    liste?.properties?.timeseries?.get(0)?.data?.instant?.details?.forEach{
-        println(it.key)
-        println(it.value)
-    }
-}*/
-
-
-/*suspend fun main() {
-    val lfds = LocationForecastDataSource()
-    val liste = lfds.getLocationForecast("68.18", "18", null)
-    println(liste?.type)
-
-    liste?.properties?.timeseries?.get(0)?.data?.instant?.details?.forEach { (key, value) ->
-        println("$key: $value")
-    }
-}*/
-
-

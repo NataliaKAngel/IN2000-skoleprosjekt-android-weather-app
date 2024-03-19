@@ -1,4 +1,5 @@
 
+
 package no.uio.ifi.in2000.natalan.havvarselapp.data.locationForcast
 
 
@@ -6,6 +7,68 @@ import kotlinx.serialization.Serializable
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
+@Serializable
+data class WeatherResponse(
+    val type: String? = null,
+    val geometry: Geometry? = null,
+    val properties: Properties? = null,
+    val windSpeed: Double? = null,
+    val windDirection: Double? = null
+)
+
+@Serializable
+data class Geometry(
+    val type: String,
+    val coordinates: List<Double>
+)
+
+@Serializable
+data class Properties(
+    val meta: Meta,
+    val timeseries: List<TimeSeries>
+)
+
+@Serializable
+data class Meta(
+    val updatedAt: String? = null,
+    val units: Map<String?, String?>
+)
+
+@Serializable
+data class TimeSeries(
+    val time: String,
+    val data: Data
+)
+
+@Serializable
+data class Data(
+    val instant: Instant
+)
+
+@Serializable
+data class Instant(
+    val details: Map<String?, Double>
+)
+
+@Serializable
+data class Next12HoursData(
+    val summary: Map<String?, String?>?,
+    val details: Map<String?, Double?>?
+)
+
+@Serializable
+data class NextHourData(
+    val summary: Map<String?, String?>,
+    val details: Map<String, Double>
+)
+
+@Serializable
+data class Next6HoursData(
+    val summary: Map<String?, String?>,
+    val details: Map<String, Double>
+)
+
+/*
 @Serializable
 data class WeatherResponse(
     val type: String,
@@ -215,4 +278,4 @@ data class Details4(
     val precipitationAmountMin: Double,
     @JsonProperty("probability_of_precipitation")
     val probabilityOfPrecipitation: Double,
-)
+)*/

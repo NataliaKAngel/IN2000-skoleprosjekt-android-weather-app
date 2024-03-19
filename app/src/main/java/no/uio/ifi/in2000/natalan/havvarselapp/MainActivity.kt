@@ -1,13 +1,12 @@
+
 package no.uio.ifi.in2000.natalan.havvarselapp
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.theme.HavvarselAppTheme
@@ -15,16 +14,37 @@ import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
-import no.uio.ifi.in2000.natalan.havvarselapp.data.IfiProxyDataSource
-import no.uio.ifi.in2000.natalan.havvarselapp.data.IfiProxyRepository
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import no.uio.ifi.in2000.natalan.havvarselapp.model.locationForcast.LocationForestScreen
-import no.uio.ifi.in2000.natalan.havvarselapp.model.locationForcast.LocationForestViewModel
-import no.uio.ifi.in2000.natalan.havvarselapp.model.metAlerts.MetAlertsScreen
-import no.uio.ifi.in2000.natalan.havvarselapp.model.metAlerts.MetAlertsViewModel
+import no.uio.ifi.in2000.natalan.havvarselapp.ui.locationForecast.LocationForestViewModel
+import no.uio.ifi.in2000.natalan.havvarselapp.ui.locationForecast.HomeScreen
 
+class MainActivity : ComponentActivity() {
+    @SuppressLint("UnrememberedMutableState")
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            HavvarselAppTheme {
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    val homeScreen = HomeScreen()
+                    val locationForestViewModel : LocationForestViewModel = viewModel()
+                    val navController = rememberNavController()
+                    NavHost(navController = navController, startDestination = "HomeScreen") {
+                        // Navigere til de ulike
+                        composable("HomeScreen") {homeScreen.HomeScreen(navController = navController, locationForestViewModel = locationForestViewModel)}
+
+                    }
+                }
+            }
+        }
+    }
+}
+
+/*
 class MainActivity : ComponentActivity() {
     private val metAlertsViewModel by viewModels<MetAlertsViewModel>()
     private val weatherAndWindViewModel by viewModels<LocationForestViewModel>()
@@ -72,11 +92,11 @@ suspend fun internetCheck() {
 @Composable
 fun HavvarselApp(
     metAlertsViewModel: MetAlertsViewModel = viewModel(),
-    locationForcastViewModel: LocationForestViewModel = viewModel()
+    weatherAndWindViewModel: LocationForestViewModel = viewModel()
 ) {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = "metAlerts") {
         composable("metAlerts") { MetAlertsScreen(navController) }
-        composable("locationForcast") { LocationForestScreen(navController) }
+        composable("weatherAndWind") { LocationForestScreen(navController) }
     }
-}
+}*/
