@@ -3,6 +3,7 @@ val ktor_version: String by project
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    kotlin("plugin.serialization") version "1.9.22"
 }
 
 android {
@@ -81,4 +82,6 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.7.6")
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.12.5")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.8")
 }
