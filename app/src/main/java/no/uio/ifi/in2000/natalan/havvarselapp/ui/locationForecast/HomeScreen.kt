@@ -48,7 +48,8 @@ class HomeScreen {
             }
         }
         Column(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize()
+                .padding(16.dp),
             verticalArrangement = Arrangement.Bottom,
             horizontalAlignment = Alignment.CenterHorizontally
         ){
@@ -81,6 +82,7 @@ class HomeScreen {
                 Column(
                     modifier = Modifier.padding(8.dp),
                     verticalArrangement = Arrangement.spacedBy(4.dp)
+
                 ) {
                     Text(text = "Coordinates: $coordinates")
                     val hPa = meta.units["air_pressure_at_sea_level"]
