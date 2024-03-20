@@ -1,5 +1,4 @@
 package no.uio.ifi.in2000.natalan.havvarselapp.model.metAlerts;
-
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
@@ -13,21 +12,17 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-
 class MetAlertsViewModel : ViewModel() {
     // You can have LiveData or State variables here to hold data for your UI
-
-    // Example LiveData
+// Example LiveData
     private val _metAlertsLiveData = MutableLiveData<String>()
     val metAlertsLiveData: LiveData<String> = _metAlertsLiveData
-
     // Example function to fetch MetAlerts data
     fun fetchMetAlertsData() {
-        // Fetch data here and update the LiveData
+// Fetch data here and update the LiveData
         _metAlertsLiveData.value = "MetAlerts data fetched successfully"
     }
 }
-
 @Composable
 fun MetAlertsScreen(
     navController: NavController = rememberNavController()
