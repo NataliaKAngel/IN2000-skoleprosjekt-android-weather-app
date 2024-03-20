@@ -66,6 +66,14 @@ class WarningScreen {
                 properties = selectedAreaProperties.value,
                 modifier = Modifier.fillMaxWidth()
             )
+            Button(
+                onClick = {
+                    navController.navigate("HomeScreen")
+                },
+                modifier = Modifier.padding(top = 16.dp)
+            ) {
+                Text("Knapp til neste skjerm")
+            }
         }
     }
 

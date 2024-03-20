@@ -44,7 +44,18 @@ class HomeScreen {
             UIStateLocation.lfDataMap.forEach { (coordinates, weatherResponse) ->
                 CoordinateBox(coordinates = coordinates, weatherResponse = weatherResponse)
             }
+
+            Button(
+                onClick = {
+                    navController.navigate("WarningScreen")
+                },
+                modifier = Modifier.padding(top = 16.dp)
+            ) {
+                Text("Knapp til neste skjerm")
+            }
         }
+
+
     }
 
     @Composable
