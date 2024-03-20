@@ -8,7 +8,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -44,6 +46,25 @@ class HomeScreen {
             UIStateLocation.lfDataMap.forEach { (coordinates, weatherResponse) ->
                 CoordinateBox(coordinates = coordinates, weatherResponse = weatherResponse)
             }
+        }
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Bottom,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ){
+
+            Row {
+                Button(
+                    onClick = { navController.navigate("WarningScreen")},
+                    modifier = Modifier
+                        .weight(1f),
+                    shape = MaterialTheme.shapes.medium.copy(CornerSize(0.dp))
+                ) {
+                    Text("til neste skjerm")
+                }
+            }
+
+
         }
     }
 
