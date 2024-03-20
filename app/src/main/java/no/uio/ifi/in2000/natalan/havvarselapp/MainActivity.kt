@@ -17,6 +17,7 @@ import io.ktor.client.statement.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import no.uio.ifi.in2000.natalan.havvarselapp.model.metAlerts.MetAlertsScreen
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.locationForecast.LocationForestViewModel
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.locationForecast.HomeScreen
 
@@ -36,7 +37,7 @@ class MainActivity : ComponentActivity() {
                     NavHost(navController = navController, startDestination = "HomeScreen") {
                         // Navigere til de ulike
                         composable("HomeScreen") {homeScreen.HomeScreen(navController = navController, locationForestViewModel = locationForestViewModel)}
-
+                        composable("metAlerts") { MetAlertsScreen(navController) }
                     }
                 }
             }
