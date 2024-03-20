@@ -3,10 +3,13 @@ package no.uio.ifi.in2000.natalan.havvarselapp.ui.metAlerts
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -66,6 +69,26 @@ class WarningScreen {
                 properties = selectedAreaProperties.value,
                 modifier = Modifier.fillMaxWidth()
             )
+
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Bottom,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ){
+
+                Row {
+                    Button(
+                        onClick = { navController.navigate("HomeScreen")},
+                        modifier = Modifier
+                            .weight(1f),
+                        shape = MaterialTheme.shapes.medium.copy(CornerSize(0.dp))
+                    ) {
+                        Text("til neste skjerm")
+                    }
+                }
+
+
+            }
         }
     }
 
