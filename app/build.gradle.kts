@@ -3,7 +3,7 @@ val ktor_version: String by project
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    kotlin("plugin.serialization") version "1.9.22"
+    kotlin("plugin.serialization") version "1.9.0"
 }
 
 android {
