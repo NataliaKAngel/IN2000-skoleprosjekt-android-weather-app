@@ -17,9 +17,10 @@ import io.ktor.client.statement.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import no.uio.ifi.in2000.natalan.havvarselapp.model.metAlerts.MetAlertsScreen
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.locationForecast.LocationForestViewModel
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.locationForecast.HomeScreen
+import no.uio.ifi.in2000.natalan.havvarselapp.ui.metAlerts.WarningScreen
+import no.uio.ifi.in2000.natalan.havvarselapp.ui.metAlerts.MetAlertViewModel
 
 class MainActivity : ComponentActivity() {
     @SuppressLint("UnrememberedMutableState")
@@ -33,11 +34,13 @@ class MainActivity : ComponentActivity() {
                 ) {
                     val homeScreen = HomeScreen()
                     val locationForestViewModel : LocationForestViewModel = viewModel()
+                    val warningScreen = WarningScreen()
+                    val metAlertViewModel : MetAlertViewModel = viewModel()
                     val navController = rememberNavController()
-                    NavHost(navController = navController, startDestination = "HomeScreen") {
+                    NavHost(navController = navController, startDestination = "WarningScreen") {
                         // Navigere til de ulike
                         composable("HomeScreen") {homeScreen.HomeScreen(navController = navController, locationForestViewModel = locationForestViewModel)}
-                        composable("metAlerts") { MetAlertsScreen(navController) }
+                        composable("WarningScreen") { warningScreen.WarningScreen(navController = navController, metAlertViewModel = metAlertViewModel) }
                     }
                 }
             }

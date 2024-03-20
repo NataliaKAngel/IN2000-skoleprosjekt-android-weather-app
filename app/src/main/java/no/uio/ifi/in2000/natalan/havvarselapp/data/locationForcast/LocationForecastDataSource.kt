@@ -60,3 +60,12 @@ class LocationForecastDataSource {
         }
     }
 }
+
+/*
+suspend fun main(){
+    val a = LocationForecastDataSource()
+    val b = a.getLocationForecast("60.1", "9.58")
+    if(b != null){
+        println(b.type)
+    }
+}*/
