@@ -20,4 +20,29 @@ class LocationForecastRepository (
 
     // Different methods to transform the data from a WeatherResponse.
     // Extract the wind direction etc.
+
+    //TODO: Method that returns WeatherResponse.properties.meta.units
+    fun getWeatherResponseUnit(): Map<String?, String?>{
+        return emptyMap()
+    }
+
+    //TODO: Method that returns WeatherResponse.properties.timeseries.data.instand.details
+    fun getWeatherResponseWindSpeed(): Map<String?, Double>{
+        return emptyMap()
+    }
+
+    //TODO: Method that returns WeatherResponse.properties.timeseries.data.instand.details
+    fun getWeatherResponseAirTemperature(): Map<String?, Double>{
+        return emptyMap()
+    }
+
+    //TODO: Method that returns WeatherResponse.properties.timeseries.data.instand.details
+    fun getWeatherResponseAirPressure(): Map<String?, Double>{
+        return emptyMap()
+    }
+
+    //TODO: Method that returns WeatherResponse.properties.timeseries.data.instand.details
+    fun getWeatherResponseWindDirection(): Map<String?, Double>{
+        return emptyMap()
+    }
 }

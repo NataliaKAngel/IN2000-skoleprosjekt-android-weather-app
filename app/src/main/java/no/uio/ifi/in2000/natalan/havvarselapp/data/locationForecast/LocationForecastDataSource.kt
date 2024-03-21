@@ -13,14 +13,19 @@ import kotlinx.serialization.json.Json
 import no.uio.ifi.in2000.natalan.havvarselapp.model.locationForecast.WeatherResponse
 
 class LocationForecastDataSource {
+    // Variables holds information for API connection
+    private val proxyKey = "ab4e9a8e7-469d-499e-822a-7df85483df8c"
+    private val endpoint = "https://gw-uio.intark.uh-it.no/in2000/"
+    private val apiKey = "X-Gravitee-API-Key"
 
     // Connect to IFI Proxy
     private val client = HttpClient(CIO){
         defaultRequest {
-            url("https://gw-uio.intark.uh-it.no/in2000/")
-            header("X-Gravitee-API-Key", "ab4e9a8e7-469d-499e-822a-7df85483df8c")
+            url(endpoint)
+            header(apiKey, proxyKey)
         }
 
+        //TODO: gson or json
         // Set up for handling JSON data and configuring the JSON serializer/deserializer
         install(ContentNegotiation) {
             json(Json {
