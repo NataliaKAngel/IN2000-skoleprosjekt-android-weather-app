@@ -1,6 +1,7 @@
 package no.uio.ifi.in2000.natalan.havvarselapp.data.metAlerts
 
-import no.uio.ifi.in2000.natalan.havvarselapp.data.metAlerts.Properties
+import no.uio.ifi.in2000.natalan.havvarselapp.model.metAlerts.MetAlertDataClass
+import no.uio.ifi.in2000.natalan.havvarselapp.model.metAlerts.Properties
 
 
 class MetAlertRepository {

@@ -24,10 +24,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import no.uio.ifi.in2000.natalan.havvarselapp.data.metAlerts.Feature
-import no.uio.ifi.in2000.natalan.havvarselapp.data.metAlerts.Properties
+import no.uio.ifi.in2000.natalan.havvarselapp.model.metAlerts.Properties
 
-class WarningScreen {
+class MetAlertsScreen {
     @SuppressLint("NotConstructor")
     @Composable
     fun WarningScreen(

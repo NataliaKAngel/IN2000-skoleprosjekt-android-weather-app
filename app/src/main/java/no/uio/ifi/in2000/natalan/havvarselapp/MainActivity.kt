@@ -17,9 +17,11 @@ import io.ktor.client.statement.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import no.uio.ifi.in2000.natalan.havvarselapp.ui.locationForecast.LocationForestViewModel
-import no.uio.ifi.in2000.natalan.havvarselapp.ui.locationForecast.HomeScreen
-import no.uio.ifi.in2000.natalan.havvarselapp.ui.metAlerts.WarningScreen
+import no.uio.ifi.in2000.natalan.havvarselapp.data.locationForecast.LocationForecastDataSource
+import no.uio.ifi.in2000.natalan.havvarselapp.data.locationForecast.LocationForecastRepository
+import no.uio.ifi.in2000.natalan.havvarselapp.ui.locationForecast.LocationForecastViewModel
+import no.uio.ifi.in2000.natalan.havvarselapp.ui.locationForecast.LocationForecastScreen
+import no.uio.ifi.in2000.natalan.havvarselapp.ui.metAlerts.MetAlertsScreen
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.metAlerts.MetAlertViewModel
 
 class MainActivity : ComponentActivity() {
@@ -32,15 +34,21 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    val homeScreen = HomeScreen()
-                    val locationForestViewModel : LocationForestViewModel = viewModel()
-                    val warningScreen = WarningScreen()
+                    // Creates instances of datasources and repositories
+                    val locationForecastDataSource = LocationForecastDataSource()
+                    val locationForecastRepository = LocationForecastRepository(locationForecastDataSource)
+
+
+                    // Creates instances of viewModels and Screens
+                    val locationForecastScreen = LocationForecastScreen()
+                    val locationForestViewModel : LocationForecastViewModel = LocationForecastViewModel(locationForecastRepository)
+                    val metAlertsScreen = MetAlertsScreen()
                     val metAlertViewModel : MetAlertViewModel = viewModel()
                     val navController = rememberNavController()
                     NavHost(navController = navController, startDestination = "WarningScreen") {
                         // Navigere til de ulike
-                        composable("HomeScreen") {homeScreen.HomeScreen(navController = navController, locationForestViewModel = locationForestViewModel)}
-                        composable("WarningScreen") { warningScreen.WarningScreen(navController = navController, metAlertViewModel = metAlertViewModel) }
+                        composable("HomeScreen") {locationForecastScreen.HomeScreen(navController = navController, locationForestViewModel = locationForestViewModel)}
+                        composable("WarningScreen") { metAlertsScreen.WarningScreen(navController = navController, metAlertViewModel = metAlertViewModel) }
                     }
                 }
             }

@@ -16,14 +16,16 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import no.uio.ifi.in2000.natalan.havvarselapp.data.locationForcast.LocationForecastRepository
-import no.uio.ifi.in2000.natalan.havvarselapp.data.locationForcast.WeatherResponse
+import no.uio.ifi.in2000.natalan.havvarselapp.data.locationForecast.LocationForecastRepository
+import no.uio.ifi.in2000.natalan.havvarselapp.model.locationForecast.WeatherResponse
 
 data class UIStateLocation (
     val lfDataMap: Map<String, WeatherResponse?> =  emptyMap()
 )
-class LocationForestViewModel : ViewModel() {
-    val locationForecastRepository = LocationForecastRepository()
+class LocationForecastViewModel(
+    private val locationForecastRepository: LocationForecastRepository
+) : ViewModel() {
+    //val locationForecastRepository = LocationForecastRepository()
 
     private val _locationUIState = MutableStateFlow(UIStateLocation())
     val locationUIState: StateFlow<UIStateLocation> = _locationUIState.asStateFlow()

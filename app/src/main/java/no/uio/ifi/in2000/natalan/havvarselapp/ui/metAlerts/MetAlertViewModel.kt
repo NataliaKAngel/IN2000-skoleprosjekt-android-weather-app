@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import no.uio.ifi.in2000.natalan.havvarselapp.data.metAlerts.MetAlertRepository
-import no.uio.ifi.in2000.natalan.havvarselapp.data.metAlerts.Properties
+import no.uio.ifi.in2000.natalan.havvarselapp.model.metAlerts.Properties
 
 data class UIStateMetAlert(
     val mADataMap: Map<String, List<Properties>> =  emptyMap()

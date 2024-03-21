@@ -8,6 +8,7 @@ import io.ktor.client.request.get
 import io.ktor.client.statement.HttpResponse
 import io.ktor.serialization.gson.gson
 import io.ktor.util.appendIfNameAbsent
+import no.uio.ifi.in2000.natalan.havvarselapp.model.metAlerts.MetAlertDataClass
 
 class MetAlertDataSource {
     private val proxyKey = "ab4e9a8e7-469d-499e-822a-7df85483df8c"
@@ -22,7 +23,6 @@ class MetAlertDataSource {
             }
         }
 
-
     suspend fun getHavvarselData(): MetAlertDataClass? {
         return try {
             client.use { httpClient ->
@@ -36,47 +36,3 @@ class MetAlertDataSource {
         }
     }
 }
-/*
-suspend fun testHavvarselDataFetching() {
-    val dataSource = MetAlertDataSource()
-
-    try {
-        val havvarselData = dataSource.getHavvarselData()
-
-        if (havvarselData != null) {
-            println("Havvarsel data fetched successfully!")
-
-            // Print some information for testing
-
-            havvarselData.features?.forEach { feature ->
-                val properties = feature.properties
-                println("Properties: $properties")
-                //Log.d("HAVARSEL DATA SOURCE", "$properties")
-
-                if (properties != null) {
-                    println("Title: ${properties.title}")
-                    println("Description: ${properties.description}")
-                    println("Severity: ${properties.severity}")
-                    println("-----")
-                } else {
-                    println("Properties are null for a feature.")
-                }
-            }
-
-        } else {
-            println("Failed to fetch Havvarsel data.")
-        }
-
-
-    } catch (e: Exception) {
-        e.printStackTrace()
-    }
-}
-*/
-
-/*suspend fun main(){
-    testHavvarselDataFetching()
-}*/
-
-
-

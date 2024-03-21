@@ -1,4 +1,4 @@
-package no.uio.ifi.in2000.natalan.havvarselapp.data.metAlerts
+package no.uio.ifi.in2000.natalan.havvarselapp.model.metAlerts
 
 data class Resource(
     val description: String,
