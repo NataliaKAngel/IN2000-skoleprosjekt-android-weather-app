@@ -2,81 +2,79 @@ package no.uio.ifi.in2000.natalan.havvarselapp.data.metAlerts
 
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
+import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.request.get
-import io.ktor.client.statement.HttpResponse
 import io.ktor.serialization.gson.gson
 import io.ktor.util.appendIfNameAbsent
+import no.uio.ifi.in2000.natalan.havvarselapp.model.metAlerts.MetAlertDataClass
 
 class MetAlertDataSource {
+    // Variables holds information for API connection
     private val proxyKey = "ab4e9a8e7-469d-499e-822a-7df85483df8c"
     private val endpoint = "https://api.met.no/weatherapi/metalerts/2.0/current.json"
-    private val client = HttpClient() {
+    private val apiKey = "X-Gravitee-API-Key"
+
+    // Connect to IFI Proxy
+    private val client = HttpClient(CIO) {
         defaultRequest {
             url(endpoint)
-            headers.appendIfNameAbsent("X-Gravitee-API-Key", proxyKey)
-            }
-        install(ContentNegotiation) {
-            gson()
-            }
+            headers.appendIfNameAbsent(apiKey, proxyKey)
         }
 
+        //TODO: gson or json
+        // Set up for handling JSON data and configuring the JSON serializer/deserializer
+        install(ContentNegotiation) {
+          gson()
+        }
 
+        /*
+        //Prøvde å bytte til json, men da ble ikke data hentet fra API:
+
+        install(ContentNegotiation) {
+            json(Json {
+                ignoreUnknownKeys = true
+                prettyPrint = true
+                isLenient = true
+            })
+        }
+
+         */
+    }
+
+    // Method returns a list of features that contains coordinates to a given area and properties (MetAlertDataClass)
     suspend fun getHavvarselData(): MetAlertDataClass? {
         return try {
             client.use { httpClient ->
-                val response: HttpResponse = httpClient.get(endpoint)
+                val response = httpClient.get(endpoint)
                 response.body<MetAlertDataClass>()
-
             }
         } catch (e: Exception) {
             e.printStackTrace()
             null
         }
-    }
-}
-/*
-suspend fun testHavvarselDataFetching() {
-    val dataSource = MetAlertDataSource()
 
-    try {
-        val havvarselData = dataSource.getHavvarselData()
+        /*
+        //Prøvde å skrive dette på samme form som for LocationForecast, men da ble ikke data hentet fra API
+        return try {
+            // Connects to the API with correct URL
+            val response = client.get(endpoint)
 
-        if (havvarselData != null) {
-            println("Havvarsel data fetched successfully!")
+            // Holds response body
+            val metAlertResponse = response.body<MetAlertDataClass>()
 
-            // Print some information for testing
+            // Returns response body
+            metAlertResponse
+        } catch (e: Exception) {
+            // Logging: Failed to connect to the API
+            Log.e("MetAlertDataSource", e.printStackTrace().toString(), e)
 
-            havvarselData.features?.forEach { feature ->
-                val properties = feature.properties
-                println("Properties: $properties")
-                //Log.d("HAVARSEL DATA SOURCE", "$properties")
-
-                if (properties != null) {
-                    println("Title: ${properties.title}")
-                    println("Description: ${properties.description}")
-                    println("Severity: ${properties.severity}")
-                    println("-----")
-                } else {
-                    println("Properties are null for a feature.")
-                }
-            }
-
-        } else {
-            println("Failed to fetch Havvarsel data.")
+            // Returns null
+            null
         }
 
+         */
 
-    } catch (e: Exception) {
-        e.printStackTrace()
     }
 }
-*/
-
-/*suspend fun main(){
-    testHavvarselDataFetching()
-}*/
-
-
-

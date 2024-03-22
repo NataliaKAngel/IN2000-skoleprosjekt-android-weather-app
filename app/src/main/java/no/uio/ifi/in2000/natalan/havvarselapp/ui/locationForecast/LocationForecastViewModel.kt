@@ -16,18 +16,25 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import no.uio.ifi.in2000.natalan.havvarselapp.data.locationForcast.LocationForecastRepository
-import no.uio.ifi.in2000.natalan.havvarselapp.data.locationForcast.WeatherResponse
+import no.uio.ifi.in2000.natalan.havvarselapp.data.locationForecast.LocationForecastRepository
+import no.uio.ifi.in2000.natalan.havvarselapp.model.locationForecast.WeatherResponse
 
 data class UIStateLocation (
     val lfDataMap: Map<String, WeatherResponse?> =  emptyMap()
 )
-class LocationForestViewModel : ViewModel() {
-    val locationForecastRepository = LocationForecastRepository()
+class LocationForecastViewModel(
+    private val locationForecastRepository: LocationForecastRepository
+) : ViewModel() {
 
+    //UI State: Map<String, WeatherResponse?>
     private val _locationUIState = MutableStateFlow(UIStateLocation())
     val locationUIState: StateFlow<UIStateLocation> = _locationUIState.asStateFlow()
 
+    //TODO: Make UI-states for units, windSpeed, airTemperature, airPressure, windDirection
+
+
+
+    //TODO: Remove this when methods in repository is done and viewModel offers UI-states for screen
     init {
         fetchWeatherResponses(listOf(Pair("60.1", "9.58")))
     }
@@ -53,23 +60,6 @@ class LocationForestViewModel : ViewModel() {
                         UIStateLocation(updatedMap)
                     }
                 }
-            }
-        }
-    }
-
-    @Composable
-    fun LocationForestScreen(
-        navController: NavController = rememberNavController()
-    ) {
-        Column {
-            Text("Her kommer Weather and Wind API informasjon")
-            Button(
-                onClick = {
-                    navController.navigate("metAlerts")
-                },
-                modifier = Modifier.padding(top = 16.dp)
-            ) {
-                Text("Knapp til forrige skjerm")
             }
         }
     }

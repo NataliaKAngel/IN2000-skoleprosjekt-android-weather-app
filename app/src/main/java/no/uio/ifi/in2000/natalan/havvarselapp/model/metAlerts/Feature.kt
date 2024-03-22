@@ -1,8 +1,6 @@
-package no.uio.ifi.in2000.natalan.havvarselapp.data.metAlerts
+package no.uio.ifi.in2000.natalan.havvarselapp.model.metAlerts
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import no.uio.ifi.in2000.natalan.havvarselapp.data.metAlerts.Properties
-import no.uio.ifi.in2000.natalan.havvarselapp.data.metAlerts.When
 
 data class Feature(
     val geometry: Geometry,

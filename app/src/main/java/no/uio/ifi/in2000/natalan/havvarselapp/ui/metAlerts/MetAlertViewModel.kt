@@ -8,21 +8,29 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import no.uio.ifi.in2000.natalan.havvarselapp.data.metAlerts.MetAlertRepository
-import no.uio.ifi.in2000.natalan.havvarselapp.data.metAlerts.Properties
+import no.uio.ifi.in2000.natalan.havvarselapp.model.metAlerts.Properties
 
 data class UIStateMetAlert(
     val mADataMap: Map<String, List<Properties>> =  emptyMap()
 )
-class MetAlertViewModel : ViewModel() {
-    private val metAlertRepository = MetAlertRepository()
+class MetAlertViewModel (
+    private val metAlertRepository: MetAlertRepository
+): ViewModel() {
 
+    //UI State: Map<String, List<Properties>>
     private val _UIStateMetAlert = MutableStateFlow(UIStateMetAlert())
     val metAlertUIState: StateFlow<UIStateMetAlert> = _UIStateMetAlert.asStateFlow()
 
+    //TODO: Make UI-states that provides areaName, awerenessSeriousness and riskMatrixColor
+
+
+
+    //TODO: Remove this init block when repository and viewModel is up to date
     init {
         fetchMetAlerts()
     }
 
+    //TODO: Remove this function when repository and viewModel is up to date
     private fun fetchMetAlerts() {
         viewModelScope.launch {
             val alertMap = metAlertRepository.getAlertMap()
@@ -31,19 +39,4 @@ class MetAlertViewModel : ViewModel() {
             _UIStateMetAlert.value = UIStateMetAlert(filteredMap)
         }
     }
-
-    /*private fun fetchMetAlerts() {
-        viewModelScope.launch {
-            val alertMap = metAlertRepository.getAlertMap()
-            _UIStateMetAlert.value = UIStateMetAlert(alertMap)
-        }
-    }
-
-    suspend fun fetchCoordinates(): List<List<List<Any?>>>? {
-        return metAlertRepository.getCoordinates()
-    }
-
-    suspend fun getAlertsForArea(area: String): List<Properties>? {
-        return metAlertRepository.getAlertsForArea(area)
-    }*/
 }
