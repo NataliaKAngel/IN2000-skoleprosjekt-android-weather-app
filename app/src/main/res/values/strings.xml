@@ -1,3 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">HavvarselApp</string>
+    <string name="mapbox_access_token" translatable="false" tools:ignore="UnusedResources">sk.eyJ1IjoiaW50cmFuIiwiYSI6ImNsdTJraTA4NTAzcDYyam40NmxkdzE0OG4ifQ.cvKruOGhYQZq12SPPnjX6w</string>
 </resources>

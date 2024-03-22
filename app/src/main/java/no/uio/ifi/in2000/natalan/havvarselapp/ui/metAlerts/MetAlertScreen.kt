@@ -1,6 +1,7 @@
 package no.uio.ifi.in2000.natalan.havvarselapp.ui.metAlerts
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import no.uio.ifi.in2000.natalan.havvarselapp.model.metAlerts.Properties
+import no.uio.ifi.in2000.natalan.havvarselapp.ui.map.MapScreen
 
 @Composable
 fun MetAlertScreen(
@@ -76,11 +78,11 @@ fun MetAlertScreen(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Bottom,
             horizontalAlignment = Alignment.CenterHorizontally
-        ){
+        ) {
 
             Row {
                 Button(
-                    onClick = { navController.navigate("HomeScreen")},
+                    onClick = { navController.navigate("HomeScreen") },
                     modifier = Modifier
                         .weight(1f),
                     shape = MaterialTheme.shapes.medium.copy(CornerSize(0.dp))

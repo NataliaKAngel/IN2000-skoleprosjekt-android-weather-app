@@ -49,7 +49,6 @@ fun LocationForecastScreen(
         verticalArrangement = Arrangement.Bottom,
         horizontalAlignment = Alignment.CenterHorizontally
     ){
-
         Row {
             Button(
                 onClick = { navController.navigate("WarningScreen")},
@@ -60,8 +59,6 @@ fun LocationForecastScreen(
                 Text("til neste skjerm")
             }
         }
-
-
     }
 }
 
