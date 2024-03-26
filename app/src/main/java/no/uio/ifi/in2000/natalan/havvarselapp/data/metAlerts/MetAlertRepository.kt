@@ -45,8 +45,24 @@ class MetAlertRepository(
         return ""
     }
 
-    //TODO: Write method
-    fun getAreaName(): String{
-        return ""
+    // a method that fetches the name of a specific area from MetAlertDataClass
+    suspend fun getAreaName(areaIndex : Int): String?{
+        // This variable holds a MetAlertDataClass that contains a list of Feature
+        val metAlertDataClass : MetAlertDataClass? = metAlertDataSource.getHavvarselData()
+
+        // if metAlertDataClass i null or the areaIndex is out of bounds, return null
+        if(metAlertDataClass == null || areaIndex < 0 || areaIndex > metAlertDataClass.features.size){
+            return null
+        }
+
+        // getting the feature based on a specific index
+
+        val feature = metAlertDataClass.features[areaIndex]
+
+        // returning the area name from the specific feature
+        return feature.properties.area
     }
+
+
+
 }
