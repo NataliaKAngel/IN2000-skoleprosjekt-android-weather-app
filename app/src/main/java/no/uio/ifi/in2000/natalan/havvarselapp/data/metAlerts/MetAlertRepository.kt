@@ -36,16 +36,51 @@ class MetAlertRepository(
     }
 
     //TODO: Write method
-    fun getRiskMatrixColor(): String{
-        return ""
+    suspend fun getRiskMatrixColor(areaName : String): String?{
+
+        //The variable holds a MetAlertDataClass that contains a list of Feature
+        val metAlertDataClass : MetAlertDataClass? = metAlertDataSource.getHavvarselData()
+
+        // checking if metAlertDataClass is null or areaName is blank
+        if(metAlertDataClass == null || areaName.isBlank()){
+            return null
+        }
+
+        // finding the feature corresponding to the specific area
+        val feature = metAlertDataClass.features.find{it.properties.area == areaName}
+
+        // if the area is not found, return null
+        if(feature == null){
+            return null
+        }
+        // returning the risk matrix color for the specific area
+        return feature.properties.riskMatrixColor
     }
 
     //TODO: Write method
-    fun getAwarenessSeriousness(): String{
-        return ""
+    // The method fetches the awarness seriousness for a specific area
+    suspend fun getAwarenessSeriousness(areaName : String): String?{
+
+        //The variable holds a MetAlertDataClass that contains a list of Feature
+        val metAlertDataClass : MetAlertDataClass? = metAlertDataSource.getHavvarselData()
+
+        // checking if metAlertDataClass is null or areaName is blank
+        if(metAlertDataClass == null || areaName.isBlank()){
+            return null
+        }
+        // finding the feature corresponding to the specific area
+        val feature = metAlertDataClass.features.find{it.properties.area == areaName}
+
+        // if the area is not found, return null
+        if(feature == null){
+            return null
+        }
+        // returning the awarness seriousness for the specific area
+        return feature.properties.awarenessSeriousness
     }
 
     // a method that fetches the name of a specific area from MetAlertDataClass
+    //USIKKER PÅ OM DET ER SÅNN VI VIL HENTE NAVNET TIL AREA PÅ!!
     suspend fun getAreaName(areaIndex : Int): String?{
         // This variable holds a MetAlertDataClass that contains a list of Feature
         val metAlertDataClass : MetAlertDataClass? = metAlertDataSource.getHavvarselData()
