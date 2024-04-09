@@ -83,4 +83,10 @@ dependencies {
     implementation ("com.google.code.gson:gson:2.10.1")
     implementation("io.ktor:ktor-serialization-gson:$ktor_version")
     implementation("com.mapbox.maps:android:11.2.1")
+    implementation ("com.mapbox.mapboxsdk:mapbox-geojson:5.1.0")
+    implementation ("com.mapbox.mapboxsdk:mapbox-maps:10.0.0")
+
+
+
+
 }
