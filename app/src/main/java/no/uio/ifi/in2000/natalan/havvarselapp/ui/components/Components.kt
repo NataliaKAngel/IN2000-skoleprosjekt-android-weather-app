@@ -117,7 +117,7 @@ class Components {
         }
     }
     @Composable
-    fun navButton(text: String, icon: Int) { // Endret parameterne til tekst og ikon
+    fun navButton(text: String, icon: Int, onClick: () -> Unit) { // Endret parameterne til tekst og ikon
         Box(
             Modifier
                 .width(88.dp)
@@ -151,7 +151,7 @@ class Components {
     }
 
     @Composable
-    fun navBar(){
+    fun navBar(navButtonClick: (String) -> Unit){
         Box(
             Modifier
                 .width(328.dp)
@@ -166,9 +166,21 @@ class Components {
                 horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.Start),
                 verticalAlignment = Alignment.Bottom,
             ) {
+                navButton(text = "Kart", icon =  R.drawable.map){
+                    navButtonClick.invoke("Kart") // Invoke the click action with the button text
+                }
+                navButton(text = "Favoritter", icon = R.drawable.favourite) {
+                    navButtonClick.invoke("Favoritter") // Invoke the callback with the button text
+                }
+                navButton(text = "Instillinger", icon = R.drawable.settings) {
+                    navButtonClick.invoke("Instillinger") // Invoke the callback with the button text
+                }
+                /*
                 navButton(text = "Kart", icon = R.drawable.map)
                 navButton(text = "Favoritter", icon = R.drawable.favourite)
                 navButton(text = "Instillinger", icon = R.drawable.settings)
+
+                 */
             }
         }
     }
@@ -179,5 +191,11 @@ class Components {
 @Composable
 fun PreviewInfo() {
     val components = Components()
-    components.navBar()
+    val navButtonClick: (String) -> Unit = { buttonText ->
+        // Define actions to be performed when a button is clicked in the preview
+        // For example, you can print the clicked button text to the logcat
+        println("Clicked button: $buttonText")
+    }
+
+    components.navBar(navButtonClick)
 }
