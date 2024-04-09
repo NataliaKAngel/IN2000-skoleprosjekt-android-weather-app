@@ -29,5 +29,3 @@ class MapScreen {
         return mapView
     }
 }
-
-
