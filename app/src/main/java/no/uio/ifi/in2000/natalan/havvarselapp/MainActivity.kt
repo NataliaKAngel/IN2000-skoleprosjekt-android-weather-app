@@ -16,6 +16,7 @@ import no.uio.ifi.in2000.natalan.havvarselapp.data.locationForecast.LocationFore
 import no.uio.ifi.in2000.natalan.havvarselapp.data.locationForecast.LocationForecastRepository
 import no.uio.ifi.in2000.natalan.havvarselapp.data.metAlerts.MetAlertDataSource
 import no.uio.ifi.in2000.natalan.havvarselapp.data.metAlerts.MetAlertRepository
+import no.uio.ifi.in2000.natalan.havvarselapp.ui.Screens.HomeScreen
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.components.Components
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.locationForecast.LocationForecastViewModel
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.locationForecast.LocationForecastScreen
@@ -34,8 +35,14 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    val components = Components()
-                    //components.InfoButton()
+                    val homeScreen = HomeScreen()
+                    homeScreen.homeScreen()
+                }
+            }
+        }
+    }
+}
+
                     /*// Creates instances of datasources and repositories
                     val locationForecastDataSource = LocationForecastDataSource()
                     val locationForecastRepository = LocationForecastRepository(locationForecastDataSource)
@@ -46,12 +53,7 @@ class MainActivity : ComponentActivity() {
                     val locationForestViewModel = LocationForecastViewModel(locationForecastRepository)
                     val metAlertViewModel = MetAlertViewModel(metAlertRepository)
 
-                    // Creates a map
-                    val mapScreen = MapScreen()
-                    val mapView = mapScreen.createMapScreen(this)
 
-                    // Set ContentView
-                    setContentView(mapView)*/
 
                     /*// Creates navController and NavHost
                     val navController = rememberNavController()
@@ -60,8 +62,3 @@ class MainActivity : ComponentActivity() {
                         composable("HomeScreen") {LocationForecastScreen(navController = navController, locationForecastViewModel = locationForestViewModel)}
                         composable("WarningScreen") { MetAlertScreen(navController = navController, metAlertViewModel = metAlertViewModel) }
                     }*/
-                }
-            }
-        }
-    }
-}

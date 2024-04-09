@@ -62,7 +62,7 @@ class Components {
     fun TopBar() {
         Box(
             modifier = Modifier
-                .width(268.76471.dp)
+                .width(328.dp)
                 .height(76.dp)
                 .background(
                     color = whiteBox.White,
@@ -170,7 +170,6 @@ class Components {
                 navButton(text = "Favoritter", icon = R.drawable.favourite)
                 navButton(text = "Instillinger", icon = R.drawable.settings)
             }
-
         }
     }
 }

@@ -4,18 +4,20 @@ import android.annotation.SuppressLint
 import android.content.Context
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import com.mapbox.geojson.Point
 import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.MapView
+import com.mapbox.maps.Style
 
 class MapScreen {
-
-    @SuppressLint("SuspiciousIndentation")
     @Composable
-    fun createMapScreen(
-        context: Context): MapView {
-        val mapView = MapView(context)
+    fun createMapScreen(context: Context): MapView {
+        val mapView = remember { MapView(context) }
+
         mapView.mapboxMap.setCamera(
             CameraOptions.Builder()
                 .center(Point.fromLngLat(7.99, 58.146))
@@ -27,3 +29,5 @@ class MapScreen {
         return mapView
     }
 }
+
+
