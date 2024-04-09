@@ -1,6 +1,7 @@
 package no.uio.ifi.in2000.natalan.havvarselapp.ui.metAlerts
 
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -8,35 +9,58 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import no.uio.ifi.in2000.natalan.havvarselapp.data.metAlerts.MetAlertRepository
-import no.uio.ifi.in2000.natalan.havvarselapp.model.metAlerts.Properties
 
 data class UIStateMetAlert(
-    val mADataMap: Map<String, List<Properties>> =  emptyMap()
+    val areaName: String? = "",
+    val awerenessSeriousness:String? = "",
+    val riskMatrixColor: String? = ""
 )
 class MetAlertViewModel (
     private val metAlertRepository: MetAlertRepository
 ): ViewModel() {
 
-    //UI State: Map<String, List<Properties>>
     private val _UIStateMetAlert = MutableStateFlow(UIStateMetAlert())
     val metAlertUIState: StateFlow<UIStateMetAlert> = _UIStateMetAlert.asStateFlow()
 
     //TODO: Make UI-states that provides areaName, awerenessSeriousness and riskMatrixColor
-
-
-
-    //TODO: Remove this init block when repository and viewModel is up to date
-    init {
-        fetchMetAlerts()
-    }
-
-    //TODO: Remove this function when repository and viewModel is up to date
-    private fun fetchMetAlerts() {
+    private fun fetchMetAlerts(index: Int){
         viewModelScope.launch {
-            val alertMap = metAlertRepository.getAlertMap()
-            // Filter only the first two areas
-            val filteredMap = alertMap.entries.take(2).associate { it.key to it.value }
-            _UIStateMetAlert.value = UIStateMetAlert(filteredMap)
+            val areaName = metAlertRepository.getAreaName(index)
+            val awerenessSeriousness = areaName?.let { metAlertRepository.getAwarenessSeriousness(it) }
+            val riskMatrixColor = areaName?.let { metAlertRepository.getRiskMatrixColor(it) }
+
+            // Update UIStateLocation with fetched data
+            _UIStateMetAlert.value = UIStateMetAlert(
+                areaName,
+                awerenessSeriousness,
+                riskMatrixColor
+            )
         }
     }
+
+    // en test funksjon som bare skriver ut mange stedsnavn på index, men det er noe rart jeg ikke skjønner her
+    private suspend fun fetchMetAlertsAreaNames(){
+        val areaNameList = mutableListOf<String>()
+        for (i in 0 until 100) {
+            val areaName = metAlertRepository.getAreaName(i)
+            if (areaName != null) {
+                Log.i("check", "Index: $i, AreaName: $areaName")
+                areaNameList.add(areaName)
+            } else {
+                Log.i("check", "Index: $i, AreaName is null")
+            }
+        }
+    }
+
+    fun fetchMetAlertsByIndex(index: Int) {
+        viewModelScope.launch {
+            try {
+                fetchMetAlerts(index)
+                fetchMetAlertsAreaNames()
+            } catch (e: Exception) {
+                // skriv catch kommentar
+            }
+        }
+    }
+
 }
