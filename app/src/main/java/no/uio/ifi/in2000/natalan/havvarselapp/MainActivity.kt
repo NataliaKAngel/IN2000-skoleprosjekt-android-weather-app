@@ -16,6 +16,7 @@ import no.uio.ifi.in2000.natalan.havvarselapp.data.locationForecast.LocationFore
 import no.uio.ifi.in2000.natalan.havvarselapp.data.locationForecast.LocationForecastRepository
 import no.uio.ifi.in2000.natalan.havvarselapp.data.metAlerts.MetAlertDataSource
 import no.uio.ifi.in2000.natalan.havvarselapp.data.metAlerts.MetAlertRepository
+import no.uio.ifi.in2000.natalan.havvarselapp.ui.components.Components
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.locationForecast.LocationForecastViewModel
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.locationForecast.LocationForecastScreen
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.map.MapScreen
@@ -33,7 +34,9 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    // Creates instances of datasources and repositories
+                    val components = Components()
+                    //components.InfoButton()
+                    /*// Creates instances of datasources and repositories
                     val locationForecastDataSource = LocationForecastDataSource()
                     val locationForecastRepository = LocationForecastRepository(locationForecastDataSource)
                     val metAlertDataSource = MetAlertDataSource()
@@ -48,7 +51,7 @@ class MainActivity : ComponentActivity() {
                     val mapView = mapScreen.createMapScreen(this)
 
                     // Set ContentView
-                    setContentView(mapView)
+                    setContentView(mapView)*/
 
                     /*// Creates navController and NavHost
                     val navController = rememberNavController()

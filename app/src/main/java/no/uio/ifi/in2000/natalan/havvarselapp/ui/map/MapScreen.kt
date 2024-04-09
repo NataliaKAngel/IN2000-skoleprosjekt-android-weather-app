@@ -18,9 +18,9 @@ class MapScreen {
         val mapView = MapView(context)
         mapView.mapboxMap.setCamera(
             CameraOptions.Builder()
-                .center(Point.fromLngLat(-98.0, 39.5))
+                .center(Point.fromLngLat(7.99, 58.146))
                 .pitch(0.0)
-                .zoom(2.0)
+                .zoom(6.0)
                 .bearing(0.0)
                 .build()
         )
