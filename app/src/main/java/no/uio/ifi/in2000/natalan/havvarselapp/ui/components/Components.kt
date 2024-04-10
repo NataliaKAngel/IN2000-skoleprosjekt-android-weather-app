@@ -151,7 +151,7 @@ class Components {
     }
 
     @Composable
-    fun navBar(navButtonClick: (String) -> Unit){
+    fun navBar(navButtonClick: (String) -> Unit){ //
         Box(
             Modifier
                 .width(328.dp)
@@ -175,12 +175,10 @@ class Components {
                 navButton(text = "Instillinger", icon = R.drawable.settings) {
                     navButtonClick.invoke("Instillinger") // Invoke the callback with the button text
                 }
-                /*
-                navButton(text = "Kart", icon = R.drawable.map)
+               /* navButton(text = "Kart", icon = R.drawable.map)
                 navButton(text = "Favoritter", icon = R.drawable.favourite)
-                navButton(text = "Instillinger", icon = R.drawable.settings)
+                navButton(text = "Instillinger", icon = R.drawable.settings)*/
 
-                 */
             }
         }
     }
