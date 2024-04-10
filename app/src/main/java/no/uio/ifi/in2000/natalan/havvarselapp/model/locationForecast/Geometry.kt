@@ -5,5 +5,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Geometry(
     val type: String,
-    val coordinates: List<Double>
+    val coordinates: List<Double>,
 )

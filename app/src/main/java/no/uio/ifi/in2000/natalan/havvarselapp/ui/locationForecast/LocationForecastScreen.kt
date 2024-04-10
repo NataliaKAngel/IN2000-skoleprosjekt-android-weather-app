@@ -4,10 +4,14 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -39,8 +43,24 @@ fun LocationForecastScreen(
             modifier = Modifier.padding(8.dp),
             style = TextStyle(fontSize = 35.sp)
         )
-        UIStateLocation.lfDataMap.forEach { (coordinates, weatherResponse) ->
-            CoordinateBox(coordinates = coordinates, weatherResponse = weatherResponse)
+
+        LazyColumn(
+            modifier = Modifier.weight(1f)
+        ) {
+            item {
+                UIStateLocation.windSpeedMap.keys.forEach { time ->
+                    val windSpeed = UIStateLocation.windSpeedMap[time] ?: 0.0
+                    CoordinateBox(
+                        modifier = Modifier.padding(8.dp),
+                        time = time,
+                        windSpeed = windSpeed,
+                        airTemperature = UIStateLocation.airTemperatureMap[time] ?: 0.0,
+                        airPressure = UIStateLocation.airPressureMap[time] ?: 0.0,
+                        windDirection = UIStateLocation.windDirectionMap[time] ?: 0.0,
+                        units = UIStateLocation.units
+                    )
+                }
+            }
         }
     }
     Column(
@@ -63,33 +83,34 @@ fun LocationForecastScreen(
 }
 
 //TODO: Move all weatherReponses to viewModel (UIStateFlow)
+
 @Composable
-fun CoordinateBox(coordinates: String, weatherResponse: WeatherResponse?, modifier: Modifier = Modifier) {
-    Row(modifier = Modifier.padding(2.dp), verticalAlignment = Alignment.CenterVertically) {
-        if (weatherResponse != null && weatherResponse.properties?.meta != null) {
-            val meta = weatherResponse.properties.meta
-            val units = weatherResponse.properties.meta.units //Henter ut enheter
-            val windSpeed = weatherResponse.properties.timeseries.firstOrNull()?.data?.instant?.details?.getOrDefault("wind_speed", "0.0") // Henter ut Vind meter per sekund
-            val airTemperatur = weatherResponse.properties.timeseries.firstOrNull()?.data?.instant?.details?.getOrDefault("air_temperature", "0.0") // Henter ut luft temperatur
-            val airPressure = weatherResponse.properties.timeseries.firstOrNull()?.data?.instant?.details?.getOrDefault("air_pressure_at_sea_level", "0.0") // Henter ut luft trykk
+fun CoordinateBox(
+    modifier: Modifier = Modifier,
+    time: String,
+    windSpeed: Double,
+    airTemperature: Double,
+    airPressure: Double,
+    windDirection: Double,
+    units: Map<String?, String?>?
+) {
+    Column(modifier = modifier.padding(16.dp)) {
+        Text("Time: $time")
+        Spacer(modifier = Modifier.height(8.dp))
 
-            Column(
-                modifier = Modifier.padding(8.dp),
-                verticalArrangement = Arrangement.spacedBy(4.dp)
+        // Display wind speed information
+        Text("Wind Speed: $windSpeed ${units?.get("wind_speed")}") // Using units for wind speed
+        Spacer(modifier = Modifier.height(8.dp))
 
-            ) {
-                Text(text = "Coordinates: $coordinates")
-                val hPa = meta.units["air_pressure_at_sea_level"]
-                Text(text = "Air Pressure: $airPressure ${hPa ?: "N/A"}")
+        // Display air temperature information
+        Text("Air Temperature: $airTemperature ${units?.get("air_temperature")}") // Using units for air temperature
+        Spacer(modifier = Modifier.height(8.dp))
 
-                Text(text = "Air Temperature: $airTemperatur ℃")
+        // Display air pressure information
+        Text("Air Pressure: $airPressure ${units?.get("air_pressure_at_sea_level")}") // Using units for air pressure
+        Spacer(modifier = Modifier.height(8.dp))
 
-                val m_s = units["wind_speed"]
-                Text(text = "Wind Speed: $windSpeed ${m_s ?: "N/A"}")
-            }
-    } else {
-        // Handle case where weatherResponse or its properties are null
-        Text(text = "No data available for $coordinates")
-        }
+        // Display wind direction information
+        Text("Wind Direction: $windDirection ${units?.get("wind_from_direction")}") // Using units for wind direction
     }
 }

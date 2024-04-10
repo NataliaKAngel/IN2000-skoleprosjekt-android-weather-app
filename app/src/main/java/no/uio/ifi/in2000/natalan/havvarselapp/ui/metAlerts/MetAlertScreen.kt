@@ -4,14 +4,18 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -25,7 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import no.uio.ifi.in2000.natalan.havvarselapp.model.metAlerts.Properties
-import no.uio.ifi.in2000.natalan.havvarselapp.ui.map.MapScreen
+import no.uio.ifi.in2000.natalan.havvarselapp.ui.locationForecast.CoordinateBox
 
 @Composable
 fun MetAlertScreen(
@@ -34,105 +38,70 @@ fun MetAlertScreen(
 ) {
     //UI-state flow:
     val metAlertUIState by metAlertViewModel.metAlertUIState.collectAsState()
+    // Tester viewmodel og repository
+    metAlertViewModel.fetchMetAlertsByIndex(1)
 
-    //TODO: Move UI-States to viewModel
-    val coordinates = remember { mutableStateListOf<List<List<List<Any?>>>>() }
-    val selectedAreaProperties = remember { mutableStateOf<List<Properties>?>(null) }
-    val selectedAreaIndex = remember { mutableStateOf(0) }
-
-    //TODO: Make UI-state flows that provides the information needed.
-
-    //TODO: Update information - use UI-state flows
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Text(
-            "Met Alerts",
+            "MetAlert",
             modifier = Modifier.padding(8.dp),
             style = TextStyle(fontSize = 35.sp)
         )
-        Text("Havvarsel-Met Alerts", fontSize = 20.sp)
-        Button(onClick = {
-            selectedAreaIndex.value = 0
-            selectedAreaProperties.value = metAlertUIState.mADataMap.values.elementAtOrNull(selectedAreaIndex.value)
-        }) {
-            Text("Fedje-Måløy")
-        }
-        Button(onClick = {
-            selectedAreaIndex.value = 1
-            selectedAreaProperties.value = metAlertUIState.mADataMap.values.elementAtOrNull(selectedAreaIndex.value)
-        }) {
-            Text("Måløy-Svinøy")
-        }
-        CoordinateBox(
-            //features = metAlertUIState.mADataMap.values.elementAtOrNull(selectedAreaIndex.value) ?: emptyList(),
-            properties = selectedAreaProperties.value,
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Bottom,
-            horizontalAlignment = Alignment.CenterHorizontally
+        LazyColumn(
+            modifier = Modifier.weight(1f)
         ) {
+            item {
+                metAlertCard(
+                    areaName = metAlertUIState.areaName,
+                    awerenessSeriousness = metAlertUIState.awerenessSeriousness,
+                    riskMatrixColor = metAlertUIState.riskMatrixColor
+                )
+            }
+        }
+    }
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Bottom,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ){
 
-            Row {
-                Button(
-                    onClick = { navController.navigate("HomeScreen") },
-                    modifier = Modifier
-                        .weight(1f),
-                    shape = MaterialTheme.shapes.medium.copy(CornerSize(0.dp))
-                ) {
-                    Text("til neste skjerm")
-                }
+        Row {
+            Button(
+                onClick = { navController.navigate("HomeScreen")},
+                modifier = Modifier
+                    .weight(1f),
+                shape = MaterialTheme.shapes.medium.copy(CornerSize(0.dp))
+            ) {
+                Text("til neste skjerm")
+
             }
         }
     }
 }
-
 
 //TODO: Switch from using instance variables to show farge and awerenessSeriousness to UI-state flow
 @Composable
-fun CoordinateBox(
-    //features: List<Feature>,
-    properties: List<Properties>?,
-    modifier: Modifier = Modifier
-) {
-    Column(
-        modifier = modifier.padding(8.dp)
-    ) {
-        if (properties != null){
-            properties.forEachIndexed { index, properties ->
-                // Only display properties for the first two features
-                if (index < 2) {
-                    Text(
-                        text = "Area ${index + 1}:",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 18.sp,
-                        modifier = Modifier.padding(bottom = 4.dp)
-                    )
-                    Text(
-                        text = "Risk Matrix Color: ${properties.riskMatrixColor}",
-                        fontSize = 16.sp,
-                        modifier = Modifier.padding(bottom = 8.dp)
-                    )
-                    Text(
-                        text = "Awareness Seriousness: ${properties.awarenessSeriousness}",
-                        fontSize = 16.sp,
-                        modifier = Modifier.padding(bottom = 8.dp)
-                    )
-                }
-            }
-        } else {
-            Text(
-                text = "No features available",
-                fontWeight = FontWeight.Bold,
-                fontSize = 16.sp
-            )
-        }
-    }
+fun metAlertCard(
+    areaName: String?,
+    awerenessSeriousness:String?,
+    riskMatrixColor: String?
+){
+    // Display wind speed information
+    Text("areaName: $areaName")
+    Spacer(modifier = Modifier.height(8.dp))
+
+    //
+    Text("awerenessSeriousness: $awerenessSeriousness")
+    Spacer(modifier = Modifier.height(8.dp))
+
+    //
+    Text("riskMatrixColor: $riskMatrixColor")
+    Spacer(modifier = Modifier.height(8.dp))
 }
+
+
