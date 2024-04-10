@@ -5,7 +5,7 @@ import no.uio.ifi.in2000.natalan.havvarselapp.model.locationForecast.WeatherResp
 class LocationForecastRepository (
     private val locationForecastDataSource: LocationForecastDataSource
 ){
-
+    // Utgangspunkt til Torsdag
     //TODO: Change arguments to this method to coordinate (comes from ViewModel)
     suspend fun getLocationForecast(lat: String, lon: String, alt: String? = null): WeatherResponse? {
         //TODO: Uncomment this line of code when the TODO in datasource is solved
@@ -38,7 +38,7 @@ class LocationForecastRepository (
 
             // Check if details is not null and contains the wind_speed property
             if (details.containsKey("wind_speed")) {
-                val windSpeed = details["wind_speed"] as? Double // Get the wind speed value
+                val windSpeed = details["wind_speed"]// Get the wind speed value
 
                 // If windSpeed is not null, store it in the map
                 if (windSpeed != null) {
@@ -53,7 +53,7 @@ class LocationForecastRepository (
         val weatherResponse = locationForecastDataSource.getLocationForecast(latitude, longitude, altitude)
         val timeseries = weatherResponse?.properties?.timeseries
 
-        val air_tempMap = mutableMapOf<String, Double>()
+        val airTempMap = mutableMapOf<String, Double>()
 
         timeseries?.forEach { timeseriesItem ->
             val time = timeseriesItem.time // Get the time for this timeseries
@@ -61,22 +61,22 @@ class LocationForecastRepository (
 
             // Check if details is not null and contains the wind_speed property
             if (details.containsKey("air_temperature")) {
-                val air_tempSpeed = details["air_temperature"] as? Double // Get the wind speed value
+                val airTempSpeed = details["air_temperature"]// Get the wind speed value
 
                 // If windSpeed is not null, store it in the map
-                if (air_tempSpeed != null) {
-                    air_tempMap[time] = air_tempSpeed
+                if (airTempSpeed != null) {
+                    airTempMap[time] = airTempSpeed
                 }
             }
         }
-        return air_tempMap
+        return airTempMap
     }
 
     suspend fun getWeatherResponseAirPressure(latitude: String, longitude: String, altitude: String? = null): Map<String, Double>{
         val weatherResponse = locationForecastDataSource.getLocationForecast(latitude, longitude, altitude)
         val timeseries = weatherResponse?.properties?.timeseries
 
-        val air_pressureMap = mutableMapOf<String, Double>()
+        val airPressureMap = mutableMapOf<String, Double>()
 
         timeseries?.forEach { timeseriesItem ->
             val time = timeseriesItem.time // Get the time for this timeseries
@@ -84,15 +84,15 @@ class LocationForecastRepository (
 
             // Check if details is not null and contains the wind_speed property
             if (details.containsKey("air_pressure_at_sea_level")) {
-                val airpressure = details["air_pressure_at_sea_level"] as? Double // Get the wind speed value
+                val airpressure = details["air_pressure_at_sea_level"]// Get the wind speed value
 
                 // If windSpeed is not null, store it in the map
                 if (airpressure != null) {
-                    air_pressureMap[time] = airpressure
+                    airPressureMap[time] = airpressure
                 }
             }
         }
-        return air_pressureMap
+        return airPressureMap
     }
 
     suspend fun getWeatherResponseWindDirection(latitude: String, longitude: String, altitude: String? = null): Map<String, Double>{
@@ -107,7 +107,7 @@ class LocationForecastRepository (
 
             // Check if details is not null and contains the wind_speed property
             if (details.containsKey("wind_from_direction")) {
-                val windDirection = details["wind_from_direction"] as? Double // Get the wind speed value
+                val windDirection = details["wind_from_direction"]// Get the wind speed value
 
                 // If windSpeed is not null, store it in the map
                 if (windDirection != null) {

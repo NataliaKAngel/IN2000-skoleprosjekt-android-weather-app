@@ -1,24 +1,18 @@
 package no.uio.ifi.in2000.natalan.havvarselapp.ui.locationForecast
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import no.uio.ifi.in2000.natalan.havvarselapp.data.locationForecast.LocationForecastRepository
-import no.uio.ifi.in2000.natalan.havvarselapp.model.locationForecast.WeatherResponse
 
+// TODO: Roten til API-kall problemet -->
+//  løsning: UIStateLocation holder en variabel f.eks: "values",
+//  hvor man får alle verdiene samla i en liste.
+//  Gjøre et API-kall som tar all dataen og transformer den og legger den i en liste
+//  Dette på må skje i repository, også må UIStateLocation hente fra Repository sin metode.
 data class UIStateLocation (
     val windSpeedMap: Map<String, Double> = emptyMap(),
     val airTemperatureMap: Map<String, Double> = emptyMap(),
@@ -30,7 +24,7 @@ class LocationForecastViewModel(
     private val locationForecastRepository: LocationForecastRepository
 ) : ViewModel() {
 
-    //UI State: Map<String, WeatherResponse?>
+    //UI State:
     private val _locationUIState = MutableStateFlow(UIStateLocation())
     val locationUIState: StateFlow<UIStateLocation> = _locationUIState.asStateFlow()
 
@@ -43,6 +37,7 @@ class LocationForecastViewModel(
 
     // Method to fetch weather responses for given coordinates
 
+    // TODO: Om skrive denne til å passe med den nye UIStateLocation
     fun fetchWeatherResponses(latitude: String, longitude: String, altitude: String? = null) {
         viewModelScope.launch {
             val windSpeedMap = locationForecastRepository.getWeatherResponseWindSpeedMap(latitude, longitude, altitude)

@@ -1,8 +1,0 @@
-package no.uio.ifi.in2000.natalan.havvarselapp.Data.Havvarsel
-
-data class Geometry(
-    val coordinates: List<List<List<Any?>>>,
-    val type: String,
-)
-
-
