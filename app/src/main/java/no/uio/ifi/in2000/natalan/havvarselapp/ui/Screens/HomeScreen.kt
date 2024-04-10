@@ -10,13 +10,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.navigation.NavController
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.components.Components
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.map.MapScreen
 
-class HomeScreen {
+class HomeScreen() {
     @SuppressLint("NotConstructor")
     @Composable
-    fun homeScreen() {
+    fun homeScreen(navController: NavController) {
         val context = LocalContext.current.applicationContext
         val mapScreen = MapScreen()
         val mapView = mapScreen.createMapScreen(context)
@@ -31,13 +32,12 @@ class HomeScreen {
                 modifier = Modifier.fillMaxSize()
             )
 
-            // Components
             Box(
                 modifier = Modifier
                     .padding(top = 16.dp, start = 16.dp, end = 16.dp)
                     .align(Alignment.TopCenter)
             ) {
-                Components().TopBar()
+                Components().TopBar(infoButtonClick = { navController.navigate("InfoKiteForholdScreen") })
             }
 
             // NavBar
@@ -46,7 +46,7 @@ class HomeScreen {
                     .padding(bottom = 16.dp, start = 16.dp, end = 16.dp)
                     .align(Alignment.BottomCenter)
             ) {
-                Components().navBar { selectedComponent ->
+                Components().navBarKart { selectedComponent ->
                     // Her kan du utføre handlinger basert på den valgte komponenten
                     when (selectedComponent) {
                         "Kart" -> {

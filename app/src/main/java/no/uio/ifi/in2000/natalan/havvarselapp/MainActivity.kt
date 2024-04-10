@@ -17,6 +17,7 @@ import no.uio.ifi.in2000.natalan.havvarselapp.data.locationForecast.LocationFore
 import no.uio.ifi.in2000.natalan.havvarselapp.data.metAlerts.MetAlertDataSource
 import no.uio.ifi.in2000.natalan.havvarselapp.data.metAlerts.MetAlertRepository
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.Screens.HomeScreen
+import no.uio.ifi.in2000.natalan.havvarselapp.ui.Screens.InfoKiteForholdScreen
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.components.Components
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.locationForecast.LocationForecastViewModel
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.locationForecast.LocationForecastScreen
@@ -36,7 +37,15 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val homeScreen = HomeScreen()
-                    homeScreen.homeScreen()
+                    val infoKiteForholdScreen = InfoKiteForholdScreen()
+
+                    // Creates navController and NavHost
+                    val navController = rememberNavController()
+                    NavHost(navController = navController, startDestination = "HomeScreen") {
+                        // Navigere til de ulike
+                        composable("HomeScreen") {homeScreen.homeScreen(navController = navController)}
+                        composable("InfoKiteForholdScreen") { infoKiteForholdScreen.infoScreen(navController = navController) }
+                    }
                 }
             }
         }
@@ -55,7 +64,7 @@ class MainActivity : ComponentActivity() {
 
 
 
-                    /*// Creates navController and NavHost
+                    // Creates navController and NavHost
                     val navController = rememberNavController()
                     NavHost(navController = navController, startDestination = "WarningScreen") {
                         // Navigere til de ulike
