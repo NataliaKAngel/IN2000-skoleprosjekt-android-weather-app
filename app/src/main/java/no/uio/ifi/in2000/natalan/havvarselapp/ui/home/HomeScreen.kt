@@ -15,7 +15,7 @@ import androidx.navigation.NavController
 import com.mapbox.geojson.Point
 import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.MapView
-import no.uio.ifi.in2000.natalan.havvarselapp.ui.components.Components
+import no.uio.ifi.in2000.natalan.havvarselapp.ui.components.*
 
 @Composable
 fun HomeScreen(
@@ -40,7 +40,7 @@ fun HomeScreen(
                 .padding(top = 16.dp, start = 16.dp, end = 16.dp)
                 .align(Alignment.TopCenter)
         ) {
-            Components().TopBar(infoButtonClick = { navController.navigate("InfoScreen") })
+            TopBar(infoButtonClick = { navController.navigate("InfoScreen") })
         }
 
         // NavBar
@@ -49,7 +49,7 @@ fun HomeScreen(
                 .padding(bottom = 16.dp, start = 16.dp, end = 16.dp)
                 .align(Alignment.BottomCenter)
         ) {
-            Components().NavBarKart { selectedComponent ->
+            NavBarKart { selectedComponent ->
                 // Her kan du utføre handlinger basert på den valgte komponenten
                 when (selectedComponent) {
                     "Kart" -> {
