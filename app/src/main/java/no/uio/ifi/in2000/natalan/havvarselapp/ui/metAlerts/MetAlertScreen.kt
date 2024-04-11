@@ -1,6 +1,7 @@
 package no.uio.ifi.in2000.natalan.havvarselapp.ui.metAlerts
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -51,7 +52,6 @@ fun MetAlertScreen(
             modifier = Modifier.padding(8.dp),
             style = TextStyle(fontSize = 35.sp)
         )
-
         LazyColumn(
             modifier = Modifier.weight(1f)
         ) {
@@ -78,6 +78,7 @@ fun MetAlertScreen(
                 shape = MaterialTheme.shapes.medium.copy(CornerSize(0.dp))
             ) {
                 Text("til neste skjerm")
+
             }
         }
     }
