@@ -12,18 +12,8 @@ import no.uio.ifi.in2000.natalan.havvarselapp.ui.theme.HavvarselAppTheme
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import no.uio.ifi.in2000.natalan.havvarselapp.data.locationForecast.LocationForecastDataSource
-import no.uio.ifi.in2000.natalan.havvarselapp.data.locationForecast.LocationForecastRepository
-import no.uio.ifi.in2000.natalan.havvarselapp.data.metAlerts.MetAlertDataSource
-import no.uio.ifi.in2000.natalan.havvarselapp.data.metAlerts.MetAlertRepository
-import no.uio.ifi.in2000.natalan.havvarselapp.ui.Screens.HomeScreen
-import no.uio.ifi.in2000.natalan.havvarselapp.ui.Screens.InfoKiteForholdScreen
-import no.uio.ifi.in2000.natalan.havvarselapp.ui.components.Components
-import no.uio.ifi.in2000.natalan.havvarselapp.ui.locationForecast.LocationForecastViewModel
-import no.uio.ifi.in2000.natalan.havvarselapp.ui.locationForecast.LocationForecastScreen
-import no.uio.ifi.in2000.natalan.havvarselapp.ui.map.MapScreen
-import no.uio.ifi.in2000.natalan.havvarselapp.ui.metAlerts.MetAlertScreen
-import no.uio.ifi.in2000.natalan.havvarselapp.ui.metAlerts.MetAlertViewModel
+import no.uio.ifi.in2000.natalan.havvarselapp.ui.home.HomeScreen
+import no.uio.ifi.in2000.natalan.havvarselapp.ui.spot.SpotScreen
 
 
 class MainActivity : ComponentActivity() {
@@ -36,15 +26,12 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    val homeScreen = HomeScreen()
-                    val infoKiteForholdScreen = InfoKiteForholdScreen()
-
                     // Creates navController and NavHost
                     val navController = rememberNavController()
                     NavHost(navController = navController, startDestination = "HomeScreen") {
                         // Navigere til de ulike
-                        composable("HomeScreen") {homeScreen.homeScreen(navController = navController)}
-                        composable("InfoKiteForholdScreen") { infoKiteForholdScreen.infoScreen(navController = navController) }
+                        composable("HomeScreen") {HomeScreen(navController = navController)}
+                        composable("InfoKiteForholdScreen") { SpotScreen(navController = navController) }
                     }
                 }
             }

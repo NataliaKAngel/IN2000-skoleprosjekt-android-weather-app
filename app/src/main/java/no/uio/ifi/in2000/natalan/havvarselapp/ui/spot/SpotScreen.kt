@@ -1,50 +1,54 @@
-package no.uio.ifi.in2000.natalan.havvarselapp.ui.Screens
+package no.uio.ifi.in2000.natalan.havvarselapp.ui.spot
 
-import android.annotation.SuppressLint
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
+import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavController
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.components.Components
-import no.uio.ifi.in2000.natalan.havvarselapp.ui.map.MapScreen
 
-class HomeScreen() {
-    @SuppressLint("NotConstructor")
-    @Composable
-    fun homeScreen(navController: NavController) {
-        val context = LocalContext.current.applicationContext
-        val mapScreen = MapScreen()
-        val mapView = mapScreen.createMapScreen(context)
-
-        Box(
+@Composable
+fun SpotScreen(navController: NavController){
+    Box(
+        Modifier
+            .width(360.dp)
+            .height(640.dp)
+            .background(color = Color(0xFF96CFF5))
+            .padding(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 16.dp)
+    ) {
+        Column(
             modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.TopCenter
+            verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            // Map
-            AndroidView(
-                factory = { mapView },
-                modifier = Modifier.fillMaxSize()
-            )
-
+            // Components
             Box(
                 modifier = Modifier
-                    .padding(top = 16.dp, start = 16.dp, end = 16.dp)
-                    .align(Alignment.TopCenter)
+                    .padding(start = 16.dp, end = 16.dp)
             ) {
-                Components().TopBar(infoButtonClick = { navController.navigate("InfoKiteForholdScreen") })
+                Components().goToMap { navController.popBackStack() }
             }
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            Box{
+                Components().kiteForholdInfoBox()
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
 
             // NavBar
             Box(
                 modifier = Modifier
-                    .padding(bottom = 16.dp, start = 16.dp, end = 16.dp)
-                    .align(Alignment.BottomCenter)
+                    .padding(start = 16.dp, end = 16.dp)
             ) {
                 Components().navBarKart { selectedComponent ->
                     // Her kan du utføre handlinger basert på den valgte komponenten
