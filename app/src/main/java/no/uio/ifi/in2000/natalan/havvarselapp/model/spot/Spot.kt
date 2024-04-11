@@ -6,7 +6,7 @@ data class Spot (
     //The name of the spot
     val spotName: String = "",
     //The city ("kommune") the spot lies in
-    val city: String = "",
+    val cityName: String = "",
     //The name of the area the spot is a part of (from MetAlert)
     val areaName: String = "",
     //Photo of the spot
