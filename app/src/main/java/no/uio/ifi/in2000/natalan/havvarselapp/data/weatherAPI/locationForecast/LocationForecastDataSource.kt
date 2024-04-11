@@ -11,19 +11,18 @@ import io.ktor.client.request.header
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.Endpoint.LOCATIONFORECAST
-import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.Endpoint.WEATHERRESPONSE
+import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.Endpoint.LF_WEATHERRESPONSE
 import no.uio.ifi.in2000.natalan.havvarselapp.model.locationForecast.WeatherResponse
 
 class LocationForecastDataSource {
     // Variables holds information for API connection
     private val proxyKey = "ab4e9a8e7-469d-499e-822a-7df85483df8c" //MÅ FLYTTES!!!!!!
-    private val endpoint = LOCATIONFORECAST
     private val apiKey = "X-Gravitee-API-Key" //MÅ FLYTTES!!!!!!!
 
     // Connect to IFI Proxy
     private val client = HttpClient(CIO){
         defaultRequest {
-            url(endpoint)
+            url(LOCATIONFORECAST)
             header(apiKey, proxyKey)
         }
 
@@ -36,9 +35,8 @@ class LocationForecastDataSource {
         }
     }
 
-    suspend fun getLocationForecast(latitude: String?, longitude: String?, altitude: String? = null): WeatherResponse? {
+    suspend fun getWeatherResponse(latitude: String?, longitude: String?, altitude: String? = null): WeatherResponse? {
         // Variable holds coordinates to create URL
-
         var coordinates = "lat=$latitude&lon=$longitude"
 
         // Adds altitude to the URL
@@ -51,7 +49,7 @@ class LocationForecastDataSource {
 
         return try {
             // Connects to the API with correct URL (coordinates = lat + lon + alt)
-            val response = client.get(WEATHERRESPONSE + coordinates)
+            val response = client.get(LF_WEATHERRESPONSE + coordinates)
 
             // Holds response body
             val weatherResponse = response.body<WeatherResponse>()

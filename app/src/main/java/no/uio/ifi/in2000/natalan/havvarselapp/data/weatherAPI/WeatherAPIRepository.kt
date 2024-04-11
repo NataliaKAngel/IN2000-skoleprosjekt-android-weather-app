@@ -22,19 +22,19 @@ class WeatherAPIRepository (
         // TODO: Search through weatherResponses with built in Kotlin functions and return the WeatherResponse-object that matches the coordinates
         // Location of the coordinates:
         // coordinates: List<Double> = WeatherResponse.Geometry.coordinate
-        return locationForecastDataSource.getLocationForecast(lat, lon, alt)
+        return locationForecastDataSource.getWeatherResponse(lat, lon, alt)
     }
 
     // Different methods to transform the data from a WeatherResponse.
     // Extract the wind direction etc.
 
     suspend fun getWeatherResponseUnit(latitude: String, longitude: String, altitude: String? = null): Map<String?, String?>? {
-        val weatherResponse = locationForecastDataSource.getLocationForecast(latitude, longitude, altitude)
+        val weatherResponse = locationForecastDataSource.getWeatherResponse(latitude, longitude, altitude)
         return weatherResponse?.properties?.meta?.units
     }
 
     suspend fun getWeatherResponseWindSpeedMap(latitude: String, longitude: String, altitude: String? = null): Map<String, Double> {
-        val weatherResponse = locationForecastDataSource.getLocationForecast(latitude, longitude, altitude)
+        val weatherResponse = locationForecastDataSource.getWeatherResponse(latitude, longitude, altitude)
         val timeseries = weatherResponse?.properties?.timeseries
 
         val windSpeedMap = mutableMapOf<String, Double>()
@@ -57,7 +57,7 @@ class WeatherAPIRepository (
     }
 
     suspend fun getWeatherResponseAirTemperature(latitude: String, longitude: String, altitude: String? = null): Map<String, Double>{
-        val weatherResponse = locationForecastDataSource.getLocationForecast(latitude, longitude, altitude)
+        val weatherResponse = locationForecastDataSource.getWeatherResponse(latitude, longitude, altitude)
         val timeseries = weatherResponse?.properties?.timeseries
 
         val airTempMap = mutableMapOf<String, Double>()
@@ -80,7 +80,7 @@ class WeatherAPIRepository (
     }
 
     suspend fun getWeatherResponseAirPressure(latitude: String, longitude: String, altitude: String? = null): Map<String, Double>{
-        val weatherResponse = locationForecastDataSource.getLocationForecast(latitude, longitude, altitude)
+        val weatherResponse = locationForecastDataSource.getWeatherResponse(latitude, longitude, altitude)
         val timeseries = weatherResponse?.properties?.timeseries
 
         val airPressureMap = mutableMapOf<String, Double>()
@@ -103,7 +103,7 @@ class WeatherAPIRepository (
     }
 
     suspend fun getWeatherResponseWindDirection(latitude: String, longitude: String, altitude: String? = null): Map<String, Double>{
-        val weatherResponse = locationForecastDataSource.getLocationForecast(latitude, longitude, altitude)
+        val weatherResponse = locationForecastDataSource.getWeatherResponse(latitude, longitude, altitude)
         val timeseries = weatherResponse?.properties?.timeseries
 
         val windDirectionMap = mutableMapOf<String, Double>()
@@ -128,7 +128,7 @@ class WeatherAPIRepository (
     //METALERTREPOSITORY
     private suspend fun getAlertMap(): Map<String, List<Properties>> {
         // Holds a MetAlertDataClass that contains a list of Feature
-        val metAlertDataClass: MetAlertDataClass? = metAlertDataSource.getHavvarselData()
+        val metAlertDataClass: MetAlertDataClass? = metAlertDataSource.getMetAlert()
 
         // alertMap = MutableMap<String, MutableList<Properties>>: String = area, MutableList<Properties> = List<MetAlertDataSource.feature.properties>
         val alertMap: MutableMap<String, MutableList<Properties>> = mutableMapOf()
@@ -149,7 +149,7 @@ class WeatherAPIRepository (
 
     //TODO: Write comments to explain this method
     suspend fun getCoordinates(): List<List<List<Any?>>>? {
-        val metAlertDataClass: MetAlertDataClass? = metAlertDataSource.getHavvarselData()
+        val metAlertDataClass: MetAlertDataClass? = metAlertDataSource.getMetAlert()
         return metAlertDataClass?.features?.map { feature ->
             feature.geometry.coordinates
         }
@@ -159,7 +159,7 @@ class WeatherAPIRepository (
     suspend fun getRiskMatrixColor(areaName : String): String?{
 
         //The variable holds a MetAlertDataClass that contains a list of Feature
-        val metAlertDataClass : MetAlertDataClass? = metAlertDataSource.getHavvarselData()
+        val metAlertDataClass : MetAlertDataClass? = metAlertDataSource.getMetAlert()
 
         // checking if metAlertDataClass is null or areaName is blank
         if(metAlertDataClass == null || areaName.isBlank()){
@@ -178,7 +178,7 @@ class WeatherAPIRepository (
     suspend fun getAwarenessSeriousness(areaName : String): String?{
 
         //The variable holds a MetAlertDataClass that contains a list of Feature
-        val metAlertDataClass : MetAlertDataClass? = metAlertDataSource.getHavvarselData()
+        val metAlertDataClass : MetAlertDataClass? = metAlertDataSource.getMetAlert()
 
         // checking if metAlertDataClass is null or areaName is blank
         if(metAlertDataClass == null || areaName.isBlank()){
@@ -195,7 +195,7 @@ class WeatherAPIRepository (
     //USIKKER PÅ OM DET ER SÅNN VI VIL HENTE NAVNET TIL AREA PÅ!!
     suspend fun getAreaName(areaIndex : Int): String?{
         // This variable holds a MetAlertDataClass that contains a list of Feature
-        val metAlertDataClass : MetAlertDataClass? = metAlertDataSource.getHavvarselData()
+        val metAlertDataClass : MetAlertDataClass? = metAlertDataSource.getMetAlert()
 
         // if metAlertDataClass i null or the areaIndex is out of bounds, return null
         if(metAlertDataClass == null || areaIndex < 0 || areaIndex > metAlertDataClass.features.size){
