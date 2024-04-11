@@ -1,4 +1,4 @@
-package no.uio.ifi.in2000.natalan.havvarselapp.data.metAlerts
+package no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.metAlerts
 
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body

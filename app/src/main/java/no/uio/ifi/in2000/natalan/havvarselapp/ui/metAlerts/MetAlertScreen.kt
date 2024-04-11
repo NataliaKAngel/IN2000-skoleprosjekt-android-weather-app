@@ -39,7 +39,7 @@ fun MetAlertScreen(
     //UI-state flow:
     val metAlertUIState by metAlertViewModel.metAlertUIState.collectAsState()
     // Tester viewmodel og repository
-    metAlertViewModel.fetchMetAlertsByIndex(1)
+  //  metAlertViewModel.fetchMetAlertsByIndex(1)
 
     Column(
         modifier = Modifier

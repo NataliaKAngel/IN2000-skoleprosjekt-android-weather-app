@@ -6,7 +6,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import no.uio.ifi.in2000.natalan.havvarselapp.data.locationForecast.LocationForecastRepository
 
 // TODO: Roten til API-kall problemet -->
 //  løsning: UIStateLocation holder en variabel f.eks: "values",
@@ -21,7 +20,7 @@ data class UIStateLocation (
     val units: Map<String?, String?>? = null
 )
 class LocationForecastViewModel(
-    private val locationForecastRepository: LocationForecastRepository
+    //private val locationForecastRepository: LocationForecastRepository
 ) : ViewModel() {
 
     //UI State:
@@ -40,20 +39,20 @@ class LocationForecastViewModel(
     // TODO: Om skrive denne til å passe med den nye UIStateLocation
     fun fetchWeatherResponses(latitude: String, longitude: String, altitude: String? = null) {
         viewModelScope.launch {
-            val windSpeedMap = locationForecastRepository.getWeatherResponseWindSpeedMap(latitude, longitude, altitude)
-            val airTemperatureMap = locationForecastRepository.getWeatherResponseAirTemperature(latitude, longitude, altitude)
-            val airPressureMap = locationForecastRepository.getWeatherResponseAirPressure(latitude, longitude, altitude)
-            val windDirectionMap = locationForecastRepository.getWeatherResponseWindDirection(latitude, longitude, altitude)
-            val units = locationForecastRepository.getWeatherResponseUnit(latitude, longitude, altitude)
+//            val windSpeedMap = locationForecastRepository.getWeatherResponseWindSpeedMap(latitude, longitude, altitude)
+//            val airTemperatureMap = locationForecastRepository.getWeatherResponseAirTemperature(latitude, longitude, altitude)
+//            val airPressureMap = locationForecastRepository.getWeatherResponseAirPressure(latitude, longitude, altitude)
+//            val windDirectionMap = locationForecastRepository.getWeatherResponseWindDirection(latitude, longitude, altitude)
+//            val units = locationForecastRepository.getWeatherResponseUnit(latitude, longitude, altitude)
 
             // Update UIStateLocation with fetched data
-            _locationUIState.value = UIStateLocation(
-                windSpeedMap,
-                airTemperatureMap,
-                airPressureMap,
-                windDirectionMap,
-                units
-            )
+//            _locationUIState.value = UIStateLocation(
+//                windSpeedMap,
+//                airTemperatureMap,
+//                airPressureMap,
+//                windDirectionMap,
+//                units
+           // )
         }
     }
 }

@@ -12,8 +12,13 @@ import no.uio.ifi.in2000.natalan.havvarselapp.ui.theme.HavvarselAppTheme
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.WeatherAPIRepository
+import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.locationForecast.LocationForecastDataSource
+import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.metAlerts.MetAlertDataSource
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.home.HomeScreen
-import no.uio.ifi.in2000.natalan.havvarselapp.ui.spot.SpotScreen
+import no.uio.ifi.in2000.natalan.havvarselapp.ui.home.HomeScreenViewModel
+import no.uio.ifi.in2000.natalan.havvarselapp.ui.info.InfoScreen
+import no.uio.ifi.in2000.natalan.havvarselapp.ui.info.InfoScreenViewModel
 
 
 class MainActivity : ComponentActivity() {
@@ -26,35 +31,24 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+                    //Creates instances of datasources and repositories
+                    val locationForecastDataSource = LocationForecastDataSource()
+                    val metAlertDataSource = MetAlertDataSource()
+                    val weatherAPIRepository = WeatherAPIRepository(locationForecastDataSource, metAlertDataSource)
+
+                    // Creates instances of viewModels and Screens
+                    val homeScreenViewModel = HomeScreenViewModel(weatherAPIRepository)
+                    val spotScreenViewModel = InfoScreenViewModel(weatherAPIRepository)
+
                     // Creates navController and NavHost
                     val navController = rememberNavController()
                     NavHost(navController = navController, startDestination = "HomeScreen") {
-                        // Navigere til de ulike
-                        composable("HomeScreen") {HomeScreen(navController = navController)}
-                        composable("InfoKiteForholdScreen") { SpotScreen(navController = navController) }
+                     // Navigating routes
+                     composable("HomeScreen") { HomeScreen(navController = navController, homeScreenViewModel = homeScreenViewModel) }
+                     composable("InfoScreen") { InfoScreen(navController = navController, infoScreenViewModel = spotScreenViewModel) }
                     }
                 }
             }
         }
     }
 }
-
-                    /*// Creates instances of datasources and repositories
-                    val locationForecastDataSource = LocationForecastDataSource()
-                    val locationForecastRepository = LocationForecastRepository(locationForecastDataSource)
-                    val metAlertDataSource = MetAlertDataSource()
-                    val metAlertRepository = MetAlertRepository(metAlertDataSource)
-
-                    // Creates instances of viewModels and Screens
-                    val locationForestViewModel = LocationForecastViewModel(locationForecastRepository)
-                    val metAlertViewModel = MetAlertViewModel(metAlertRepository)
-
-
-
-                    // Creates navController and NavHost
-                    val navController = rememberNavController()
-                    NavHost(navController = navController, startDestination = "WarningScreen") {
-                        // Navigere til de ulike
-                        composable("HomeScreen") {LocationForecastScreen(navController = navController, locationForecastViewModel = locationForestViewModel)}
-                        composable("WarningScreen") { MetAlertScreen(navController = navController, metAlertViewModel = metAlertViewModel) }
-                    }*/

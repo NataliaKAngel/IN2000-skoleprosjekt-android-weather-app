@@ -1,4 +1,4 @@
-package no.uio.ifi.in2000.natalan.havvarselapp.ui.spot
+package no.uio.ifi.in2000.natalan.havvarselapp.ui.info
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -17,7 +17,10 @@ import androidx.navigation.NavController
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.components.Components
 
 @Composable
-fun SpotScreen(navController: NavController){
+fun InfoScreen(
+    navController: NavController,
+    infoScreenViewModel: InfoScreenViewModel
+    ){
     Box(
         Modifier
             .width(360.dp)
