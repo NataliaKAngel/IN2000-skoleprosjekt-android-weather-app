@@ -20,7 +20,6 @@ import no.uio.ifi.in2000.natalan.havvarselapp.ui.home.HomeScreenViewModel
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.info.InfoScreen
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.info.InfoScreenViewModel
 
-
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

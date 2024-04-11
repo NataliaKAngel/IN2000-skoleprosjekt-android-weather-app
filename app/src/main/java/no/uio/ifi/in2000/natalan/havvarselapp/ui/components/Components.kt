@@ -24,7 +24,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -39,47 +38,47 @@ object InfoText {
     val Brand: Color = Color(0xFF3E6BF6)
 }
 
-object whiteBox {
+object WhiteBox {
     val White: Color = Color(0xFFFFFFFF)
     val StandardRadius: Dp = 16.dp
 }
 
-object blueBoxMap {
+object BlueBoxMap {
     val color: Color = Color(0xFF96CFF5)
     val StandardRadius: Dp = 16.dp
 }
 
-object whiteBoxNavbar {
+object WhiteBoxNavbar {
     val White: Color = Color(0xFFFFFFFF)
     val StandardRadius: Dp = 16.dp
 }
 
-object blueNotClicked {
+object BlueNotClicked {
     val color: Color = Color(0xFFD5ECFB)
     val StandardRadius: Dp = 16.dp
 }
 
-object textColor {
+object TextColor {
     val textColor: Color = Color(0xFF05134D)
 }
-object redCircle {
+object RedCircle {
     val color: Color = Color(0xFFF7524B)
 }
-object orangeCircle {
+object OrangeCircle {
     val color: Color = Color(0xFFF7934B)
 }
-object yellowCircle {
+object YellowCircle {
     val color: Color = Color(0xFFFFC42C)
 }
 
-object greenCircle {
+object GreenCircle {
     val color: Color = Color(0xFF00B680)
 }
 
-object blueCircle {
+object BlueCircle {
     val color: Color = Color(0xFF0991DD)
 }
-object greyCircle {
+object GreyCircle {
     val color: Color = Color(0xFFB1B3B4)
 }
 class Components {
@@ -90,8 +89,8 @@ class Components {
                 .width(328.dp)
                 .height(76.dp)
                 .background(
-                    color = whiteBox.White,
-                    shape = RoundedCornerShape(size = whiteBox.StandardRadius)
+                    color = WhiteBox.White,
+                    shape = RoundedCornerShape(size = WhiteBox.StandardRadius)
                 )
                 .padding(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 16.dp)
         ) {
@@ -105,12 +104,12 @@ class Components {
                     contentDescription = "image description",
                     contentScale = ContentScale.None
                 )
-                infoButton(onClick = infoButtonClick)
+                InfoButton(onClick = infoButtonClick)
             }
         }
     }
     @Composable
-    fun infoButton(onClick: () -> Unit){
+    fun InfoButton(onClick: () -> Unit){
         Box(
             modifier = Modifier
                 .clickable(onClick = onClick)
@@ -143,14 +142,14 @@ class Components {
         }
     }
     @Composable
-    fun navButton(text: String, icon: Int, onClick: () -> Unit, color: Color) { // Endret parameterne til tekst og ikon
+    fun NavButton(text: String, icon: Int, onClick: () -> Unit, color: Color) { // Endret parameterne til tekst og ikon
         Box(
             Modifier
                 .width(88.dp)
                 .height(72.dp)
                 .background(
                     color = color,
-                    shape = RoundedCornerShape(size = blueBoxMap.StandardRadius)
+                    shape = RoundedCornerShape(size = BlueBoxMap.StandardRadius)
                 ),
             contentAlignment = Alignment.Center
         ) {
@@ -177,14 +176,14 @@ class Components {
     }
 
     @Composable
-    fun navBarKart(navButtonClick: (String) -> Unit){ //
+    fun NavBarKart(navButtonClick: (String) -> Unit){ //
         Box(
             Modifier
                 .width(328.dp)
                 .height(104.dp)
                 .background(
-                    color = whiteBoxNavbar.White,
-                    shape = RoundedCornerShape(size = whiteBoxNavbar.StandardRadius)
+                    color = WhiteBoxNavbar.White,
+                    shape = RoundedCornerShape(size = WhiteBoxNavbar.StandardRadius)
                 )
                 .padding(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 16.dp)
         ){
@@ -192,21 +191,21 @@ class Components {
                 horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.Start),
                 verticalAlignment = Alignment.Bottom,
             ) {
-                navButton(text = "Kart", icon = R.drawable.map, onClick = { navButtonClick.invoke("Kart") }, color = blueBoxMap.color)
-                navButton(text = "Favoritter", icon = R.drawable.favourite, onClick = { navButtonClick.invoke("Favoritter") }, color = blueNotClicked.color)
-                navButton(text = "Instillinger", icon = R.drawable.settings, onClick = { navButtonClick.invoke("Instillinger") }, color = blueNotClicked.color)
+                NavButton(text = "Kart", icon = R.drawable.map, onClick = { navButtonClick.invoke("Kart") }, color = BlueBoxMap.color)
+                NavButton(text = "Favoritter", icon = R.drawable.favourite, onClick = { navButtonClick.invoke("Favoritter") }, color = BlueNotClicked.color)
+                NavButton(text = "Instillinger", icon = R.drawable.settings, onClick = { navButtonClick.invoke("Instillinger") }, color = BlueNotClicked.color)
             }
         }
     }
     @Composable
-    fun navBarFavourite(navButtonClick: (String) -> Unit){ //
+    fun NavBarFavourite(navButtonClick: (String) -> Unit){ //
         Box(
             Modifier
                 .width(328.dp)
                 .height(104.dp)
                 .background(
-                    color = whiteBoxNavbar.White,
-                    shape = RoundedCornerShape(size = whiteBoxNavbar.StandardRadius)
+                    color = WhiteBoxNavbar.White,
+                    shape = RoundedCornerShape(size = WhiteBoxNavbar.StandardRadius)
                 )
                 .padding(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 16.dp)
         ){
@@ -214,21 +213,21 @@ class Components {
                 horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.Start),
                 verticalAlignment = Alignment.Bottom,
             ) {
-                navButton(text = "Kart", icon = R.drawable.map, onClick = { navButtonClick.invoke("Kart") }, color = blueNotClicked.color)
-                navButton(text = "Favoritter", icon = R.drawable.favourite, onClick = { navButtonClick.invoke("Favoritter") }, color = blueBoxMap.color)
-                navButton(text = "Instillinger", icon = R.drawable.settings, onClick = { navButtonClick.invoke("Instillinger") }, color = blueNotClicked.color)
+                NavButton(text = "Kart", icon = R.drawable.map, onClick = { navButtonClick.invoke("Kart") }, color = BlueNotClicked.color)
+                NavButton(text = "Favoritter", icon = R.drawable.favourite, onClick = { navButtonClick.invoke("Favoritter") }, color = BlueBoxMap.color)
+                NavButton(text = "Instillinger", icon = R.drawable.settings, onClick = { navButtonClick.invoke("Instillinger") }, color = BlueNotClicked.color)
             }
         }
     }
     @Composable
-    fun navBarInnstillinger(navButtonClick: (String) -> Unit){ //
+    fun NavBarInnstillinger(navButtonClick: (String) -> Unit){ //
         Box(
             Modifier
                 .width(328.dp)
                 .height(104.dp)
                 .background(
-                    color = whiteBoxNavbar.White,
-                    shape = RoundedCornerShape(size = whiteBoxNavbar.StandardRadius)
+                    color = WhiteBoxNavbar.White,
+                    shape = RoundedCornerShape(size = WhiteBoxNavbar.StandardRadius)
                 )
                 .padding(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 16.dp)
         ){
@@ -236,15 +235,15 @@ class Components {
                 horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.Start),
                 verticalAlignment = Alignment.Bottom,
             ) {
-                navButton(text = "Kart", icon = R.drawable.map, onClick = { navButtonClick.invoke("Kart") }, color = blueNotClicked.color)
-                navButton(text = "Favoritter", icon = R.drawable.favourite, onClick = { navButtonClick.invoke("Favoritter") }, color = blueNotClicked.color)
-                navButton(text = "Instillinger", icon = R.drawable.settings, onClick = { navButtonClick.invoke("Instillinger") }, color = blueBoxMap.color)
+                NavButton(text = "Kart", icon = R.drawable.map, onClick = { navButtonClick.invoke("Kart") }, color = BlueNotClicked.color)
+                NavButton(text = "Favoritter", icon = R.drawable.favourite, onClick = { navButtonClick.invoke("Favoritter") }, color = BlueNotClicked.color)
+                NavButton(text = "Instillinger", icon = R.drawable.settings, onClick = { navButtonClick.invoke("Instillinger") }, color = BlueBoxMap.color)
             }
         }
     }
 
     @Composable
-    fun goToMap(onClick: () -> Unit){
+    fun GoToMap(onClick: () -> Unit){
         Box(modifier = Modifier
             .clickable(onClick = onClick))
         {
@@ -256,12 +255,12 @@ class Components {
         }
     }
     @Composable
-    fun kiteForholdInfoBox(){
+    fun KiteConditionInfoBox(){
         Box(
             Modifier
                 .width(328.dp)
                 .height(437.dp)
-                .background(color = whiteBox.White, shape = RoundedCornerShape(size = whiteBox.StandardRadius))
+                .background(color = WhiteBox.White, shape = RoundedCornerShape(size = WhiteBox.StandardRadius))
                 .padding(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 16.dp)
         ){
             Column(
@@ -283,7 +282,7 @@ class Components {
                                 fontSize = 24.sp,
                                 fontFamily = FontFamily(Font(R.font.inter_font)),
                                 fontWeight = FontWeight(700),
-                                color = textColor.textColor,
+                                color = TextColor.textColor,
                             )
                         )
                         Text(
@@ -292,7 +291,7 @@ class Components {
                                 fontSize = 12.sp,
                                 fontFamily = FontFamily(Font(R.font.inter_font)),
                                 fontWeight = FontWeight(400),
-                                color = textColor.textColor,
+                                color = TextColor.textColor,
                             )
                         )
                     }
@@ -309,7 +308,7 @@ class Components {
                             fontSize = 9.sp,
                             fontFamily = FontFamily(Font(R.font.inter_font)),
                             fontWeight = FontWeight(400),
-                            color = textColor.textColor,
+                            color = TextColor.textColor,
                             letterSpacing = 0.5.sp,
                         )
                     )
@@ -325,19 +324,19 @@ class Components {
                         verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.Top),
                         horizontalAlignment = Alignment.Start,
                     ) {
-                        kiteForholdColorBox(greyCircle.color, icon = R.drawable.thumbdown, "Ingen kiteforhold", "0-5 m/s og/eller feil vindretning.\nNesten umulig å kite.")
-                        kiteForholdColorBox(blueCircle.color, icon = R.drawable.thumbup, "Middels kiteforhold", "5<7 m/s og riktig vindretning.\nBør ha større kite.")
-                        kiteForholdColorBox(greenCircle.color, icon = R.drawable.thumbup, "Anbefalte kiteforhold", "7<11 m/s\nRiktig vindstyrke og vindretning.")
-                        kiteForholdColorBox(yellowCircle.color, icon = R.drawable.thumbup, "Utfordrende kiteforhold", "11<15 m/s og riktig vindretning.\nSterk vind. Kan være moderat fare.")
-                        kiteForholdColorBox(orangeCircle.color, icon = R.drawable.thumbdown, "Ingen kiteforhold", "15<19 m/s\nKan være stor fare.")
-                        kiteForholdColorBox(redCircle.color, icon = R.drawable.thumbdown, "Ingen kiteforhold", "19< m/s\nEkstrem fare og ekstremvær")
+                        KiteConditionColorBox(GreyCircle.color, icon = R.drawable.thumbdown, "Ingen kiteforhold", "0-5 m/s og/eller feil vindretning.\nNesten umulig å kite.")
+                        KiteConditionColorBox(BlueCircle.color, icon = R.drawable.thumbup, "Middels kiteforhold", "5<7 m/s og riktig vindretning.\nBør ha større kite.")
+                        KiteConditionColorBox(GreenCircle.color, icon = R.drawable.thumbup, "Anbefalte kiteforhold", "7<11 m/s\nRiktig vindstyrke og vindretning.")
+                        KiteConditionColorBox(YellowCircle.color, icon = R.drawable.thumbup, "Utfordrende kiteforhold", "11<15 m/s og riktig vindretning.\nSterk vind. Kan være moderat fare.")
+                        KiteConditionColorBox(OrangeCircle.color, icon = R.drawable.thumbdown, "Ingen kiteforhold", "15<19 m/s\nKan være stor fare.")
+                        KiteConditionColorBox(RedCircle.color, icon = R.drawable.thumbdown, "Ingen kiteforhold", "19< m/s\nEkstrem fare og ekstremvær")
                     }
                 }
             }
         }
     }
     @Composable
-    fun kiteForholdColorBox(color: Color, icon: Int, title: String, info: String) {
+    fun KiteConditionColorBox(color: Color, icon: Int, title: String, info: String) {
         Box(
             Modifier
                 .width(181.dp)
@@ -379,7 +378,7 @@ class Components {
                                 fontSize = 12.sp,
                                 fontFamily = FontFamily(Font(R.font.inter_font)),
                                 fontWeight = FontWeight(400),
-                                color = textColor.textColor,
+                                color = TextColor.textColor,
                             )
                         )
                         Text(
@@ -388,7 +387,7 @@ class Components {
                                 fontSize = 9.sp,
                                 fontFamily = FontFamily(Font(R.font.inter_font)),
                                 fontWeight = FontWeight(400),
-                                color = textColor.textColor,
+                                color = TextColor.textColor,
                             )
                         )
                     }
@@ -397,7 +396,6 @@ class Components {
         }
     }
 }
-
 
 /*@Preview
 @Composable

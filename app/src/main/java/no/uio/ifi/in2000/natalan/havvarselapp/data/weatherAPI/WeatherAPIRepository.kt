@@ -126,7 +126,7 @@ class WeatherAPIRepository (
     }
 
     //METALERTREPOSITORY
-    suspend fun getAlertMap(): Map<String, List<Properties>> {
+    private suspend fun getAlertMap(): Map<String, List<Properties>> {
         // Holds a MetAlertDataClass that contains a list of Feature
         val metAlertDataClass: MetAlertDataClass? = metAlertDataSource.getHavvarselData()
 
@@ -166,13 +166,9 @@ class WeatherAPIRepository (
             return null
         }
 
-        // finding the feature corresponding to the specific area
-        val feature = metAlertDataClass.features.find{it.properties.area == areaName}
+        // finding the feature corresponding to the specific area, if the area is not found, return null
+        val feature = metAlertDataClass.features.find{it.properties.area == areaName} ?: return null
 
-        // if the area is not found, return null
-        if(feature == null){
-            return null
-        }
         // returning the risk matrix color for the specific area
         return feature.properties.riskMatrixColor
     }
@@ -188,13 +184,9 @@ class WeatherAPIRepository (
         if(metAlertDataClass == null || areaName.isBlank()){
             return null
         }
-        // finding the feature corresponding to the specific area
-        val feature = metAlertDataClass.features.find{it.properties.area == areaName}
+        // finding the feature corresponding to the specific area, if the area is not found, return null
+        val feature = metAlertDataClass.features.find{it.properties.area == areaName} ?: return null
 
-        // if the area is not found, return null
-        if(feature == null){
-            return null
-        }
         // returning the awarness seriousness for the specific area
         return feature.properties.awarenessSeriousness
     }

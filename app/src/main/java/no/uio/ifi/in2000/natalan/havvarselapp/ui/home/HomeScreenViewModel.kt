@@ -6,4 +6,5 @@ import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.WeatherAPIReposito
 class HomeScreenViewModel(
     val weatherAPIRepository: WeatherAPIRepository
 ) : ViewModel(){
+
 }

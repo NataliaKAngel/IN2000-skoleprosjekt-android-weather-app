@@ -49,7 +49,7 @@ fun HomeScreen(
                 .padding(bottom = 16.dp, start = 16.dp, end = 16.dp)
                 .align(Alignment.BottomCenter)
         ) {
-            Components().navBarKart { selectedComponent ->
+            Components().NavBarKart { selectedComponent ->
                 // Her kan du utføre handlinger basert på den valgte komponenten
                 when (selectedComponent) {
                     "Kart" -> {

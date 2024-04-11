@@ -13,7 +13,7 @@ data class Spot (
     val photo: String = "",
 
 
-    //LOCATIONFORECAST:
+    //LOCATION-FORECAST:
     //Map containing windSpeed: Map<Time, WindSpeed>
     val windSpeed : Map<String, Double> = emptyMap(),
     //Map containing windDirection: Map<Time, WindDirection>
@@ -21,7 +21,7 @@ data class Spot (
     //Map containing units:
     val units: Map<String?, String?> = emptyMap(),
 
-    //METALERT:
+    //MET-ALERT:
     val riskMatrixColor: String = "",
     val awarenessSeriousness: String = "",
 

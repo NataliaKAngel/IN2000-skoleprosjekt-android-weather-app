@@ -37,13 +37,13 @@ fun InfoScreen(
                 modifier = Modifier
                     .padding(start = 16.dp, end = 16.dp)
             ) {
-                Components().goToMap { navController.popBackStack() }
+                Components().GoToMap { navController.popBackStack() }
             }
 
             Spacer(modifier = Modifier.height(12.dp))
 
             Box{
-                Components().kiteForholdInfoBox()
+                Components().KiteConditionInfoBox()
             }
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -53,7 +53,7 @@ fun InfoScreen(
                 modifier = Modifier
                     .padding(start = 16.dp, end = 16.dp)
             ) {
-                Components().navBarKart { selectedComponent ->
+                Components().NavBarKart { selectedComponent ->
                     // Her kan du utføre handlinger basert på den valgte komponenten
                     when (selectedComponent) {
                         "Kart" -> {
