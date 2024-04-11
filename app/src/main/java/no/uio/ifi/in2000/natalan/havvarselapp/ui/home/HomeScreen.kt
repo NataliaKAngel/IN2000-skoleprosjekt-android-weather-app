@@ -18,7 +18,10 @@ import com.mapbox.maps.MapView
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.components.Components
 
 @Composable
-fun HomeScreen(navController: NavController) {
+fun HomeScreen(
+    navController: NavController,
+    homeScreenViewModel: HomeScreenViewModel
+) {
     val context = LocalContext.current.applicationContext
     val mapView = createMapScreen(context)
 
@@ -37,7 +40,7 @@ fun HomeScreen(navController: NavController) {
                 .padding(top = 16.dp, start = 16.dp, end = 16.dp)
                 .align(Alignment.TopCenter)
         ) {
-            Components().TopBar(infoButtonClick = { navController.navigate("InfoKiteForholdScreen") })
+            Components().TopBar(infoButtonClick = { navController.navigate("InfoScreen") })
         }
 
         // NavBar

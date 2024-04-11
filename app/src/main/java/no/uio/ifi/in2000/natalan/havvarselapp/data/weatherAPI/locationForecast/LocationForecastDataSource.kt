@@ -1,4 +1,4 @@
-package no.uio.ifi.in2000.natalan.havvarselapp.data.locationForecast
+package no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.locationForecast
 
 import android.util.Log
 import io.ktor.client.HttpClient
