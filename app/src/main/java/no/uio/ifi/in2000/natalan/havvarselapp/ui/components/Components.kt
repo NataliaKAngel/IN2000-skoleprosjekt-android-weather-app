@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -83,11 +84,12 @@ object greyCircle {
     val color: Color = Color(0xFFB1B3B4)
 }
 class Components {
+    //TopBar component that contains a info-button about the app
     @Composable
     fun TopBar(infoButtonClick: () -> Unit) {
         Box(
             modifier = Modifier
-                .width(328.dp)
+                .fillMaxWidth()
                 .height(76.dp)
                 .background(
                     color = whiteBox.White,
@@ -109,6 +111,8 @@ class Components {
             }
         }
     }
+
+    //infoButton
     @Composable
     fun infoButton(onClick: () -> Unit){
         Box(
@@ -411,3 +415,4 @@ fun PreviewInfo() {
 
     components.navBar(navButtonClick)
 }*/
+
