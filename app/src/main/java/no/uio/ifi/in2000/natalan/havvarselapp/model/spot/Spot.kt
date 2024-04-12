@@ -2,30 +2,26 @@ package no.uio.ifi.in2000.natalan.havvarselapp.model.spot
 
 data class Spot (
     //The coordinates of the spot
-    val coordinates: String = "",
-    //The name of the spot
-    val spotName: String = "",
-    //The city ("kommune") the spot lies in
-    val city: String = "",
+    val coordinates: String,
     //The name of the area the spot is a part of (from MetAlert)
-    val areaName: String = "",
+    val areaName: String,
     //Photo of the spot
-    val photo: String = "",
+    val photo: String,
 
 
-    //LOCATIONFORECAST:
+    //LOCATION-FORECAST:
     //Map containing windSpeed: Map<Time, WindSpeed>
-    val windSpeed : Map<String, Double> = emptyMap(),
+    val windSpeed : Map<String, Double>,
     //Map containing windDirection: Map<Time, WindDirection>
-    val windDirection : Map<String, Double> = emptyMap(),
+    val windDirection : Map<String, Double>,
     //Map containing units:
-    val units: Map<String?, String?> = emptyMap(),
+    val units: Map<String?, String?>,
 
-    //METALERT:
-    val riskMatrixColor: String = "",
-    val awarenessSeriousness: String = "",
+    //MET-ALERT:
+    val riskMatrixColor: String,
+    val awarenessSeriousness: String,
 
     //CALCULATION:
     //Recommended windDirection for the spot
-    val bestWindDirection : Double = 0.0
+    val bestWindDirection : Double
 )

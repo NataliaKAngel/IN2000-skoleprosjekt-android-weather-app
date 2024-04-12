@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavController
-import no.uio.ifi.in2000.natalan.havvarselapp.ui.components.Components
+import no.uio.ifi.in2000.natalan.havvarselapp.ui.components.*
 
 @Composable
 fun InfoScreen(
@@ -37,13 +37,13 @@ fun InfoScreen(
                 modifier = Modifier
                     .padding(start = 16.dp, end = 16.dp)
             ) {
-                Components().goToMap { navController.popBackStack() }
+                GoToMap { navController.popBackStack() }
             }
 
             Spacer(modifier = Modifier.height(12.dp))
 
             Box{
-                Components().kiteForholdInfoBox()
+                KiteConditionInfoBox()
             }
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -53,7 +53,7 @@ fun InfoScreen(
                 modifier = Modifier
                     .padding(start = 16.dp, end = 16.dp)
             ) {
-                Components().navBarKart { selectedComponent ->
+                NavBarKart { selectedComponent ->
                     // Her kan du utføre handlinger basert på den valgte komponenten
                     when (selectedComponent) {
                         "Kart" -> {

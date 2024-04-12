@@ -37,7 +37,7 @@ class LocationForecastViewModel(
     // Method to fetch weather responses for given coordinates
 
     // TODO: Om skrive denne til å passe med den nye UIStateLocation
-    fun fetchWeatherResponses(latitude: String, longitude: String, altitude: String? = null) {
+    private fun fetchWeatherResponses(latitude: String, longitude: String, altitude: String? = null) {
         viewModelScope.launch {
 //            val windSpeedMap = locationForecastRepository.getWeatherResponseWindSpeedMap(latitude, longitude, altitude)
 //            val airTemperatureMap = locationForecastRepository.getWeatherResponseAirTemperature(latitude, longitude, altitude)
