@@ -1,9 +1,7 @@
 package no.uio.ifi.in2000.natalan.havvarselapp.ui.home
 
 import android.content.Context
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -17,7 +15,7 @@ import androidx.navigation.NavController
 import com.mapbox.geojson.Point
 import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.MapView
-import no.uio.ifi.in2000.natalan.havvarselapp.ui.components.Components
+import no.uio.ifi.in2000.natalan.havvarselapp.ui.components.*
 
 @Composable
 fun HomeScreen(
@@ -27,52 +25,43 @@ fun HomeScreen(
     val context = LocalContext.current.applicationContext
     val mapView = createMapScreen(context)
 
-
-    Column(
-        verticalArrangement = Arrangement.SpaceBetween,
-        horizontalAlignment = Alignment.CenterHorizontally,
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.TopCenter
     ) {
+        // Map
+        AndroidView(
+            factory = { mapView },
+            modifier = Modifier.fillMaxSize()
+        )
 
         Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.TopCenter
+            modifier = Modifier
+                .padding(top = 16.dp, start = 16.dp, end = 16.dp)
+                .align(Alignment.TopCenter)
         ) {
-            // Map
-            AndroidView(
-                factory = { mapView },
-                modifier = Modifier.fillMaxSize()
-            )
+            TopBar(infoButtonClick = { navController.navigate("InfoScreen") })
+        }
 
-            Box(
-                modifier = Modifier
-                    .padding(top = 16.dp, start = 16.dp, end = 16.dp)
-                    .align(Alignment.TopCenter)
-            ) {
-                Components().TopBar(infoButtonClick = { navController.navigate("InfoScreen") })
-            }
-
-            // NavBar
-            Box(
-                modifier = Modifier
-                    .padding(bottom = 16.dp, start = 16.dp, end = 16.dp)
-                    .align(Alignment.BottomCenter)
-            ) {
-                Components().navBarKart { selectedComponent ->
-                    // Her kan du utføre handlinger basert på den valgte komponenten
-                    when (selectedComponent) {
-                        "Kart" -> {
-                            // Gjør noe når "Kart" er valgt
-                        }
-
-                        "Favoritter" -> {
-                            // Gjør noe når "Favoritter" er valgt
-                        }
-
-                        "Instillinger" -> {
-                            // Gjør noe når "Instillinger" er valgt
-                        }
-                        // Legg til flere tilfeller etter behov for andre komponenter
+        // NavBar
+        Box(
+            modifier = Modifier
+                .padding(bottom = 16.dp, start = 16.dp, end = 16.dp)
+                .align(Alignment.BottomCenter)
+        ) {
+            NavBarKart { selectedComponent ->
+                // Her kan du utføre handlinger basert på den valgte komponenten
+                when (selectedComponent) {
+                    "Kart" -> {
+                        // Gjør noe når "Kart" er valgt
                     }
+                    "Favoritter" -> {
+                        // Gjør noe når "Favoritter" er valgt
+                    }
+                    "Instillinger" -> {
+                        // Gjør noe når "Instillinger" er valgt
+                    }
+                    // Legg til flere tilfeller etter behov for andre komponenter
                 }
             }
         }

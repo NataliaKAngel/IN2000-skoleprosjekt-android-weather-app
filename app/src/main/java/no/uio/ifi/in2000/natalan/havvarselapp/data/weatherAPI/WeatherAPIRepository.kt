@@ -5,11 +5,27 @@ import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.metAlerts.MetAlert
 import no.uio.ifi.in2000.natalan.havvarselapp.model.locationForecast.WeatherResponse
 import no.uio.ifi.in2000.natalan.havvarselapp.model.metAlerts.MetAlertDataClass
 import no.uio.ifi.in2000.natalan.havvarselapp.model.metAlerts.Properties
+import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.Spot
 
 class WeatherAPIRepository (
     private val locationForecastDataSource: LocationForecastDataSource,
     private val metAlertDataSource: MetAlertDataSource
 ){
+    //Map: Stores the predefined coordinates
+    private val predefinedSpots = createPredefinedSpots()
+
+    //Creates a map of predefined kite spots connected to the correct Spot-object
+    private fun createPredefinedSpots(): Map<PredefinedSpots, Spot?>{
+        return mapOf<PredefinedSpots, Spot?>(
+            PredefinedSpots(coordinate = "lat=10&lon=60.1", spotName = "Hamresanden", cityName = "Kristiansand") to null
+        )
+    }
+
+    //Offers the map of predefined kite spots to ViewModel
+    fun getPredefinedSpots(): Map<PredefinedSpots, Spot?>{
+        return predefinedSpots
+    }
+
     //LOCATIONFORECASTREPOSITORY
 
     // Utgangspunkt til Torsdag
@@ -22,19 +38,19 @@ class WeatherAPIRepository (
         // TODO: Search through weatherResponses with built in Kotlin functions and return the WeatherResponse-object that matches the coordinates
         // Location of the coordinates:
         // coordinates: List<Double> = WeatherResponse.Geometry.coordinate
-        return locationForecastDataSource.getLocationForecast(lat, lon, alt)
+        return locationForecastDataSource.getWeatherResponse(lat, lon, alt)
     }
 
     // Different methods to transform the data from a WeatherResponse.
     // Extract the wind direction etc.
 
     suspend fun getWeatherResponseUnit(latitude: String, longitude: String, altitude: String? = null): Map<String?, String?>? {
-        val weatherResponse = locationForecastDataSource.getLocationForecast(latitude, longitude, altitude)
+        val weatherResponse = locationForecastDataSource.getWeatherResponse(latitude, longitude, altitude)
         return weatherResponse?.properties?.meta?.units
     }
 
     suspend fun getWeatherResponseWindSpeedMap(latitude: String, longitude: String, altitude: String? = null): Map<String, Double> {
-        val weatherResponse = locationForecastDataSource.getLocationForecast(latitude, longitude, altitude)
+        val weatherResponse = locationForecastDataSource.getWeatherResponse(latitude, longitude, altitude)
         val timeseries = weatherResponse?.properties?.timeseries
 
         val windSpeedMap = mutableMapOf<String, Double>()
@@ -57,7 +73,7 @@ class WeatherAPIRepository (
     }
 
     suspend fun getWeatherResponseAirTemperature(latitude: String, longitude: String, altitude: String? = null): Map<String, Double>{
-        val weatherResponse = locationForecastDataSource.getLocationForecast(latitude, longitude, altitude)
+        val weatherResponse = locationForecastDataSource.getWeatherResponse(latitude, longitude, altitude)
         val timeseries = weatherResponse?.properties?.timeseries
 
         val airTempMap = mutableMapOf<String, Double>()
@@ -80,7 +96,7 @@ class WeatherAPIRepository (
     }
 
     suspend fun getWeatherResponseAirPressure(latitude: String, longitude: String, altitude: String? = null): Map<String, Double>{
-        val weatherResponse = locationForecastDataSource.getLocationForecast(latitude, longitude, altitude)
+        val weatherResponse = locationForecastDataSource.getWeatherResponse(latitude, longitude, altitude)
         val timeseries = weatherResponse?.properties?.timeseries
 
         val airPressureMap = mutableMapOf<String, Double>()
@@ -103,7 +119,7 @@ class WeatherAPIRepository (
     }
 
     suspend fun getWeatherResponseWindDirection(latitude: String, longitude: String, altitude: String? = null): Map<String, Double>{
-        val weatherResponse = locationForecastDataSource.getLocationForecast(latitude, longitude, altitude)
+        val weatherResponse = locationForecastDataSource.getWeatherResponse(latitude, longitude, altitude)
         val timeseries = weatherResponse?.properties?.timeseries
 
         val windDirectionMap = mutableMapOf<String, Double>()
@@ -126,9 +142,9 @@ class WeatherAPIRepository (
     }
 
     //METALERTREPOSITORY
-    suspend fun getAlertMap(): Map<String, List<Properties>> {
+    private suspend fun getAlertMap(): Map<String, List<Properties>> {
         // Holds a MetAlertDataClass that contains a list of Feature
-        val metAlertDataClass: MetAlertDataClass? = metAlertDataSource.getHavvarselData()
+        val metAlertDataClass: MetAlertDataClass? = metAlertDataSource.getMetAlert()
 
         // alertMap = MutableMap<String, MutableList<Properties>>: String = area, MutableList<Properties> = List<MetAlertDataSource.feature.properties>
         val alertMap: MutableMap<String, MutableList<Properties>> = mutableMapOf()
@@ -149,7 +165,7 @@ class WeatherAPIRepository (
 
     //TODO: Write comments to explain this method
     suspend fun getCoordinates(): List<List<List<Any?>>>? {
-        val metAlertDataClass: MetAlertDataClass? = metAlertDataSource.getHavvarselData()
+        val metAlertDataClass: MetAlertDataClass? = metAlertDataSource.getMetAlert()
         return metAlertDataClass?.features?.map { feature ->
             feature.geometry.coordinates
         }
@@ -159,20 +175,16 @@ class WeatherAPIRepository (
     suspend fun getRiskMatrixColor(areaName : String): String?{
 
         //The variable holds a MetAlertDataClass that contains a list of Feature
-        val metAlertDataClass : MetAlertDataClass? = metAlertDataSource.getHavvarselData()
+        val metAlertDataClass : MetAlertDataClass? = metAlertDataSource.getMetAlert()
 
         // checking if metAlertDataClass is null or areaName is blank
         if(metAlertDataClass == null || areaName.isBlank()){
             return null
         }
 
-        // finding the feature corresponding to the specific area
-        val feature = metAlertDataClass.features.find{it.properties.area == areaName}
+        // finding the feature corresponding to the specific area, if the area is not found, return null
+        val feature = metAlertDataClass.features.find{it.properties.area == areaName} ?: return null
 
-        // if the area is not found, return null
-        if(feature == null){
-            return null
-        }
         // returning the risk matrix color for the specific area
         return feature.properties.riskMatrixColor
     }
@@ -182,19 +194,15 @@ class WeatherAPIRepository (
     suspend fun getAwarenessSeriousness(areaName : String): String?{
 
         //The variable holds a MetAlertDataClass that contains a list of Feature
-        val metAlertDataClass : MetAlertDataClass? = metAlertDataSource.getHavvarselData()
+        val metAlertDataClass : MetAlertDataClass? = metAlertDataSource.getMetAlert()
 
         // checking if metAlertDataClass is null or areaName is blank
         if(metAlertDataClass == null || areaName.isBlank()){
             return null
         }
-        // finding the feature corresponding to the specific area
-        val feature = metAlertDataClass.features.find{it.properties.area == areaName}
+        // finding the feature corresponding to the specific area, if the area is not found, return null
+        val feature = metAlertDataClass.features.find{it.properties.area == areaName} ?: return null
 
-        // if the area is not found, return null
-        if(feature == null){
-            return null
-        }
         // returning the awarness seriousness for the specific area
         return feature.properties.awarenessSeriousness
     }
@@ -203,7 +211,7 @@ class WeatherAPIRepository (
     //USIKKER PÅ OM DET ER SÅNN VI VIL HENTE NAVNET TIL AREA PÅ!!
     suspend fun getAreaName(areaIndex : Int): String?{
         // This variable holds a MetAlertDataClass that contains a list of Feature
-        val metAlertDataClass : MetAlertDataClass? = metAlertDataSource.getHavvarselData()
+        val metAlertDataClass : MetAlertDataClass? = metAlertDataSource.getMetAlert()
 
         // if metAlertDataClass i null or the areaIndex is out of bounds, return null
         if(metAlertDataClass == null || areaIndex < 0 || areaIndex > metAlertDataClass.features.size){

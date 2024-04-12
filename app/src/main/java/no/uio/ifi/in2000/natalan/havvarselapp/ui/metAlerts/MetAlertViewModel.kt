@@ -1,7 +1,6 @@
 package no.uio.ifi.in2000.natalan.havvarselapp.ui.metAlerts
 
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
