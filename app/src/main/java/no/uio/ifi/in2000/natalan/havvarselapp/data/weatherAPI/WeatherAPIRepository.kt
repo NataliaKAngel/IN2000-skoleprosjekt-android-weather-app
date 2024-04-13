@@ -8,22 +8,22 @@ import no.uio.ifi.in2000.natalan.havvarselapp.model.metAlerts.Properties
 import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.Spot
 
 class WeatherAPIRepository (
+    private val predefinedSpotsList: List<PredefinedSpots>,
     private val locationForecastDataSource: LocationForecastDataSource,
     private val metAlertDataSource: MetAlertDataSource
+
 ){
     //Map: Stores the predefined coordinates
-    private val predefinedSpots = createPredefinedSpots()
+    private val predefinedSpotsMap = createPredefinedSpots()
 
     //Creates a map of predefined kite spots connected to the correct Spot-object
     private fun createPredefinedSpots(): Map<PredefinedSpots, Spot?>{
-        return mapOf<PredefinedSpots, Spot?>(
-            PredefinedSpots(coordinate = "lat=10&lon=60.1", spotName = "Hamresanden", cityName = "Kristiansand") to null
-        )
+        return mapOf<PredefinedSpots, Spot?>()
     }
 
     //Offers the map of predefined kite spots to ViewModel
     fun getPredefinedSpots(): Map<PredefinedSpots, Spot?>{
-        return predefinedSpots
+        return predefinedSpotsMap
     }
 
     //LOCATIONFORECASTREPOSITORY
