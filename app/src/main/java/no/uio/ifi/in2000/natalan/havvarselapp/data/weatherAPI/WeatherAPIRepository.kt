@@ -58,30 +58,6 @@ class WeatherAPIRepository (
         return weatherResponse.properties?.meta?.units
     }
 
-    //Not in use:
-    suspend fun getWeatherResponseAirPressure(latitude: String, longitude: String, altitude: String? = null): Map<String, Double>{
-        val weatherResponse = locationForecastDataSource.getWeatherResponse(latitude, longitude, altitude)
-        val timeseries = weatherResponse?.properties?.timeseries
-
-        val airPressureMap = mutableMapOf<String, Double>()
-
-        timeseries?.forEach { timeseriesItem ->
-            val time = timeseriesItem.time // Get the time for this timeseries
-            val details = timeseriesItem.data.instant.details // Get the details object within instant
-
-            // Check if details is not null and contains the wind_speed property
-            if (details.containsKey("air_pressure_at_sea_level")) {
-                val airpressure = details["air_pressure_at_sea_level"]// Get the wind speed value
-
-                // If windSpeed is not null, store it in the map
-                if (airpressure != null) {
-                    airPressureMap[time] = airpressure
-                }
-            }
-        }
-        return airPressureMap
-    }
-
     //METALERTREPOSITORY
     private suspend fun getAlertMap(): Map<String, List<Properties>> {
         // Holds a MetAlertDataClass that contains a list of Feature
