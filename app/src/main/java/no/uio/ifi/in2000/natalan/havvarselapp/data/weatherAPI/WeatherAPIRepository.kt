@@ -42,7 +42,7 @@ class WeatherAPIRepository (
     }
 
     // Different methods to transform the data from a WeatherResponse. Extract the wind direction etc.
-    private suspend fun getWeatherResponseWindSpeedMap(latitude: String, longitude: String, altitude: String? = null): Map<String, Double> {
+    private suspend fun getWindSpeedMap(weatherResponse: WeatherResponse): Map<String, Double> {
         val weatherResponse = locationForecastDataSource.getWeatherResponse(latitude, longitude, altitude)
         val timeseries = weatherResponse?.properties?.timeseries
 
