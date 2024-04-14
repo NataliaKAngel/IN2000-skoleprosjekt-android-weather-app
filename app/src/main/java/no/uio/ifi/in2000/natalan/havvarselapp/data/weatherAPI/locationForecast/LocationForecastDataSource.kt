@@ -35,15 +35,7 @@ class LocationForecastDataSource {
         }
     }
 
-    suspend fun getWeatherResponse(latitude: String?, longitude: String?, altitude: String? = null): WeatherResponse? {
-        // Variable holds coordinates to create URL
-        var coordinates = "lat=$latitude&lon=$longitude"
-
-        // Adds altitude to the URL
-        if (altitude != null) {
-            coordinates += "&altitude=$altitude"
-        }
-
+    suspend fun getWeatherResponse(coordinates: String): WeatherResponse? {
         // Logging: coordinates
         Log.d("LocationForecastDataSource", "Requesting weather data for coordinates: $coordinates")
 
