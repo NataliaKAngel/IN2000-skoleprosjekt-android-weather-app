@@ -5,6 +5,7 @@ import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.metAlerts.MetAlert
 import no.uio.ifi.in2000.natalan.havvarselapp.model.locationForecast.WeatherResponse
 import no.uio.ifi.in2000.natalan.havvarselapp.model.metAlerts.MetAlertDataClass
 import no.uio.ifi.in2000.natalan.havvarselapp.model.metAlerts.Properties
+import no.uio.ifi.in2000.natalan.havvarselapp.model.predefinedSpots.PredefinedSpots
 import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.Spot
 
 class WeatherAPIRepository (
