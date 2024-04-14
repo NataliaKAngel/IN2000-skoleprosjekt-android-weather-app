@@ -59,30 +59,6 @@ class WeatherAPIRepository (
     }
 
     //Not in use:
-    suspend fun getWeatherResponseAirTemperature(latitude: String, longitude: String, altitude: String? = null): Map<String, Double>{
-        val weatherResponse = locationForecastDataSource.getWeatherResponse(latitude, longitude, altitude)
-        val timeseries = weatherResponse?.properties?.timeseries
-
-        val airTempMap = mutableMapOf<String, Double>()
-
-        timeseries?.forEach { timeseriesItem ->
-            val time = timeseriesItem.time // Get the time for this timeseries
-            val details = timeseriesItem.data.instant.details // Get the details object within instant
-
-            // Check if details is not null and contains the wind_speed property
-            if (details.containsKey("air_temperature")) {
-                val airTempSpeed = details["air_temperature"]// Get the wind speed value
-
-                // If windSpeed is not null, store it in the map
-                if (airTempSpeed != null) {
-                    airTempMap[time] = airTempSpeed
-                }
-            }
-        }
-        return airTempMap
-    }
-
-    //Not in use:
     suspend fun getWeatherResponseAirPressure(latitude: String, longitude: String, altitude: String? = null): Map<String, Double>{
         val weatherResponse = locationForecastDataSource.getWeatherResponse(latitude, longitude, altitude)
         val timeseries = weatherResponse?.properties?.timeseries
