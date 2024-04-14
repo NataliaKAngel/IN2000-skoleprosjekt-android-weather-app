@@ -1,7 +1,9 @@
 package no.uio.ifi.in2000.natalan.havvarselapp.ui.home
 
 import android.content.Context
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -25,47 +27,42 @@ fun HomeScreen(
     val context = LocalContext.current.applicationContext
     val mapView = createMapScreen(context)
 
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.TopCenter
+    Column(
+        verticalArrangement = Arrangement.SpaceBetween,
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        // Map
-        AndroidView(
-            factory = { mapView },
-            modifier = Modifier.fillMaxSize()
-        )
 
         Box(
-            modifier = Modifier
-                .padding(top = 16.dp, start = 16.dp, end = 16.dp)
-                .align(Alignment.TopCenter)
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.TopCenter
         ) {
-            TopBar(infoButtonClick = { navController.navigate("InfoScreen") })
-        }
+            // Map
+            AndroidView(
+                factory = { mapView },
+                modifier = Modifier.fillMaxSize()
+            )
 
-        // NavBar
-        Box(
-            modifier = Modifier
-                .padding(bottom = 16.dp, start = 16.dp, end = 16.dp)
-                .align(Alignment.BottomCenter)
-        ) {
-            NavBarKart { selectedComponent ->
-                // Her kan du utføre handlinger basert på den valgte komponenten
-                when (selectedComponent) {
-                    "Kart" -> {
-                        // Gjør noe når "Kart" er valgt
-                    }
-                    "Favoritter" -> {
-                        // Gjør noe når "Favoritter" er valgt
-                    }
-                    "Instillinger" -> {
-                        // Gjør noe når "Instillinger" er valgt
-                    }
-                    // Legg til flere tilfeller etter behov for andre komponenter
-                }
+            Box(
+                modifier = Modifier
+                    .padding(top = 16.dp, start = 16.dp, end = 16.dp)
+                    .align(Alignment.TopCenter)
+            ) {
+                TopBar(infoButtonClick = { navController.navigate("InfoScreen") })
+            }
+
+            // NavBar
+            Box(
+                modifier = Modifier
+                    .padding(bottom = 16.dp, start = 16.dp, end = 16.dp)
+                    .align(Alignment.BottomCenter)
+            ) {
+                NavBar(navController)
             }
         }
+
     }
+
+
 }
 
 @Composable
