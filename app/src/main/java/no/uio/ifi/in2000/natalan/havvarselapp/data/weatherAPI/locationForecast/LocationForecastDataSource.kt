@@ -19,13 +19,14 @@ class LocationForecastDataSource {
     private val proxyKey = "ab4e9a8e7-469d-499e-822a-7df85483df8c" //MÅ FLYTTES!!!!!!
     private val apiKey = "X-Gravitee-API-Key" //MÅ FLYTTES!!!!!!!
 
-    // Connect to IFI Proxy
+    // Creating a client and using the apiKey and proxyKey to connect
     private val client = HttpClient(CIO){
         defaultRequest {
             url(LOCATIONFORECAST)
             header(apiKey, proxyKey)
         }
 
+        //Installing json to deserialize the data from the API
         install(ContentNegotiation) {
             json(Json {
                 ignoreUnknownKeys = true
@@ -35,12 +36,13 @@ class LocationForecastDataSource {
         }
     }
 
+    //Gets one WeatherResponse-object from LocationForecast (API)
     suspend fun getWeatherResponse(coordinates: String): WeatherResponse? {
         // Logging: coordinates
         Log.d("LocationForecastDataSource", "Requesting weather data for coordinates: $coordinates")
 
         return try {
-            // Connects to the API with correct URL (coordinates = lat + lon + alt)
+            // Connects to the API with correct URL
             val response = client.get(LF_WEATHERRESPONSE + coordinates)
 
             // Holds response body

@@ -27,12 +27,11 @@ class WeatherAPIRepository (
     }
 
     //LOCATIONFORECASTREPOSITORY
-    //TODO: Change arguments to this method to coordinate (comes from ViewModel)
     suspend fun getWeatherResponse(coordinates: String): WeatherResponse? {
         return locationForecastDataSource.getWeatherResponse(coordinates)
     }
 
-    // Different methods to transform the data from a WeatherResponse. Extract the wind direction etc.
+    // Different methods to transform the data from a WeatherResponse.
     private fun getWindSpeedMap(weatherResponse: WeatherResponse): Map<String, Double> { //Return value: Map<time: String, windSpeed: Double>
         return weatherResponse.properties?.timeseries?.associate { timeSeries ->
             timeSeries.time to (timeSeries.data.instant.details["windSpeed"] ?: 0.0)
