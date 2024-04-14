@@ -28,5 +28,6 @@ data class Spot (
     //CALCULATION:
     //Recommended windDirection for the spot
     val bestWindDirection : Double,
+    //Color recommendation for kiting
     val recommendationColor: String,
 )
