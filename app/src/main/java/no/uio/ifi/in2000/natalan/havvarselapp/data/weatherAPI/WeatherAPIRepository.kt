@@ -48,9 +48,8 @@ class WeatherAPIRepository (
         } ?: emptyMap()
     }
 
-    suspend fun getWeatherResponseWindDirection(latitude: String, longitude: String, altitude: String? = null): Map<String, Double>{
-        val weatherResponse = locationForecastDataSource.getWeatherResponse(latitude, longitude, altitude)
-        val timeseries = weatherResponse?.properties?.timeseries
+    private fun getWindDirectionMap(weatherResponse: WeatherResponse): Map<String, Double>{
+        val timeseries = weatherResponse.properties?.timeseries
 
         val windDirectionMap = mutableMapOf<String, Double>()
 
