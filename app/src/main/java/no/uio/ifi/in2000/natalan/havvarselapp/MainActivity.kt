@@ -40,8 +40,8 @@ class MainActivity : ComponentActivity() {
                     //Predefined spots
                     val predefinedSpots : List<PredefinedSpots> = listOf(
                         PredefinedSpots(coordinate = "lat=58&lon=8.1", spotName = "Hamresanden", cityName = "Kristiansand"),
-                        PredefinedSpots(coordinate = "", spotName = "", cityName = ""),
-                        PredefinedSpots(coordinate = "", spotName = "", cityName = "")
+                        //PredefinedSpots(coordinate = "", spotName = "", cityName = ""),
+                        //PredefinedSpots(coordinate = "", spotName = "", cityName = "")
                     )
 
                     //Creates instances of datasources and repositories
