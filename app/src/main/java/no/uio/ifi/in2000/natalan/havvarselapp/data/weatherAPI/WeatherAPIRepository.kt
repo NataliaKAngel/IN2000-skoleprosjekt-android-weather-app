@@ -12,39 +12,40 @@ class WeatherAPIRepository (
     private val locationForecastDataSource: LocationForecastDataSource,
     private val metAlertDataSource: MetAlertDataSource
 ){
-    //Creates a map of predefined kite spots connected to the correct Spot-object
-    private suspend fun createPredefinedSpots(coordinates: String): Map<PredefinedSpots, Spot?>{
-        //Gets one WeatherResponse based on the coordinates
-        val weatherResponse = getWeatherResponse(coordinates)
-
-        //Creates and returns a Map<PredefinedSpots, Spot?>
+    //Creates: Map<PredefinedSpots, Spot?>
+    private suspend fun createPredefinedSpots(): Map<PredefinedSpots, Spot?>{
         return predefinedSpotsList.associateWith { predefinedSpot ->
-            weatherResponse?.let { getWindSpeedMap(it) }?.let {
-                getWindDirectionMap(weatherResponse).let { it1 ->
-                    getUnitMap(weatherResponse)?.let { it2 ->
-                        Spot(
-                            coordinates = predefinedSpot.coordinate,
-                            spotName = predefinedSpot.spotName,
-                            cityName = predefinedSpot.cityName,
-                            areaName = "",  //The name of the area the spot is a part of (from MetAlert)
-                            photo = "",  //Photo of the spot as URL
-                            windSpeed = it,
-                            windDirection = it1,
-                            units = it2,
-                            riskMatrixColor = "",  // From MetAlerts
-                            awarenessSeriousness = "",  // From MetAlerts
-                            bestWindDirection = 0.0,  //Recommended windDirection for the spot
-                            recommendationColor = "" //Recommended color for kiting
-                        )
-                    }
+            //Gets a new WeatherResponse based on the coordinates in the PredefinedSpots-object
+            val weatherResponse = getWeatherResponse(predefinedSpot.coordinate)
+            //Using let-blocks to secure that weatherResponse, windSpeed, windDirection and units is not null
+            weatherResponse?.let {
+                val windSpeed = getWindSpeedMap(it)
+                val windDirection = getWindDirectionMap(it)
+                val units = getUnitMap(it)
+                units?.let { it1 ->
+                    //Creates one Spot-object per PredefinedSpot-object
+                    Spot(
+                        coordinates = predefinedSpot.coordinate, //The coordinates of the spot
+                        spotName = predefinedSpot.spotName, //The name of the spot
+                        cityName = predefinedSpot.cityName, //The city the spot lies in
+                        areaName = "",  //The name of the area the spot is a part of (from MetAlert)
+                        photo = "",  //Photo of the spot as URL
+                        windSpeed = windSpeed, //Map<String, Double>
+                        windDirection = windDirection, //Map<String, Double>
+                        units = it1, //Map<String?, String?>?
+                        riskMatrixColor = "",  // From MetAlerts
+                        awarenessSeriousness = "",  // From MetAlerts
+                        bestWindDirection = 0.0,  //Recommended windDirection for the spot
+                        recommendationColor = "" //Recommended color for kiting
+                    )
                 }
             }
         }
     }
 
     //Creates a Map<PredefinedSpots, Spot?> and returns it. Offers the map of predefined kite spots to ViewModel
-    suspend fun getPredefinedSpots(coordinates: String): Map<PredefinedSpots, Spot?>{
-        return createPredefinedSpots(coordinates)
+    suspend fun getPredefinedSpots(): Map<PredefinedSpots, Spot?>{
+        return createPredefinedSpots()
     }
 
     //LOCATIONFORECASTREPOSITORY
