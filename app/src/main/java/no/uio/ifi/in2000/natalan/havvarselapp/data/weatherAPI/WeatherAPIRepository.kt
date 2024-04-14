@@ -42,27 +42,10 @@ class WeatherAPIRepository (
     }
 
     // Different methods to transform the data from a WeatherResponse. Extract the wind direction etc.
-    private suspend fun getWindSpeedMap(weatherResponse: WeatherResponse): Map<String, Double> {
-        val weatherResponse = locationForecastDataSource.getWeatherResponse(latitude, longitude, altitude)
-        val timeseries = weatherResponse?.properties?.timeseries
-
-        val windSpeedMap = mutableMapOf<String, Double>()
-
-        timeseries?.forEach { timeseriesItem ->
-            val time = timeseriesItem.time // Get the time for this timeseries
-            val details = timeseriesItem.data.instant.details // Get the details object within instant
-
-            // Check if details is not null and contains the wind_speed property
-            if (details.containsKey("wind_speed")) {
-                val windSpeed = details["wind_speed"]// Get the wind speed value
-
-                // If windSpeed is not null, store it in the map
-                if (windSpeed != null) {
-                    windSpeedMap[time] = windSpeed
-                }
-            }
-        }
-        return windSpeedMap
+    private fun getWindSpeedMap(weatherResponse: WeatherResponse): Map<String, Double> { //Return value: Map<time: String, windSpeed: Double>
+        return weatherResponse.properties?.timeseries?.associate { timeSeries ->
+            timeSeries.time to (timeSeries.data.instant.details["windSpeed"] ?: 0.0)
+        } ?: emptyMap()
     }
 
     suspend fun getWeatherResponseWindDirection(latitude: String, longitude: String, altitude: String? = null): Map<String, Double>{
