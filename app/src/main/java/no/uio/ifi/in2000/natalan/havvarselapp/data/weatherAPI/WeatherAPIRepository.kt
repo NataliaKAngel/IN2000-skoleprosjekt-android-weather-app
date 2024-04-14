@@ -3,6 +3,7 @@ package no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI
 import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.locationForecast.LocationForecastDataSource
 import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.metAlerts.MetAlertDataSource
 import no.uio.ifi.in2000.natalan.havvarselapp.model.locationForecast.WeatherResponse
+import no.uio.ifi.in2000.natalan.havvarselapp.model.metAlerts.Coordinates
 import no.uio.ifi.in2000.natalan.havvarselapp.model.metAlerts.MetAlertDataClass
 import no.uio.ifi.in2000.natalan.havvarselapp.model.metAlerts.Properties
 import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.Spot
@@ -11,7 +12,6 @@ class WeatherAPIRepository (
     private val predefinedSpotsList: List<PredefinedSpots>,
     private val locationForecastDataSource: LocationForecastDataSource,
     private val metAlertDataSource: MetAlertDataSource
-
 ){
     //Map: Stores the predefined coordinates
     private val predefinedSpotsMap = createPredefinedSpots()
@@ -27,18 +27,9 @@ class WeatherAPIRepository (
     }
 
     //LOCATIONFORECASTREPOSITORY
-
-    // Utgangspunkt til Torsdag
     //TODO: Change arguments to this method to coordinate (comes from ViewModel)
-    suspend fun getWeatherResponse(lat: String, lon: String, alt: String? = null): WeatherResponse? {
-        //TODO: Uncomment this line of code when the TODO in datasource is solved
-        // Holds List<WeatherResponse> from locationForecastDataSource
-        // val weatherResponses: List<WeatherResponse> = locationForecastDataSource.getLocationForecast(lat, lon, alt)
-
-        // TODO: Search through weatherResponses with built in Kotlin functions and return the WeatherResponse-object that matches the coordinates
-        // Location of the coordinates:
-        // coordinates: List<Double> = WeatherResponse.Geometry.coordinate
-        return locationForecastDataSource.getWeatherResponse(lat, lon, alt)
+    suspend fun getWeatherResponse(coordinates: String): WeatherResponse? {
+        return locationForecastDataSource.getWeatherResponse(coordinates)
     }
 
     // Different methods to transform the data from a WeatherResponse. Extract the wind direction etc.
