@@ -14,16 +14,41 @@ class WeatherAPIRepository (
 ){
     //Creates a map of predefined kite spots connected to the correct Spot-object
     private suspend fun createPredefinedSpots(coordinates: String): Map<PredefinedSpots, Spot?>{
+        //Gets one WeatherResponse based on the coordinates
         val weatherResponse = getWeatherResponse(coordinates)
-        return mapOf<PredefinedSpots, Spot?>()
+
+        //Creates and returns a Map<PredefinedSpots, Spot?>
+        return predefinedSpotsList.associateWith { predefinedSpot ->
+            weatherResponse?.let { getWindSpeedMap(it) }?.let {
+                getWindDirectionMap(weatherResponse).let { it1 ->
+                    getUnitMap(weatherResponse)?.let { it2 ->
+                        Spot(
+                            coordinates = predefinedSpot.coordinate,
+                            spotName = predefinedSpot.spotName,
+                            cityName = predefinedSpot.cityName,
+                            areaName = "",  //The name of the area the spot is a part of (from MetAlert)
+                            photo = "",  //Photo of the spot as URL
+                            windSpeed = it,
+                            windDirection = it1,
+                            units = it2,
+                            riskMatrixColor = "",  // From MetAlerts
+                            awarenessSeriousness = "",  // From MetAlerts
+                            bestWindDirection = 0.0,  //Recommended windDirection for the spot
+                            recommendationColor = "" //Recommended color for kiting
+                        )
+                    }
+                }
+            }
+        }
     }
 
-    //Initializes the variable predefinedSpotsMap and returns it. Offers the map of predefined kite spots to ViewModel
+    //Creates a Map<PredefinedSpots, Spot?> and returns it. Offers the map of predefined kite spots to ViewModel
     suspend fun getPredefinedSpots(coordinates: String): Map<PredefinedSpots, Spot?>{
         return createPredefinedSpots(coordinates)
     }
 
     //LOCATIONFORECASTREPOSITORY
+    //Gets one WeatherResponse object from locationForecastDataSource
     private suspend fun getWeatherResponse(coordinates: String): WeatherResponse? {
         return locationForecastDataSource.getWeatherResponse(coordinates)
     }
