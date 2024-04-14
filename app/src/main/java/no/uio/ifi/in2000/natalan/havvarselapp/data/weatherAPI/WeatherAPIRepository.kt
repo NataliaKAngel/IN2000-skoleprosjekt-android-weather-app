@@ -11,134 +11,64 @@ class WeatherAPIRepository (
     private val predefinedSpotsList: List<PredefinedSpots>,
     private val locationForecastDataSource: LocationForecastDataSource,
     private val metAlertDataSource: MetAlertDataSource
-
 ){
-    //Map: Stores the predefined coordinates
-    private val predefinedSpotsMap = createPredefinedSpots()
-
-    //Creates a map of predefined kite spots connected to the correct Spot-object
-    private fun createPredefinedSpots(): Map<PredefinedSpots, Spot?>{
-        return mapOf<PredefinedSpots, Spot?>()
+    //Creates: Map<PredefinedSpots, Spot?>
+    private suspend fun createPredefinedSpots(): Map<PredefinedSpots, Spot?>{
+        return predefinedSpotsList.associateWith { predefinedSpot ->
+            //Gets a new WeatherResponse based on the coordinates in the PredefinedSpots-object
+            val weatherResponse = getWeatherResponse(predefinedSpot.coordinate)
+            //Using let-blocks to secure that weatherResponse, windSpeed, windDirection and units is not null
+            weatherResponse?.let {
+                val windSpeed = getWindSpeedMap(it)
+                val windDirection = getWindDirectionMap(it)
+                val units = getUnitMap(it)
+                units?.let { it1 ->
+                    //Creates one Spot-object per PredefinedSpot-object
+                    Spot(
+                        coordinates = predefinedSpot.coordinate, //The coordinates of the spot
+                        spotName = predefinedSpot.spotName, //The name of the spot
+                        cityName = predefinedSpot.cityName, //The city the spot lies in
+                        areaName = "",  //The name of the area the spot is a part of (from MetAlert)
+                        photo = "",  //Photo of the spot as URL
+                        windSpeed = windSpeed, //Map<String, Double>
+                        windDirection = windDirection, //Map<String, Double>
+                        units = it1, //Map<String?, String?>?
+                        riskMatrixColor = "",  // From MetAlerts
+                        awarenessSeriousness = "",  // From MetAlerts
+                        bestWindDirection = 0.0,  //Recommended windDirection for the spot
+                        recommendationColor = "" //Recommended color for kiting
+                    )
+                }
+            }
+        }
     }
 
-    //Offers the map of predefined kite spots to ViewModel
-    fun getPredefinedSpots(): Map<PredefinedSpots, Spot?>{
-        return predefinedSpotsMap
+    //Creates a Map<PredefinedSpots, Spot?> and returns it. Offers the map of predefined kite spots to ViewModel
+    suspend fun getPredefinedSpots(): Map<PredefinedSpots, Spot?>{
+        return createPredefinedSpots()
     }
 
     //LOCATIONFORECASTREPOSITORY
-
-    // Utgangspunkt til Torsdag
-    //TODO: Change arguments to this method to coordinate (comes from ViewModel)
-    suspend fun getLocationForecast(lat: String, lon: String, alt: String? = null): WeatherResponse? {
-        //TODO: Uncomment this line of code when the TODO in datasource is solved
-        // Holds List<WeatherResponse> from locationForecastDataSource
-        // val weatherResponses: List<WeatherResponse> = locationForecastDataSource.getLocationForecast(lat, lon, alt)
-
-        // TODO: Search through weatherResponses with built in Kotlin functions and return the WeatherResponse-object that matches the coordinates
-        // Location of the coordinates:
-        // coordinates: List<Double> = WeatherResponse.Geometry.coordinate
-        return locationForecastDataSource.getWeatherResponse(lat, lon, alt)
+    //Gets one WeatherResponse object from locationForecastDataSource
+    private suspend fun getWeatherResponse(coordinates: String): WeatherResponse? {
+        return locationForecastDataSource.getWeatherResponse(coordinates)
     }
 
     // Different methods to transform the data from a WeatherResponse.
-    // Extract the wind direction etc.
-
-    suspend fun getWeatherResponseUnit(latitude: String, longitude: String, altitude: String? = null): Map<String?, String?>? {
-        val weatherResponse = locationForecastDataSource.getWeatherResponse(latitude, longitude, altitude)
-        return weatherResponse?.properties?.meta?.units
+    private fun getWindSpeedMap(weatherResponse: WeatherResponse): Map<String, Double> { //Return value: Map<time: String, windSpeed: Double>
+        return weatherResponse.properties?.timeseries?.associate { timeSeries ->
+            timeSeries.time to (timeSeries.data.instant.details["windSpeed"] ?: 0.0)
+        } ?: emptyMap()
     }
 
-    suspend fun getWeatherResponseWindSpeedMap(latitude: String, longitude: String, altitude: String? = null): Map<String, Double> {
-        val weatherResponse = locationForecastDataSource.getWeatherResponse(latitude, longitude, altitude)
-        val timeseries = weatherResponse?.properties?.timeseries
-
-        val windSpeedMap = mutableMapOf<String, Double>()
-
-        timeseries?.forEach { timeseriesItem ->
-            val time = timeseriesItem.time // Get the time for this timeseries
-            val details = timeseriesItem.data.instant.details // Get the details object within instant
-
-            // Check if details is not null and contains the wind_speed property
-            if (details.containsKey("wind_speed")) {
-                val windSpeed = details["wind_speed"]// Get the wind speed value
-
-                // If windSpeed is not null, store it in the map
-                if (windSpeed != null) {
-                    windSpeedMap[time] = windSpeed
-                }
-            }
-        }
-        return windSpeedMap
+    private fun getWindDirectionMap(weatherResponse: WeatherResponse): Map<String, Double>{ //Return value: Map<time : String, windDirection: Double>
+        return weatherResponse.properties?.timeseries?.associate {timeSeries ->
+            timeSeries.time to (timeSeries.data.instant.details["windFromDirection"] ?: 0.0)
+        } ?: emptyMap()
     }
 
-    suspend fun getWeatherResponseAirTemperature(latitude: String, longitude: String, altitude: String? = null): Map<String, Double>{
-        val weatherResponse = locationForecastDataSource.getWeatherResponse(latitude, longitude, altitude)
-        val timeseries = weatherResponse?.properties?.timeseries
-
-        val airTempMap = mutableMapOf<String, Double>()
-
-        timeseries?.forEach { timeseriesItem ->
-            val time = timeseriesItem.time // Get the time for this timeseries
-            val details = timeseriesItem.data.instant.details // Get the details object within instant
-
-            // Check if details is not null and contains the wind_speed property
-            if (details.containsKey("air_temperature")) {
-                val airTempSpeed = details["air_temperature"]// Get the wind speed value
-
-                // If windSpeed is not null, store it in the map
-                if (airTempSpeed != null) {
-                    airTempMap[time] = airTempSpeed
-                }
-            }
-        }
-        return airTempMap
-    }
-
-    suspend fun getWeatherResponseAirPressure(latitude: String, longitude: String, altitude: String? = null): Map<String, Double>{
-        val weatherResponse = locationForecastDataSource.getWeatherResponse(latitude, longitude, altitude)
-        val timeseries = weatherResponse?.properties?.timeseries
-
-        val airPressureMap = mutableMapOf<String, Double>()
-
-        timeseries?.forEach { timeseriesItem ->
-            val time = timeseriesItem.time // Get the time for this timeseries
-            val details = timeseriesItem.data.instant.details // Get the details object within instant
-
-            // Check if details is not null and contains the wind_speed property
-            if (details.containsKey("air_pressure_at_sea_level")) {
-                val airpressure = details["air_pressure_at_sea_level"]// Get the wind speed value
-
-                // If windSpeed is not null, store it in the map
-                if (airpressure != null) {
-                    airPressureMap[time] = airpressure
-                }
-            }
-        }
-        return airPressureMap
-    }
-
-    suspend fun getWeatherResponseWindDirection(latitude: String, longitude: String, altitude: String? = null): Map<String, Double>{
-        val weatherResponse = locationForecastDataSource.getWeatherResponse(latitude, longitude, altitude)
-        val timeseries = weatherResponse?.properties?.timeseries
-
-        val windDirectionMap = mutableMapOf<String, Double>()
-
-        timeseries?.forEach { timeseriesItem ->
-            val time = timeseriesItem.time // Get the time for this timeseries
-            val details = timeseriesItem.data.instant.details // Get the details object within instant
-
-            // Check if details is not null and contains the wind_speed property
-            if (details.containsKey("wind_from_direction")) {
-                val windDirection = details["wind_from_direction"]// Get the wind speed value
-
-                // If windSpeed is not null, store it in the map
-                if (windDirection != null) {
-                    windDirectionMap[time] = windDirection
-                }
-            }
-        }
-        return windDirectionMap
+    private fun getUnitMap(weatherResponse: WeatherResponse): Map<String?, String?>? {
+        return weatherResponse.properties?.meta?.units
     }
 
     //METALERTREPOSITORY
