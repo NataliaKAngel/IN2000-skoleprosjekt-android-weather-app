@@ -1,9 +1,11 @@
 package no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.locationForecast.LocationForecastDataSource
 import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.metAlerts.MetAlertDataSource
 import no.uio.ifi.in2000.natalan.havvarselapp.model.locationForecast.WeatherResponse
-import no.uio.ifi.in2000.natalan.havvarselapp.model.metAlerts.Coordinates
 import no.uio.ifi.in2000.natalan.havvarselapp.model.metAlerts.MetAlertDataClass
 import no.uio.ifi.in2000.natalan.havvarselapp.model.metAlerts.Properties
 import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.Spot
@@ -13,21 +15,19 @@ class WeatherAPIRepository (
     private val locationForecastDataSource: LocationForecastDataSource,
     private val metAlertDataSource: MetAlertDataSource
 ){
-    //Map: Stores the predefined coordinates
-    private val predefinedSpotsMap = createPredefinedSpots()
-
     //Creates a map of predefined kite spots connected to the correct Spot-object
-    private fun createPredefinedSpots(): Map<PredefinedSpots, Spot?>{
+    private suspend fun createPredefinedSpots(coordinates: String): Map<PredefinedSpots, Spot?>{
+        val weatherResponse = getWeatherResponse(coordinates)
         return mapOf<PredefinedSpots, Spot?>()
     }
 
-    //Offers the map of predefined kite spots to ViewModel
-    fun getPredefinedSpots(): Map<PredefinedSpots, Spot?>{
-        return predefinedSpotsMap
+    //Initializes the variable predefinedSpotsMap and returns it. Offers the map of predefined kite spots to ViewModel
+    suspend fun getPredefinedSpots(coordinates: String): Map<PredefinedSpots, Spot?>{
+        return createPredefinedSpots(coordinates)
     }
 
     //LOCATIONFORECASTREPOSITORY
-    suspend fun getWeatherResponse(coordinates: String): WeatherResponse? {
+    private suspend fun getWeatherResponse(coordinates: String): WeatherResponse? {
         return locationForecastDataSource.getWeatherResponse(coordinates)
     }
 
