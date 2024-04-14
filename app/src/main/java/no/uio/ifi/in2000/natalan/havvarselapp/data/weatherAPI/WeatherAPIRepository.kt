@@ -48,26 +48,10 @@ class WeatherAPIRepository (
         } ?: emptyMap()
     }
 
-    private fun getWindDirectionMap(weatherResponse: WeatherResponse): Map<String, Double>{
-        val timeseries = weatherResponse.properties?.timeseries
-
-        val windDirectionMap = mutableMapOf<String, Double>()
-
-        timeseries?.forEach { timeseriesItem ->
-            val time = timeseriesItem.time // Get the time for this timeseries
-            val details = timeseriesItem.data.instant.details // Get the details object within instant
-
-            // Check if details is not null and contains the wind_speed property
-            if (details.containsKey("wind_from_direction")) {
-                val windDirection = details["wind_from_direction"]// Get the wind speed value
-
-                // If windSpeed is not null, store it in the map
-                if (windDirection != null) {
-                    windDirectionMap[time] = windDirection
-                }
-            }
-        }
-        return windDirectionMap
+    private fun getWindDirectionMap(weatherResponse: WeatherResponse): Map<String, Double>{ //Return value: Map<time : String, windDirection: Double>
+        return weatherResponse.properties?.timeseries?.associate {timeSeries ->
+            timeSeries.time to (timeSeries.data.instant.details["windFromDirection"] ?: 0.0)
+        } ?: emptyMap()
     }
 
     suspend fun getWeatherResponseUnit(latitude: String, longitude: String, altitude: String? = null): Map<String?, String?>? {
