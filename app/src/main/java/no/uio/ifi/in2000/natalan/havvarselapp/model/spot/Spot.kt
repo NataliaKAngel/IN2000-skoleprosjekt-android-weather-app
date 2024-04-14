@@ -3,6 +3,10 @@ package no.uio.ifi.in2000.natalan.havvarselapp.model.spot
 data class Spot (
     //The coordinates of the spot
     val coordinates: String,
+    //The name of the spot (example: "Hamresanden")
+    val spotName: String,
+    //The city the spot is in (example: "Kristiansand")
+    val cityName: String,
     //The name of the area the spot is a part of (from MetAlert)
     val areaName: String,
     //Photo of the spot
