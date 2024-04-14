@@ -54,9 +54,8 @@ class WeatherAPIRepository (
         } ?: emptyMap()
     }
 
-    suspend fun getWeatherResponseUnit(latitude: String, longitude: String, altitude: String? = null): Map<String?, String?>? {
-        val weatherResponse = locationForecastDataSource.getWeatherResponse(latitude, longitude, altitude)
-        return weatherResponse?.properties?.meta?.units
+    private fun getUnitMap(weatherResponse: WeatherResponse): Map<String?, String?>? {
+        return weatherResponse.properties?.meta?.units
     }
 
     //Not in use:
