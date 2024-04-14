@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.WeatherAPIRepository
 
 class HomeScreenViewModel(
-    val weatherAPIRepository: WeatherAPIRepository
+    private val weatherAPIRepository: WeatherAPIRepository
 ) : ViewModel(){
 
 }
