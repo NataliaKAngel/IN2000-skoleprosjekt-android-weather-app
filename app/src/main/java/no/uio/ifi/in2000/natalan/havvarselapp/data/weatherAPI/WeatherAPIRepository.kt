@@ -58,13 +58,13 @@ class WeatherAPIRepository (
     // Different methods to transform the data from a WeatherResponse.
     private fun getWindSpeedMap(weatherResponse: WeatherResponse): Map<String, Double> { //Return value: Map<time: String, windSpeed: Double>
         return weatherResponse.properties?.timeseries?.associate { timeSeries ->
-            timeSeries.time to (timeSeries.data.instant.details["windSpeed"] ?: 0.0)
+            timeSeries.time to (timeSeries.data.instant.details["wind_speed"] ?: 0.0)
         } ?: emptyMap()
     }
 
     private fun getWindDirectionMap(weatherResponse: WeatherResponse): Map<String, Double>{ //Return value: Map<time : String, windDirection: Double>
         return weatherResponse.properties?.timeseries?.associate {timeSeries ->
-            timeSeries.time to (timeSeries.data.instant.details["windFromDirection"] ?: 0.0)
+            timeSeries.time to (timeSeries.data.instant.details["wind_from_direction"] ?: 0.0)
         } ?: emptyMap()
     }
 
