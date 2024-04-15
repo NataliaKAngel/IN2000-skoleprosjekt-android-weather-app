@@ -40,7 +40,7 @@ class MainActivity : ComponentActivity() {
                     //Predefined spots
                     val predefinedSpots : List<PredefinedSpots> = listOf(
                         PredefinedSpots(coordinate = "lat=58&lon=8.1", spotName = "Hamresanden", cityName = "Kristiansand"),
-                        //PredefinedSpots(coordinate = "", spotName = "", cityName = ""),
+                        PredefinedSpots(coordinate = "lat=60&lon=10.7", spotName = "Aker Brygge", cityName = "Oslo"),
                         //PredefinedSpots(coordinate = "", spotName = "", cityName = "")
                     )
 
@@ -58,7 +58,7 @@ class MainActivity : ComponentActivity() {
 
                     // Creates navController and NavHost
                     val navController = rememberNavController()
-                    NavHost(navController = navController, startDestination = "HomeScreen") {
+                    NavHost(navController = navController, startDestination = "SpotScreen") {
                      // Navigating routes
                         composable("HomeScreen") { HomeScreen(navController = navController, homeScreenViewModel = homeScreenViewModel) }
                         composable("InfoScreen") { InfoScreen(navController = navController, infoScreenViewModel = infoScreenViewModel) }

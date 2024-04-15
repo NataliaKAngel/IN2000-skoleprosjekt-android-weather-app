@@ -1,9 +1,12 @@
 package no.uio.ifi.in2000.natalan.havvarselapp.ui.settings
 
+import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 
-class SettingsScreen (
+@Composable
+fun SettingsScreen (
     navController: NavController,
     settingsScreenViewModel: SettingsScreenViewModel
 ) {
+
 }
