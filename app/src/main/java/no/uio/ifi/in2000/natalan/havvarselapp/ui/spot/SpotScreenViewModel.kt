@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.WeatherAPIRepository
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.state.SpotUIState
-import no.uio.ifi.in2000.natalan.havvarselapp.ui.state.SpotsUIState
 
 class SpotScreenViewModel (
     private val weatherAPIRepository: WeatherAPIRepository,

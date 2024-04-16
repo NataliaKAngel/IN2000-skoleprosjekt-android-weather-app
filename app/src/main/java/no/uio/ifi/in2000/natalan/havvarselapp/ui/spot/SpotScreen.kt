@@ -4,8 +4,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,26 +21,20 @@ fun SpotScreen (
     spotScreenViewModel: SpotScreenViewModel
 ) {
     //Collecting the state flow from spotScreenViewModel
-    val spotsUIState by spotScreenViewModel.spotsUIState.collectAsState()
+    val spotUIState by spotScreenViewModel.spotUIState.collectAsState()
 
-    //Getting the map from the UI-state (Map<PredefinedSpots, Spot?>)
-    val spotMap = spotsUIState.spots
-
-    //Getting the spots objects from the map (List<Spot?>)
-    val spots = spotMap.values.toList()
+    //Getting the spot from the UI-state (type: Spot?)
+    val spot = spotUIState.spot
 
     //Test: Display info in the Spot-objects
-    LazyColumn(
+    Column (
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ){
-        items(spots){spot ->
-            SpotCard(
-                spot = spot
-            )
-        }
+        SpotCard(
+            spot = spot
+        )
     }
-
 }
 
 @Composable
