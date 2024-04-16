@@ -39,8 +39,8 @@ class MainActivity : ComponentActivity() {
                 ) {
                     //Predefined spots
                     val predefinedSpots : List<PredefinedSpots> = listOf(
-                        PredefinedSpots(coordinate = "lat=58&lon=8.1", spotName = "Hamresanden", cityName = "Kristiansand"),
-                        PredefinedSpots(coordinate = "lat=60&lon=10.7", spotName = "Aker Brygge", cityName = "Oslo"),
+                        PredefinedSpots(coordinate = "58,8.1", spotName = "Hamresanden", cityName = "Kristiansand"),
+                        PredefinedSpots(coordinate = "60,10.7", spotName = "Aker Brygge", cityName = "Oslo"),
                         //PredefinedSpots(coordinate = "", spotName = "", cityName = "")
                     )
 

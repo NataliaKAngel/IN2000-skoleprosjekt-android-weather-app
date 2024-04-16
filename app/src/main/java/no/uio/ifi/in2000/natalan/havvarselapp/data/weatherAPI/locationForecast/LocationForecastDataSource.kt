@@ -38,12 +38,18 @@ class LocationForecastDataSource {
 
     //Gets one WeatherResponse-object from LocationForecast (API)
     suspend fun getWeatherResponse(coordinates: String): WeatherResponse? {
+        //Creating correct URL based on the coordinates
+        val details = coordinates.split(",")
+        val latitude = details[0]
+        val longitude = details[1]
+        val coordinatesURL = "lat=$latitude&lon=$longitude"
+
         // Logging: coordinates
         Log.d("LocationForecastDataSource", "Requesting weather data for coordinates: $coordinates")
 
         return try {
             // Connects to the API with correct URL
-            val response = client.get(LF_WEATHERRESPONSE + coordinates)
+            val response = client.get(LF_WEATHERRESPONSE + coordinatesURL)
 
             // Holds response body
             val weatherResponse = response.body<WeatherResponse>()
