@@ -23,23 +23,23 @@ class WeatherAPIRepository (
                 val windSpeed = getWindSpeedMap(it)
                 val windDirection = getWindDirectionMap(it)
                 val units = getUnitMap(it)
-                units?.let { it1 ->
-                    //Creates one Spot-object per PredefinedSpot-object
-                    Spot(
-                        coordinates = predefinedSpot.coordinates, //The coordinates of the spot
-                        spotName = predefinedSpot.spotName, //The name of the spot
-                        cityName = predefinedSpot.cityName, //The city the spot lies in
-                        areaName = "",  //The name of the area the spot is a part of (from MetAlert)
-                        photo = "",  //Photo of the spot as URL
-                        windSpeed = windSpeed, //Map<String, Double>
-                        windDirection = windDirection, //Map<String, Double>
-                        units = it1, //Map<String?, String?>?
-                        riskMatrixColor = "",  // From MetAlerts
-                        awarenessSeriousness = "",  // From MetAlerts
-                        bestWindDirection = 0.0,  //Recommended windDirection for the spot
-                        recommendationColor = "" //Recommended color for kiting
-                    )
-                }
+
+                //Creates one Spot-object per PredefinedSpot-object
+                Spot(
+                    coordinates = predefinedSpot.coordinates, //The coordinates of the spot
+                    spotName = predefinedSpot.spotName, //The name of the spot
+                    cityName = predefinedSpot.cityName, //The city the spot lies in
+                    areaName = "",  //The name of the area the spot is a part of (from MetAlert)
+                    photo = "",  //Photo of the spot as URL
+                    windSpeed = windSpeed, //Map<String, Double>
+                    windSpeedUnit = "",
+                    windDirection = windDirection, //Map<String, Double>
+                    windDirectionUnit = "", //String
+                    riskMatrixColor = "",  // From MetAlerts
+                    awarenessSeriousness = "",  // From MetAlerts
+                    bestWindDirection = 0.0,  //Recommended windDirection for the spot
+                    recommendationColor = "" //Recommended color for kiting
+                )
             }
         }
     }
