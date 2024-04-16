@@ -20,8 +20,7 @@ import no.uio.ifi.in2000.natalan.havvarselapp.ui.theme.*
 
 @Composable
 fun InfoScreen(
-    navController: NavController,
-    infoScreenViewModel: InfoScreenViewModel
+    navController: NavController
     ) {
 
     Column(
