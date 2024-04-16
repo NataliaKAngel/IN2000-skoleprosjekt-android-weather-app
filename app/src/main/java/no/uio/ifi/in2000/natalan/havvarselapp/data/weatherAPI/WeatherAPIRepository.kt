@@ -50,6 +50,14 @@ class WeatherAPIRepository (
         return createPredefinedSpots()
     }
 
+    //Returns one Spot-object based on coordinates
+    suspend fun getOneSpot(coordinates: String): Spot? {
+        //List of all the Spots
+        val spots = createPredefinedSpots().values.toList()
+
+        return spots.find { (it?.coordinates ?: "") == coordinates }
+    }
+
     //LOCATIONFORECASTREPOSITORY
     //Gets one WeatherResponse object from locationForecastDataSource
     private suspend fun getWeatherResponse(coordinates: String): WeatherResponse? {
