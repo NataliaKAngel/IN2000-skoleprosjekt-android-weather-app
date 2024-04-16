@@ -23,20 +23,20 @@ fun SpotScreen (
     spotScreenViewModel: SpotScreenViewModel
 ) {
     //Collecting the state flow from spotScreenViewModel
-    val _spotUIState by spotScreenViewModel.spotUIState.collectAsState()
+    val spotUIState by spotScreenViewModel.spotUIState.collectAsState()
 
     //Getting the map from the UI-state (Map<PredefinedSpots, Spot?>)
-    val spotMap = _spotUIState.spots
+    val spotMap = spotUIState.spots
 
-    //Getting the spots objects from the map (Collection<Spot?>)
-    val spots = spotMap.values
+    //Getting the spots objects from the map (List<Spot?>)
+    val spots = spotMap.values.toList()
 
     //Test: Display info in the Spot-objects
     LazyColumn(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ){
-        items(spots.toList()){spot ->
+        items(spots){spot ->
             SpotCard(
                 spot = spot
             )
