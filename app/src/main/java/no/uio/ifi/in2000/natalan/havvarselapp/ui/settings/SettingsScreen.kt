@@ -5,8 +5,7 @@ import androidx.navigation.NavController
 
 @Composable
 fun SettingsScreen (
-    navController: NavController,
-    settingsScreenViewModel: SettingsScreenViewModel
+    navController: NavController
 ) {
 
 }

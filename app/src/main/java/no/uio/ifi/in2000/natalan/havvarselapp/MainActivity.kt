@@ -25,7 +25,6 @@ import no.uio.ifi.in2000.natalan.havvarselapp.ui.home.HomeScreen
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.home.HomeScreenViewModel
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.info.InfoScreen
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.settings.SettingsScreen
-import no.uio.ifi.in2000.natalan.havvarselapp.ui.settings.SettingsScreenViewModel
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.spot.SpotScreen
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.spot.SpotScreenViewModel
 
@@ -54,7 +53,6 @@ class MainActivity : ComponentActivity() {
                     // Creates instances of viewModels and Screens
                     val homeScreenViewModel = HomeScreenViewModel(weatherAPIRepository)
                     val favouriteScreenViewModel = FavouriteScreenViewModel(weatherAPIRepository)
-                    val settingsScreenViewModel = SettingsScreenViewModel(weatherAPIRepository)
 
                     // Creates navController and NavHost
                     val navController = rememberNavController()
@@ -69,7 +67,7 @@ class MainActivity : ComponentActivity() {
                             val viewModel: SpotScreenViewModel = viewModel {SpotScreenViewModel(weatherAPIRepository, coordinates)}
                             SpotScreen(navController = navController, spotScreenViewModel = viewModel)}
                         composable("FavouriteScreen") { FavouriteScreen(navController = navController, favouriteScreenViewModel = favouriteScreenViewModel)}
-                        composable("SettingsScreen") { SettingsScreen(navController = navController, settingsScreenViewModel = settingsScreenViewModel)}
+                        composable("SettingsScreen") { SettingsScreen(navController = navController)}
                     }
                 }
             }
