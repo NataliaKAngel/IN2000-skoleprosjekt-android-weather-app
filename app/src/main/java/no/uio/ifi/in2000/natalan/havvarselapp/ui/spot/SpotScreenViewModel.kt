@@ -14,15 +14,15 @@ class SpotScreenViewModel (
     private val weatherAPIRepository: WeatherAPIRepository
 ) : ViewModel() {
     //Private UI-state (Map<PredefinedSpots, Spot?>)
-    private val _spotUIState = MutableStateFlow(SpotsUIState())
+    private val _spotsUIState = MutableStateFlow(SpotsUIState())
 
     //UI-state offered to the SpotScreen
-    var spotUIState: StateFlow<SpotsUIState> = _spotUIState.asStateFlow()
+    var spotsUIState: StateFlow<SpotsUIState> = _spotsUIState.asStateFlow()
 
     //Getting data asynchronous from weatherAPIRepository and updates private UI-state
     init {
         viewModelScope.launch {
-            _spotUIState.update {
+            _spotsUIState.update {
             it.copy(
                 spots = weatherAPIRepository.getPredefinedSpots()
                 )

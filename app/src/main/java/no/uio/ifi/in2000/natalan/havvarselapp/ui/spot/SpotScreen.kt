@@ -23,7 +23,7 @@ fun SpotScreen (
     spotScreenViewModel: SpotScreenViewModel
 ) {
     //Collecting the state flow from spotScreenViewModel
-    val spotUIState by spotScreenViewModel.spotUIState.collectAsState()
+    val spotUIState by spotScreenViewModel.spotsUIState.collectAsState()
 
     //Getting the map from the UI-state (Map<PredefinedSpots, Spot?>)
     val spotMap = spotUIState.spots
