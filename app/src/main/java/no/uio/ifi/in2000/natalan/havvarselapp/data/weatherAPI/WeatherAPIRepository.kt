@@ -22,7 +22,8 @@ class WeatherAPIRepository (
             weatherResponse?.let {
                 val windSpeed = getWindSpeedMap(it)
                 val windDirection = getWindDirectionMap(it)
-                val units = getUnitMap(it)
+                val windSpeedUnit = getWindSpeedUnit(it)
+                val windDirectionUnit = getWindDirectionUnit(it)
 
                 //Creates one Spot-object per PredefinedSpot-object
                 Spot(
@@ -32,9 +33,9 @@ class WeatherAPIRepository (
                     areaName = "",  //The name of the area the spot is a part of (from MetAlert)
                     photo = "",  //Photo of the spot as URL
                     windSpeed = windSpeed, //Map<String, Double>
-                    windSpeedUnit = "",
+                    windSpeedUnit = windSpeedUnit,
                     windDirection = windDirection, //Map<String, Double>
-                    windDirectionUnit = "", //String
+                    windDirectionUnit = windDirectionUnit, //String
                     riskMatrixColor = "",  // From MetAlerts
                     awarenessSeriousness = "",  // From MetAlerts
                     bestWindDirection = 0.0,  //Recommended windDirection for the spot
@@ -68,8 +69,14 @@ class WeatherAPIRepository (
         } ?: emptyMap()
     }
 
-    private fun getUnitMap(weatherResponse: WeatherResponse): Map<String?, String?>? {
-        return weatherResponse.properties?.meta?.units
+    private fun getWindSpeedUnit(weatherResponse: WeatherResponse): String? {
+        val units = weatherResponse.properties?.meta?.units
+        return units?.get("wind_speed")
+    }
+
+    private fun getWindDirectionUnit(weatherResponse: WeatherResponse): String?{
+        val units = weatherResponse.properties?.meta?.units
+        return units?.get("wind_from_direction")
     }
 
     //METALERTREPOSITORY

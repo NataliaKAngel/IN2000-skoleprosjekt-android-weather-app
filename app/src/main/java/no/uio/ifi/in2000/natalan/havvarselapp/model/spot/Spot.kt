@@ -16,10 +16,10 @@ data class Spot (
     //LOCATION-FORECAST:
     //Map containing windSpeed: Map<Time, WindSpeed>
     val windSpeed : Map<String, Double>,
-    val windSpeedUnit: String,
+    val windSpeedUnit: String?,
     //Map containing windDirection: Map<Time, WindDirection>
     val windDirection : Map<String, Double>,
-    val windDirectionUnit: String,
+    val windDirectionUnit: String?,
 
     //MET-ALERT:
     val riskMatrixColor: String,
