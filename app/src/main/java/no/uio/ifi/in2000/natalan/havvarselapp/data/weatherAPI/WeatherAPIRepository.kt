@@ -17,7 +17,7 @@ class WeatherAPIRepository (
     private suspend fun createPredefinedSpots(): Map<PredefinedSpots, Spot?>{
         return predefinedSpotsList.associateWith { predefinedSpot ->
             //Gets a new WeatherResponse based on the coordinates in the PredefinedSpots-object
-            val weatherResponse = getWeatherResponse(predefinedSpot.coordinate)
+            val weatherResponse = getWeatherResponse(predefinedSpot.coordinates)
             //Using let-blocks to secure that weatherResponse, windSpeed, windDirection and units is not null
             weatherResponse?.let {
                 val windSpeed = getWindSpeedMap(it)
@@ -26,7 +26,7 @@ class WeatherAPIRepository (
                 units?.let { it1 ->
                     //Creates one Spot-object per PredefinedSpot-object
                     Spot(
-                        coordinates = predefinedSpot.coordinate, //The coordinates of the spot
+                        coordinates = predefinedSpot.coordinates, //The coordinates of the spot
                         spotName = predefinedSpot.spotName, //The name of the spot
                         cityName = predefinedSpot.cityName, //The city the spot lies in
                         areaName = "",  //The name of the area the spot is a part of (from MetAlert)
