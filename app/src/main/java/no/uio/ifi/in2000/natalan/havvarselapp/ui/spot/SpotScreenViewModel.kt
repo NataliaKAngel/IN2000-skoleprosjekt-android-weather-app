@@ -11,7 +11,8 @@ import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.WeatherAPIReposito
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.state.SpotsUIState
 
 class SpotScreenViewModel (
-    private val weatherAPIRepository: WeatherAPIRepository
+    private val weatherAPIRepository: WeatherAPIRepository,
+    private val coordinates: String
 ) : ViewModel() {
     //Private UI-state (Map<PredefinedSpots, Spot?>)
     private val _spotsUIState = MutableStateFlow(SpotsUIState())

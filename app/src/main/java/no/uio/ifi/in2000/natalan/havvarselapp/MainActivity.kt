@@ -8,10 +8,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavType
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.theme.HavvarselAppTheme
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import no.uio.ifi.in2000.natalan.havvarselapp.model.predefinedSpots.PredefinedSpots
 import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.WeatherAPIRepository
 import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.locationForecast.LocationForecastDataSource
@@ -52,7 +55,6 @@ class MainActivity : ComponentActivity() {
                     val homeScreenViewModel = HomeScreenViewModel(weatherAPIRepository)
                     val favouriteScreenViewModel = FavouriteScreenViewModel(weatherAPIRepository)
                     val settingsScreenViewModel = SettingsScreenViewModel(weatherAPIRepository)
-                    val spotScreenViewModel = SpotScreenViewModel(weatherAPIRepository)
 
                     // Creates navController and NavHost
                     val navController = rememberNavController()
@@ -60,7 +62,12 @@ class MainActivity : ComponentActivity() {
                      // Navigating routes
                         composable("HomeScreen") { HomeScreen(navController = navController, homeScreenViewModel = homeScreenViewModel) }
                         composable("InfoScreen") { InfoScreen(navController = navController)}
-                        composable("SpotScreen") { SpotScreen(navController = navController, spotScreenViewModel = spotScreenViewModel)}
+                        composable("SpotScreen/{coordinates}",
+                            arguments = listOf(navArgument("coordinates") { type = NavType.StringType })
+                        ) { navBackStackEntry ->
+                            val coordinates = navBackStackEntry.arguments?.getString("coordinates") ?: ""
+                            val viewModel: SpotScreenViewModel = viewModel {SpotScreenViewModel(weatherAPIRepository, coordinates)}
+                            SpotScreen(navController = navController, spotScreenViewModel = viewModel)}
                         composable("FavouriteScreen") { FavouriteScreen(navController = navController, favouriteScreenViewModel = favouriteScreenViewModel)}
                         composable("SettingsScreen") { SettingsScreen(navController = navController, settingsScreenViewModel = settingsScreenViewModel)}
                     }
