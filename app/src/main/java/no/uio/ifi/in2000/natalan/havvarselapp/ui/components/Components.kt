@@ -11,9 +11,11 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -39,6 +41,7 @@ import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import no.uio.ifi.in2000.natalan.havvarselapp.R
+import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.Spot
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.theme.*
 
 //Standard radius for box corners
@@ -48,7 +51,7 @@ private val StandardRadius: Dp = 16.dp
 fun TopBar(infoButtonClick: () -> Unit) {
     Box(
         modifier = Modifier
-            .width(328.dp)
+            .fillMaxWidth()
             .height(76.dp)
             .background(
                 color = White,
@@ -117,7 +120,8 @@ fun NavButton(navController: NavController, route: String, text: String, icon: I
             )
             .clickable {
                 clicked = true
-                navController.navigate(route) },
+                navController.navigate(route)
+            },
         contentAlignment = Alignment.Center
     ) {
         Column(
@@ -152,7 +156,7 @@ fun NavBar(navController: NavController){ //NavBar on the bottom of the screen. 
                 color = White,
                 shape = RoundedCornerShape(size = StandardRadius)
             )
-            .padding(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 16.dp)
+            .padding(16.dp)
     ){
         Row(
             horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.Start),
@@ -180,144 +184,132 @@ fun GoToMap(navController: NavController){
     }
 }
 @Composable
-fun KiteConditionInfoBox(){
-//    Column(
-//        verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterVertically),
-//        horizontalAlignment = Alignment.Start,
-//    ) {
-        Box(
-            Modifier
-                .fillMaxWidth()
-                // .height(437.dp)
-                .background(
-                    color = White,
-                    shape = RoundedCornerShape(size = StandardRadius)
+fun KiteConditionInfoBox() {
+    Column(
+        modifier = Modifier
+            .background(color = White, shape = RoundedCornerShape(size = StandardRadius))
+            .padding(16.dp)
+            .fillMaxWidth()
+             // Setter en minimumsbredde på 200dp og en maksimal bredde på 400dp
+            .heightIn(min = 100.dp, max =700.dp),
+       // verticalArrangement = Arrangement.SpaceBetween,
+        horizontalAlignment = Alignment.Start,
+    ) {
+        Column(
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.Start,
+        ) {
+            Text(
+                text = "Kitevarsel",
+                style = TextStyle(
+                    letterSpacing = (-0.05).em,
+                    fontSize = 24.sp,
+                    fontFamily = FontFamily(Font(R.font.inter_font)),
+                    fontWeight = FontWeight(600),
+                    color = TextColor,
                 )
-                .padding(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 16.dp)
-        ){
-            Column(
-                verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterVertically),
-                horizontalAlignment = Alignment.Start,
-            ) {
-                    Column(
-                        verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.Top),
-                        horizontalAlignment = Alignment.Start,
-                    ) {
-                        Text(
-                            text = "Kitevarsel",
-                            style = TextStyle(
-                                letterSpacing = (-0.05).em,
-                                fontSize = 24.sp,
-                                fontFamily = FontFamily(Font(R.font.inter_font)),
-                                fontWeight = FontWeight(600),
-                                color = TextColor,
-                            )
-                        )
-                        Text(
-                            text = "Informasjon",
-                            style = TextStyle(
-                                fontSize = 12.sp,
-                                fontFamily = FontFamily(Font(R.font.inter_font)),
-                                fontWeight = FontWeight(400),
-                                color = TextColor,
-                            )
-                        )
-                    }
-                Box(
-                    Modifier
-                    .width(270.dp)
-                    //.height(17.dp)
-                ) {
-                    Text(
-                        text = "Kitevarsel gir kitere anbefalinger om kiteforhold på utvalgte kitespotter langs kysten av Norge. Anbefalingene er fargekodet slik:",
-                        style = TextStyle(
-                            fontSize = 9.sp,
-                            fontFamily = FontFamily(Font(R.font.inter_font)),
-                            fontWeight = FontWeight(400),
-                            color = TextColor,
-                        )
+            )
+            Text(
+                text = "Informasjon",
+                style = TextStyle(
+                    fontSize = 12.sp,
+                    fontFamily = FontFamily(Font(R.font.inter_font)),
+                    fontWeight = FontWeight(400),
+                    color = TextColor,
+                )
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                modifier = Modifier.width(270.dp),
+                text = "Kitevarsel gir kitere anbefalinger om kiteforhold på utvalgte kitespotter langs kysten av Norge. Anbefalingene er fargekodet slik:",
+                style = TextStyle(
+                    fontSize = 9.sp,
+                    fontFamily = FontFamily(Font(R.font.inter_font)),
+                    fontWeight = FontWeight(400),
+                    color = TextColor,
+                )
+            )
+            Spacer(modifier = Modifier.height(12.dp))
+
+
+                Column {
+                    KiteConditionColorBox(
+                        LightGrayCircle,
+                        icon = R.drawable.thumbdown,
+                        "Ingen kiteforhold",
+                        "0-5 m/s og/eller feil\n vindretning. Umulig å kite."
                     )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    KiteConditionColorBox(
+                        BlueCircle,
+                        icon = R.drawable.thumbup,
+                        "Middels kiteforhold",
+                        "5<7 m/s og riktig vindretning.\nBør ha større kite."
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    KiteConditionColorBox(
+                        GreenCircle,
+                        icon = R.drawable.thumbup,
+                        "Anbefalte kiteforhold",
+                        "7<11 m/s. Riktig vindstyrke\nog vindretning."
+                    )
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    KiteConditionColorBox(
+                    YellowCircle,
+                    icon = R.drawable.thumbup,
+                    "Vanskelige kiteforhold",
+                    "11<15 m/s. Sterk vind\nFare for overrigging"
+                )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    KiteConditionColorBox(
+                        OrangeCircle,
+                        icon = R.drawable.thumbdown,
+                        "Ingen kiteforhold",
+                        "15<19 m/s\nKan være stor fare."
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    KiteConditionColorBox(
+                        RedCircle,
+                        icon = R.drawable.thumbdown,
+                        "Ingen kiteforhold",
+                        "19< m/s. Ekstrem fare\nog ekstremvær"
+                    )
+
+
                 }
 
-                Box(
-                    Modifier
-                        .width(193.dp)
-                        //.height(314.dp)
-                        .padding(top = 12.dp, bottom = 12.dp)
-                ){
-                    LazyColumn(
-                        verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.Top),
-                        horizontalAlignment = Alignment.Start,
-                    ) {
-                        item {
-                            KiteConditionColorBox(
-                                LightGrayCircle,
-                                icon = R.drawable.thumbdown,
-                                "Ingen kiteforhold",
-                                "0-5 m/s og/eller feil vindretning.\nNesten umulig å kite."
-                            )
-                            Spacer(modifier = Modifier.height(12.dp))
 
-                            KiteConditionColorBox(
-                                BlueCircle,
-                                icon = R.drawable.thumbup,
-                                "Middels kiteforhold",
-                                "5<7 m/s og riktig vindretning.\nBør ha større kite."
-                            )
-
-                            Spacer(modifier = Modifier.height(12.dp))
-
-                            KiteConditionColorBox(
-                                GreenCircle,
-                                icon = R.drawable.thumbup,
-                                "Anbefalte kiteforhold",
-                                "7<11 m/s\nRiktig vindstyrke og vindretning."
-                            )
-
-                            Spacer(modifier = Modifier.height(12.dp))
-
-                            KiteConditionColorBox(
-                                YellowCircle,
-                                icon = R.drawable.thumbup,
-                                "Utfordrende kiteforhold",
-                                "11<15 m/s og riktig vindretning.\nSterk vind. Kan være moderat fare."
-                            )
-
-                            Spacer(modifier = Modifier.height(12.dp))
-
-                            KiteConditionColorBox(
-                                OrangeCircle,
-                                icon = R.drawable.thumbdown,
-                                "Ingen kiteforhold",
-                                "15<19 m/s\nKan være stor fare."
-                            )
-
-                            Spacer(modifier = Modifier.height(12.dp))
-
-                            KiteConditionColorBox(
-                                RedCircle,
-                                icon = R.drawable.thumbdown,
-                                "Ingen kiteforhold",
-                                "19< m/s\nEkstrem fare og ekstremvær"
-                            )
-                        }
-                    }
-                }
             }
-        }
 
-    }
-//}
+
+
+//
+//                        Spacer(modifier = Modifier.height(12.dp))
+//
+//
+//
+//                        Spacer(modifier = Modifier.height(12.dp))
+//
+//
+//
+//                        Spacer(modifier = Modifier.height(12.dp))
+
+
+                    }
+
+                }
+
+
+
+
+
 @Composable
 fun KiteConditionColorBox(color: Color, icon: Int, title: String, info: String) {
-    Box(
-        Modifier
-            .fillMaxWidth()
-         //   .height(35.dp)
-    ) {
+
         Row(
             horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.Start),
-
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Box(
@@ -340,13 +332,9 @@ fun KiteConditionColorBox(color: Color, icon: Int, title: String, info: String) 
                     )
                 }
             }
-            Box(
-                Modifier
-                    //.width(200.dp)
-                    //.height(35.dp)
-                         ){
+
                 Column(
-                    verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.Top),
+                    verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.Top),
                     horizontalAlignment = Alignment.Start,
                 ) {
 
@@ -369,10 +357,24 @@ fun KiteConditionColorBox(color: Color, icon: Int, title: String, info: String) 
                         )
                     )
                 }
-            }
+
         }
     }
+
+
+@Composable
+fun SpotBox(spot: Spot){
+    Box(){
+
+
+
+    }
+
+
 }
+
+
+
 
 /*@Preview
 @Composable
@@ -391,5 +393,5 @@ fun PreviewInfo() {
 @Composable
 
 fun KiteConditionColorBoxPreview() {
-  KiteConditionColorBox(GreenCircle, R.drawable.thumbdown, "Hei", "dette er en prove")
+  KiteConditionColorBox(GreenCircle, R.drawable.thumbdown, "Hei", "dette er en prove\nharflere linjer\nggjeoheoiio")
 }
