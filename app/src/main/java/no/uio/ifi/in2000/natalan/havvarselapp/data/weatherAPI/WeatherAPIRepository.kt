@@ -17,29 +17,30 @@ class WeatherAPIRepository (
     private suspend fun createPredefinedSpots(): Map<PredefinedSpots, Spot?>{
         return predefinedSpotsList.associateWith { predefinedSpot ->
             //Gets a new WeatherResponse based on the coordinates in the PredefinedSpots-object
-            val weatherResponse = getWeatherResponse(predefinedSpot.coordinate)
+            val weatherResponse = getWeatherResponse(predefinedSpot.coordinates)
             //Using let-blocks to secure that weatherResponse, windSpeed, windDirection and units is not null
             weatherResponse?.let {
                 val windSpeed = getWindSpeedMap(it)
                 val windDirection = getWindDirectionMap(it)
-                val units = getUnitMap(it)
-                units?.let { it1 ->
-                    //Creates one Spot-object per PredefinedSpot-object
-                    Spot(
-                        coordinates = predefinedSpot.coordinate, //The coordinates of the spot
-                        spotName = predefinedSpot.spotName, //The name of the spot
-                        cityName = predefinedSpot.cityName, //The city the spot lies in
-                        areaName = "",  //The name of the area the spot is a part of (from MetAlert)
-                        photo = "",  //Photo of the spot as URL
-                        windSpeed = windSpeed, //Map<String, Double>
-                        windDirection = windDirection, //Map<String, Double>
-                        units = it1, //Map<String?, String?>?
-                        riskMatrixColor = "",  // From MetAlerts
-                        awarenessSeriousness = "",  // From MetAlerts
-                        bestWindDirection = 0.0,  //Recommended windDirection for the spot
-                        recommendationColor = "" //Recommended color for kiting
-                    )
-                }
+                val windSpeedUnit = getWindSpeedUnit(it)
+                val windDirectionUnit = getWindDirectionUnit(it)
+
+                //Creates one Spot-object per PredefinedSpot-object
+                Spot(
+                    coordinates = predefinedSpot.coordinates, //The coordinates of the spot
+                    spotName = predefinedSpot.spotName, //The name of the spot
+                    cityName = predefinedSpot.cityName, //The city the spot lies in
+                    areaName = "",  //The name of the area the spot is a part of (from MetAlert)
+                    photo = "",  //Photo of the spot as URL
+                    windSpeed = windSpeed, //Map<String, Double>
+                    windSpeedUnit = windSpeedUnit,
+                    windDirection = windDirection, //Map<String, Double>
+                    windDirectionUnit = windDirectionUnit, //String
+                    riskMatrixColor = "",  // From MetAlerts
+                    awarenessSeriousness = "",  // From MetAlerts
+                    bestWindDirection = 0.0,  //Recommended windDirection for the spot
+                    recommendationColor = "" //Recommended color for kiting
+                )
             }
         }
     }
@@ -47,6 +48,14 @@ class WeatherAPIRepository (
     //Creates a Map<PredefinedSpots, Spot?> and returns it. Offers the map of predefined kite spots to ViewModel
     suspend fun getPredefinedSpots(): Map<PredefinedSpots, Spot?>{
         return createPredefinedSpots()
+    }
+
+    //Returns one Spot-object based on coordinates
+    suspend fun getOneSpot(coordinates: String): Spot? {
+        //List of all the Spots
+        val spots = createPredefinedSpots().values.toList()
+
+        return spots.find { (it?.coordinates ?: "") == coordinates }
     }
 
     //LOCATIONFORECASTREPOSITORY
@@ -68,8 +77,14 @@ class WeatherAPIRepository (
         } ?: emptyMap()
     }
 
-    private fun getUnitMap(weatherResponse: WeatherResponse): Map<String?, String?>? {
-        return weatherResponse.properties?.meta?.units
+    private fun getWindSpeedUnit(weatherResponse: WeatherResponse): String? {
+        val units = weatherResponse.properties?.meta?.units
+        return units?.get("wind_speed")
+    }
+
+    private fun getWindDirectionUnit(weatherResponse: WeatherResponse): String?{
+        val units = weatherResponse.properties?.meta?.units
+        return units?.get("wind_from_direction")
     }
 
     //METALERTREPOSITORY

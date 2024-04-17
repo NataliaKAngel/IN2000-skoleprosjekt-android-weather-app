@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,6 +26,16 @@ fun HomeScreen(
     navController: NavController,
     homeScreenViewModel: HomeScreenViewModel
 ) {
+    //Collecting the state flow from spotScreenViewModel
+    val spotsUIState by homeScreenViewModel.spotsUIState.collectAsState()
+
+    //Getting the map from the UI-state (Map<PredefinedSpots, Spot?>)
+    val spotMap = spotsUIState.spots
+
+    //Getting the spots objects from the map (List<Spot?>)
+    val spots = spotMap.values.toList()
+
+    //Variables for map
     val context = LocalContext.current.applicationContext
     val mapView = createMapScreen(context)
 
