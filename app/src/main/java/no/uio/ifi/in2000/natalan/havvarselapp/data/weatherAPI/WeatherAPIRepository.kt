@@ -4,7 +4,6 @@ import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.locationForecast.L
 import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.metAlerts.MetAlertDataSource
 import no.uio.ifi.in2000.natalan.havvarselapp.model.locationForecast.WeatherResponse
 import no.uio.ifi.in2000.natalan.havvarselapp.model.metAlerts.MetAlertDataClass
-import no.uio.ifi.in2000.natalan.havvarselapp.model.metAlerts.Properties
 import no.uio.ifi.in2000.natalan.havvarselapp.model.predefinedSpots.PredefinedSpots
 import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.Spot
 
@@ -58,7 +57,6 @@ class WeatherAPIRepository (
         return spots.find { (it?.coordinates ?: "") == coordinates }
     }
 
-    //LOCATIONFORECASTREPOSITORY
     //Gets one WeatherResponse object from locationForecastDataSource
     private suspend fun getWeatherResponse(coordinates: String): WeatherResponse? {
         return locationForecastDataSource.getWeatherResponse(coordinates)
@@ -87,36 +85,35 @@ class WeatherAPIRepository (
         return units?.get("wind_from_direction")
     }
 
-    suspend fun getProperty(coordinate: List<List<List<Any?>>>?, propertyName: String): Any? {
-        // Fetch the MetAlertDataClass containing all the features
-        val metAlertDataClass: MetAlertDataClass? = metAlertDataSource.getMetAlert()
-
-        return metAlertDataClass?.features
-            ?.find { feature ->
-                feature.geometry.coordinates == coordinate
-            }
-            ?.properties
-            ?.let { property ->
-                when (propertyName) {
-                    "awarenessSeriousness" -> property.awarenessSeriousness
-                    "riskMatrixColor" -> property.riskMatrixColor
-                    "description" -> property.description
-                    "triggerLevel" -> property.triggerLevel
-                    // Add more cases for other properties as needed
-                    else -> null
+    suspend fun getMetAlert() : MetAlertDataClass?{
+        return metAlertDataSource.getMetAlert()
+    }
+     fun getProperty(coordinate: List<List<List<Any?>>>?, propertyName: String, metAlertDataClass: MetAlertDataClass): Any? {
+        if(checkGeographicDomain(coordinate, metAlertDataClass)) {
+            return metAlertDataClass.features
+                .find { feature ->
+                    feature.geometry.coordinates == coordinate
                 }
-            }
+                ?.properties
+                ?.let { property ->
+                    when (propertyName) {
+                        "awarenessSeriousness" -> property.awarenessSeriousness
+                        "riskMatrixColor" -> property.riskMatrixColor
+                        "description" -> property.description
+                        "triggerLevel" -> property.triggerLevel
+                        // Add more cases for other properties as needed
+                        else -> null
+                    }
+                }
+        }
+         return null
     }
 
 
-    suspend fun checkGeographicDomain(coordinate: List<List<List<Any?>>>?) : Boolean {
-        val metAlertDataClass: MetAlertDataClass? = metAlertDataSource.getMetAlert()
-        if (metAlertDataClass != null) {
-            for (feature in metAlertDataClass.features) {
-                return feature.properties.geographicDomain == "marine"
-            }
-        }
-        return false
+    private fun checkGeographicDomain(coordinate: List<List<List<Any?>>>?, metAlertDataClass: MetAlertDataClass) : Boolean {
+        return metAlertDataClass.features.find { feature ->
+            feature.properties.geographicDomain == "marine"
+        } != null
     }
 
 }
