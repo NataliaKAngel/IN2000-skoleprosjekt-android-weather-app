@@ -3,6 +3,7 @@ package no.uio.ifi.in2000.natalan.havvarselapp.ui.components
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,6 +17,7 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -29,7 +31,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -45,6 +49,8 @@ import androidx.navigation.NavController
 import no.uio.ifi.in2000.natalan.havvarselapp.R
 import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.Spot
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.theme.*
+import coil.compose.AsyncImage
+//OBS! Må legge inn avhengighet?
 
 //Standard radius for box corners
 private val StandardRadius: Dp = 16.dp
@@ -241,7 +247,7 @@ fun KiteConditionInfoBox() {
             @Composable
             fun InfoColorsColumn(){
                 LazyColumn(modifier = Modifier
-                 .verticalScroll(rememberScrollState())
+                    .verticalScroll(rememberScrollState())
                     .padding(16.dp)
                     .height(360.dp)
                 )
@@ -315,26 +321,6 @@ fun KiteConditionInfoBox() {
         }
 
 
-
-//
-//                        Spacer(modifier = Modifier.height(12.dp))
-//
-//
-//
-//                        Spacer(modifier = Modifier.height(12.dp))
-//
-//
-//
-//                        Spacer(modifier = Modifier.height(12.dp))
-
-
-
-
-
-
-
-
-
 @Composable
 fun KiteConditionColorBox(color: Color, icon: Int, title: String, info: String) {
 
@@ -392,16 +378,167 @@ fun KiteConditionColorBox(color: Color, icon: Int, title: String, info: String) 
     }
 
 
+
+
 @Composable
-fun SpotBox(spot: Spot){
-    Box(){
+fun SpotBox(navController: NavController, spot: Spot){
+    Box(
+        modifier = Modifier
+            .widthIn(max = 266.dp)
+    )
+    {
+        Column(
+            verticalArrangement = Arrangement.SpaceBetween,
+            horizontalAlignment = Alignment.Start,
+        ) {
+            //Row with title of spot and "goToSpot" button
+            Row {
+                Box(
+                    Modifier
+//                        .clickable {
+                    //navigate to SpotScreen with the chosen spot
+//                            navController.navigate("SpotScrren/${spot.id}") },
+                ){
+                    Image(
+                        painter = painterResource(id = R.drawable.gotospot),
+                        contentDescription = "go to spot",
+                        contentScale = ContentScale.None
+                    )
+                }
+            }
+
+            // Picture of spot
+            Box(
+                Modifier
+                ){
+                AsyncImage(
+                    modifier = Modifier
+                        .padding(10.dp)
+                        .clip(RectangleShape),
+                    contentScale = ContentScale.Crop,
+                    model = spot.photo,
+                    contentDescription = "Photo of spot"
+                )
+                }
 
 
+            //Box with condition for kiting (including thumb, color, wind info)
+            Box(
+                Modifier
 
+            ){
+
+                Column(
+                verticalArrangement = Arrangement.SpaceBetween,
+                horizontalAlignment = Alignment.Start,
+            ) {
+                //Time right now - can be replaced by actual time
+                    Text(
+                        text = "Akkurat nå:",
+                        style = TextStyle(
+                            fontSize = 9.sp,
+                            fontFamily = FontFamily(Font(R.font.inter_font)),
+                            fontWeight = FontWeight(500),
+                            color = BlueSignature,
+                        )
+                    )
+                Row {
+                    //ConditonCircle with thumb
+                    Box(
+                        Modifier
+                            .width(50.dp)
+                            .height(50.dp)
+                            .background(
+                                color = GreenCircle,
+                                shape = RoundedCornerShape(size = 32.dp)
+                            )
+                    ){ Image(
+                                painter = painterResource(id = ),
+                                contentDescription = "image description",
+                                contentScale = ContentScale.None
+                            )
+                    }
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.Top),
+                        horizontalAlignment = Alignment.End,
+                    ) {
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.Start),
+                            verticalAlignment = Alignment.Bottom,
+                        ) {Text(
+                            text = "8",
+                            style = TextStyle(
+                                fontSize = 32.sp,
+                                fontFamily = FontFamily(Font(R.font.inter_font)),
+                                fontWeight = FontWeight(300),
+                                color = TextColor,
+                            )
+                        )
+                            Text(
+                                text = "m/s ",
+                                style = TextStyle(
+                                    fontSize = 14.sp,
+                                    fontFamily = FontFamily(Font(R.font.inter_font)),
+                                    fontWeight = FontWeight(400),
+                                    color = TextColor,
+                                )
+                            )
+                        }
+                        Text(
+                            text = "vindstyrke",
+                            style = TextStyle(
+                                fontSize = 9.sp,
+                                fontFamily = FontFamily(Font(R.font.inter_font)),
+                                fontWeight = FontWeight(400),
+                                color = TextColor,
+                            )
+                        )
+
+
+                    }
+
+                    //Coloumn with wind direction
+                    Column {
+                        Row (
+                                    horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.Start),
+                                    verticalAlignment = Alignment.Bottom
+                            ){
+                            //Box with wind direction arrow
+                                Image(
+                                    painter = painterResource(id = R.drawable.arrowSouthwest),
+                                    contentDescription = "arrow shows wind direction",
+                                    contentScale = ContentScale.None
+                                )
+                                    Text(
+                                        text = "sørvest",
+                                        style = TextStyle(
+                                            fontSize = 14.sp,
+                                            fontFamily = FontFamily(Font(R.font.inter_font)),
+                                            fontWeight = FontWeight(400),
+                                            color = TextColor,
+
+                                            )
+                                    )
+                            }
+
+                        }
+                    Text(
+                        text = "vindretning",
+                        style = TextStyle(
+                            fontSize = 9.sp,
+                            fontFamily = FontFamily(Font(R.font.inter_font)),
+                            fontWeight = FontWeight(400),
+                            color = TextColor,
+
+                            )
+                    )
+                    }
+                }
+                }
+            }
     }
-
-
 }
+
 
 
 
@@ -421,7 +558,6 @@ fun PreviewInfo() {
 
 @Preview
 @Composable
-
 fun KiteConditionColorBoxPreview() {
   KiteConditionColorBox(GreenCircle, R.drawable.thumbdown, "Hei", "dette er en prove\nharflere linjer\nggjeoheoiio")
 }
