@@ -84,4 +84,5 @@ dependencies {
     implementation ("com.google.code.gson:gson:2.10.1")
     implementation("io.ktor:ktor-serialization-gson:$ktor_version")
     implementation("com.mapbox.maps:android:11.2.1")
+    implementation ("androidx.constraintlayout:constraintlayout-compose:1.0.1")
 }

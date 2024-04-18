@@ -1,6 +1,7 @@
 package no.uio.ifi.in2000.natalan.havvarselapp.ui.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -15,10 +16,11 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -188,17 +190,18 @@ fun KiteConditionInfoBox() {
     Column(
         modifier = Modifier
             .background(color = White, shape = RoundedCornerShape(size = StandardRadius))
-            .padding(16.dp)
-            .fillMaxWidth()
-             // Setter en minimumsbredde på 200dp og en maksimal bredde på 400dp
-            .heightIn(min = 100.dp, max =360.dp),
-       // verticalArrangement = Arrangement.SpaceBetween,
+            .padding(top = 16.dp)
+            .fillMaxWidth(),
+            // Setter en minimumsbredde på 200dp og en maksimal bredde på 400dp
+            //.heightIn(min = 100.dp, max = 424.dp),
+        // verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.Start,
     ) {
         Column(
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.Start,
         ) {
+
             Text(
                 text = "Kitevarsel",
                 style = TextStyle(
@@ -230,8 +233,19 @@ fun KiteConditionInfoBox() {
                 )
             )
             Spacer(modifier = Modifier.height(12.dp))
+        }
+    }
+}
 
-            LazyColumn {
+
+            @Composable
+            fun InfoColorsColumn(){
+                LazyColumn(modifier = Modifier
+                 .verticalScroll(rememberScrollState())
+                    .padding(16.dp)
+                    .height(360.dp)
+                )
+                {
                 item {
                     KiteConditionColorBox(
                         LightGrayCircle,
@@ -294,6 +308,7 @@ fun KiteConditionInfoBox() {
                         "Ingen kiteforhold",
                         "19< m/s. Ekstrem fare\nog ekstremvær"
                     )
+                    Spacer(modifier = Modifier.height(48.dp))
                 }
             }
 
@@ -313,9 +328,8 @@ fun KiteConditionInfoBox() {
 //                        Spacer(modifier = Modifier.height(12.dp))
 
 
-                    }
 
-                }
+
 
 
 
