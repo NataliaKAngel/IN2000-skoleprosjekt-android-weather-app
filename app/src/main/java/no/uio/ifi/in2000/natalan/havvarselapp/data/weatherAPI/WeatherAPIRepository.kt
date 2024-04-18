@@ -19,7 +19,7 @@ class WeatherAPIRepository (
             val weatherResponse = getWeatherResponse(predefinedSpot.coordinates)
             val metAlert = getMetAlert()
 
-            //val correctCoordinates = getCorrectCoordinates(predefinedSpot.coordinates, metAlert)
+            val correctCoordinates = getCorrectCoordinates(predefinedSpot.coordinates, getAllCoordinates(metAlert))
 
             //Using let-blocks to secure that weatherResponse, windSpeed, windDirection and units is not null
             weatherResponse?.let {
@@ -100,11 +100,13 @@ class WeatherAPIRepository (
         } != null
     }
 
-    private fun getAllCoordinates(metAlertDataClass: MetAlertDataClass): List<List<List<List<Any?>>>> {
-        return metAlertDataClass.features.map { feature ->
-            feature.geometry.coordinates
+    private fun getAllCoordinates(metAlertDataClass: MetAlertDataClass?): List<List<List<List<Any?>>>> {
+        if (metAlertDataClass != null) {
+            return metAlertDataClass.features.map { feature ->
+                feature.geometry.coordinates
+            }
         }
-
+        return emptyList()
     }
 
     private fun getCorrectCoordinates(coordinates: String, allCoordinates: List<List<List<List<Any?>>>>?): List<List<List<Any?>>>? {
