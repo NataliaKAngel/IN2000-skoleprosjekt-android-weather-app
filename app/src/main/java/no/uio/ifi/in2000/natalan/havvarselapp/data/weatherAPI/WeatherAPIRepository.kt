@@ -94,11 +94,14 @@ class WeatherAPIRepository (
         return metAlertDataSource.getMetAlert()
     }
 
+    /*
     private fun checkGeographicDomain(coordinate: List<List<List<Any?>>>?, metAlertDataClass: MetAlertDataClass) : Boolean {
         return metAlertDataClass.features.find { feature ->
             feature.properties.geographicDomain == "marine"
         } != null
     }
+
+     */
 
     private fun getAllCoordinates(metAlertDataClass: MetAlertDataClass?): List<List<List<List<Any?>>>> {
         if (metAlertDataClass != null) {
@@ -117,10 +120,7 @@ class WeatherAPIRepository (
     }
 
     /*
-
-     */
-
-    fun getProperty(coordinate: List<List<List<Any?>>>?, propertyName: String, metAlertDataClass: MetAlertDataClass): Any? {
+    fun getProperty(coordinate: List<List<List<Any?>>>?, propertyName: String, metAlertDataClass: MetAlertDataClass): String? {
         if(checkGeographicDomain(coordinate, metAlertDataClass)) {
             return metAlertDataClass.features
                 .find { feature ->
@@ -140,6 +140,45 @@ class WeatherAPIRepository (
         }
          return null
     }
+
+     */
+
+    //New method that checks the geographic domain based on one single coordinate
+    private fun checkGeographicDomain(coordinate: String, metAlertDataClass: MetAlertDataClass): Boolean {
+        val parsedCoordinates = coordinate.split(",").map { it.toDouble() }
+        val coordinateList = listOf(parsedCoordinates)
+
+        return metAlertDataClass.features.any { feature ->
+            feature.geometry.coordinates == coordinateList &&
+                    feature.properties.geographicDomain == "marine"
+        }
+    }
+
+    //New method that gets a property based on one single coordinate
+    fun getProperty(coordinate: String, propertyName: String, metAlertDataClass: MetAlertDataClass): String? {
+        val parsedCoordinates = coordinate.split(",").map { it.toDouble() }
+        val coordinateList = listOf(parsedCoordinates)
+
+        if(checkGeographicDomain(coordinate, metAlertDataClass)) {
+            val feature = metAlertDataClass.features
+                .find { it.geometry.coordinates == coordinateList }
+
+            return feature?.properties?.let { property ->
+                when (propertyName) {
+                    "awarenessSeriousness" -> property.awarenessSeriousness
+                    "riskMatrixColor" -> property.riskMatrixColor
+                    "description" -> property.description
+                    "triggerLevel" -> property.triggerLevel
+                    // Add more cases for other properties as needed
+                    else -> null
+                }
+            }
+        }
+
+        return null
+    }
+
+
 
 
 }
