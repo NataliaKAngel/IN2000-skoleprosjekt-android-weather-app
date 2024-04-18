@@ -36,7 +36,8 @@ class WeatherAPIRepository (
                     windDirection = windDirection, //Map<String, Double>
                     windDirectionUnit = windDirectionUnit, //String
                     riskMatrixColor = "",  // From MetAlerts
-                    awarenessSeriousness = "",  // From MetAlerts
+                    description = "",  // From MetAlerts
+                    triggerLevel = "", //From MetAlerts
                     bestWindDirection = 0.0,  //Recommended windDirection for the spot
                     recommendationColor = "" //Recommended color for kiting
                 )
