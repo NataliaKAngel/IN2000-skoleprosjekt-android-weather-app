@@ -56,7 +56,7 @@ class MainActivity : ComponentActivity() {
 
                     // Creates navController and NavHost
                     val navController = rememberNavController()
-                    NavHost(navController = navController, startDestination = "InfoScreen") {
+                    NavHost(navController = navController, startDestination = "HomeScreen") {
                      // Navigating routes
                         composable("HomeScreen") { HomeScreen(navController = navController, homeScreenViewModel = homeScreenViewModel) }
                         composable("InfoScreen") { InfoScreen(navController = navController)}

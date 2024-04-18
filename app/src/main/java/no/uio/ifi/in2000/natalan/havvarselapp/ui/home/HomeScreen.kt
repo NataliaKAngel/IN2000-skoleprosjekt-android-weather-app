@@ -65,15 +65,6 @@ fun HomeScreen(
                 TopBar(infoButtonClick = { navController.navigate("InfoScreen") })
             }
 
-            Box(
-                modifier = Modifier
-                    .background(color = White, shape = RoundedCornerShape(size = 16.dp))
-                    .padding(16.dp)
-                .align(Alignment.Center))
-            {
-                SpotBottomSheet()
-            }
-
             // NavBar
             Box(
                 modifier = Modifier
@@ -83,7 +74,6 @@ fun HomeScreen(
                 NavBar(navController)
             }
         }
-
     }
 
 

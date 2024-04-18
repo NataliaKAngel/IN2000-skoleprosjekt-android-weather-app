@@ -13,9 +13,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.paddingFromBaseline
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
@@ -44,16 +42,13 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import no.uio.ifi.in2000.natalan.havvarselapp.R
-import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.Spot
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.theme.*
 import coil.compose.AsyncImage
 //OBS! Må legge inn avhengighet?
@@ -248,9 +243,8 @@ fun KiteConditionInfoBox() {
     }
 }
 
-
-            @Composable
-            fun InfoColorsColumn(){
+ @Composable
+fun InfoColorsColumn(){
                 LazyColumn(modifier = Modifier
                     .verticalScroll(rememberScrollState())
                     //.padding(16.dp)
@@ -325,7 +319,6 @@ fun KiteConditionInfoBox() {
 
         }
 
-
 @Composable
 fun KiteConditionColorBox(color: Color, icon: Int, title: String, info: String) {
 
@@ -387,14 +380,14 @@ fun KiteConditionColorBox(color: Color, icon: Int, title: String, info: String) 
 
 
 
+
+//Currently working on:
 //SpotBox that pops up on HomeScreen when a marker with spot is clicked
 //Shows relevant information from that spot
 @Composable
 fun SpotBox(
     //navController: NavController, spot: Spot
 ) {
-
-
     Box(
         modifier = Modifier
             .widthIn(max = 238.dp)
@@ -410,7 +403,6 @@ fun SpotBox(
                 verticalAlignment = Alignment.CenterVertically
             )
             {
-
                 Box(modifier = Modifier) {
                     Column(
                         verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.Top),
@@ -443,7 +435,6 @@ fun SpotBox(
 
                 Spacer(modifier = Modifier.width(8.dp))
 
-
                 Box(
                     Modifier
 //                        .clickable {
@@ -460,6 +451,7 @@ fun SpotBox(
 
 
             // Picture of spot
+            //OBS!!! does not load image
             Box(
                 Modifier
             ) {
@@ -619,14 +611,12 @@ fun SpotBottomSheet()
         ModalBottomSheet(onDismissRequest = { /*TODO*/ }
         ) {
             SpotBox()
-
         }
     }
-
-
 }
 
 
+//Previews
     @Preview
 @Composable
 fun KiteConditionColorBoxPreview() {
