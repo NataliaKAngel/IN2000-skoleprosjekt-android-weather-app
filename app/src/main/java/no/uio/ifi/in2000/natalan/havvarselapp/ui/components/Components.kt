@@ -382,6 +382,8 @@ fun KiteConditionColorBox(color: Color, icon: Int, title: String, info: String) 
 
 @Composable
 fun SpotBox(navController: NavController, spot: Spot){
+
+
     Box(
         modifier = Modifier
             .widthIn(max = 266.dp)
@@ -393,6 +395,36 @@ fun SpotBox(navController: NavController, spot: Spot){
         ) {
             //Row with title of spot and "goToSpot" button
             Row {
+                Box(modifier = Modifier){
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Top),
+                        horizontalAlignment = Alignment.Start,
+                    ) {
+                        Text(
+                        text = spot.spotName,
+                        style = TextStyle(
+                            fontSize = 24.sp,
+                            fontFamily = FontFamily(Font(R.font.inter_font)),
+                            fontWeight = FontWeight(700),
+                            color = Color(0xFF08134A),
+
+                            )
+                    )
+                        Text(
+                            text = spot.cityName,
+                            style = TextStyle(
+                                fontSize = 12.sp,
+                                fontFamily = FontFamily(Font(R.font.inter_font)),
+                                fontWeight = FontWeight(400),
+                                color = Color(0xFF08134A),
+
+                                )
+                        )
+                    }
+                }
+
+
+
                 Box(
                     Modifier
 //                        .clickable {
@@ -406,6 +438,11 @@ fun SpotBox(navController: NavController, spot: Spot){
                     )
                 }
             }
+
+
+
+
+
 
             // Picture of spot
             Box(
@@ -452,12 +489,17 @@ fun SpotBox(navController: NavController, spot: Spot){
                                 color = GreenCircle,
                                 shape = RoundedCornerShape(size = 32.dp)
                             )
-                    ){ Image(
-                                painter = painterResource(id = ),
-                                contentDescription = "image description",
-                                contentScale = ContentScale.None
-                            )
+
+                        //denne må brukes får å få inn riktig ikon med tommel opp eller ned...
+                     ){
+//                            Image(
+//                                painter = painterResource(id = icon),
+//                                contentDescription = "image description",
+//                                contentScale = ContentScale.None
+//                            )
                     }
+
+
                     Column(
                         verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.Top),
                         horizontalAlignment = Alignment.End,
@@ -465,8 +507,9 @@ fun SpotBox(navController: NavController, spot: Spot){
                         Row(
                             horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.Start),
                             verticalAlignment = Alignment.Bottom,
-                        ) {Text(
-                            text = "8",
+                        ) {
+                            Text(
+                            text = "${spot.windSpeed}",
                             style = TextStyle(
                                 fontSize = 32.sp,
                                 fontFamily = FontFamily(Font(R.font.inter_font)),
@@ -475,7 +518,7 @@ fun SpotBox(navController: NavController, spot: Spot){
                             )
                         )
                             Text(
-                                text = "m/s ",
+                                text = "m/s",
                                 style = TextStyle(
                                     fontSize = 14.sp,
                                     fontFamily = FontFamily(Font(R.font.inter_font)),
@@ -504,13 +547,13 @@ fun SpotBox(navController: NavController, spot: Spot){
                                     verticalAlignment = Alignment.Bottom
                             ){
                             //Box with wind direction arrow
-                                Image(
-                                    painter = painterResource(id = R.drawable.arrowSouthwest),
-                                    contentDescription = "arrow shows wind direction",
-                                    contentScale = ContentScale.None
-                                )
+//                                Image(
+//                                    painter = painterResource(id = R.drawable.arrowSouthwest),
+//                                    contentDescription = "arrow shows wind direction",
+//                                    contentScale = ContentScale.None
+//                                )
                                     Text(
-                                        text = "sørvest",
+                                        text = "${spot.windDirection}",
                                         style = TextStyle(
                                             fontSize = 14.sp,
                                             fontFamily = FontFamily(Font(R.font.inter_font)),
@@ -520,7 +563,6 @@ fun SpotBox(navController: NavController, spot: Spot){
                                             )
                                     )
                             }
-
                         }
                     Text(
                         text = "vindretning",
@@ -540,21 +582,6 @@ fun SpotBox(navController: NavController, spot: Spot){
 }
 
 
-
-
-
-/*@Preview
-@Composable
-fun PreviewInfo() {
-    val components = Components()
-    val navButtonClick: (String) -> Unit = { buttonText ->
-        // Define actions to be performed when a button is clicked in the preview
-        // For example, you can print the clicked button text to the logcat
-        println("Clicked button: $buttonText")
-    }
-
-    components.navBar(navButtonClick)
-}*/
 
 @Preview
 @Composable
