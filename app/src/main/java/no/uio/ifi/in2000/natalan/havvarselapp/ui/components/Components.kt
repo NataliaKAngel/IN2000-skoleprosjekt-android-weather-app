@@ -191,7 +191,7 @@ fun KiteConditionInfoBox() {
             .padding(16.dp)
             .fillMaxWidth()
              // Setter en minimumsbredde på 200dp og en maksimal bredde på 400dp
-            .heightIn(min = 100.dp, max =700.dp),
+            .heightIn(min = 100.dp, max =360.dp),
        // verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.Start,
     ) {
@@ -220,7 +220,7 @@ fun KiteConditionInfoBox() {
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                modifier = Modifier.width(270.dp),
+                modifier = Modifier.width(300.dp),
                 text = "Kitevarsel gir kitere anbefalinger om kiteforhold på utvalgte kitespotter langs kysten av Norge. Anbefalingene er fargekodet slik:",
                 style = TextStyle(
                     fontSize = 9.sp,
@@ -231,57 +231,73 @@ fun KiteConditionInfoBox() {
             )
             Spacer(modifier = Modifier.height(12.dp))
 
-
-                Column {
+            LazyColumn {
+                item {
                     KiteConditionColorBox(
                         LightGrayCircle,
                         icon = R.drawable.thumbdown,
                         "Ingen kiteforhold",
                         "0-5 m/s og/eller feil\n vindretning. Umulig å kite."
                     )
-                    Spacer(modifier = Modifier.height(8.dp))
+                }
+                item {
+                    Spacer(modifier = Modifier.height(12.dp))
+                }
+                item {
                     KiteConditionColorBox(
                         BlueCircle,
                         icon = R.drawable.thumbup,
                         "Middels kiteforhold",
                         "5<7 m/s og riktig vindretning.\nBør ha større kite."
                     )
+                }
+                item {
                     Spacer(modifier = Modifier.height(8.dp))
+                }
+                item {
                     KiteConditionColorBox(
                         GreenCircle,
                         icon = R.drawable.thumbup,
                         "Anbefalte kiteforhold",
                         "7<11 m/s. Riktig vindstyrke\nog vindretning."
                     )
-
+                }
+                item {
                     Spacer(modifier = Modifier.height(8.dp))
-
+                }
+                item {
                     KiteConditionColorBox(
-                    YellowCircle,
-                    icon = R.drawable.thumbup,
-                    "Vanskelige kiteforhold",
-                    "11<15 m/s. Sterk vind\nFare for overrigging"
-                )
+                        YellowCircle,
+                        icon = R.drawable.thumbup,
+                        "Vanskelige kiteforhold",
+                        "11<15 m/s. Sterk vind\nFare for overrigging"
+                    )
+                }
+                item {
                     Spacer(modifier = Modifier.height(8.dp))
+                }
+                item {
                     KiteConditionColorBox(
                         OrangeCircle,
                         icon = R.drawable.thumbdown,
                         "Ingen kiteforhold",
                         "15<19 m/s\nKan være stor fare."
                     )
+                }
+                item {
                     Spacer(modifier = Modifier.height(8.dp))
+                }
+                item {
                     KiteConditionColorBox(
                         RedCircle,
                         icon = R.drawable.thumbdown,
                         "Ingen kiteforhold",
                         "19< m/s. Ekstrem fare\nog ekstremvær"
                     )
-
-
                 }
-
-
             }
+
+        }
 
 
 
