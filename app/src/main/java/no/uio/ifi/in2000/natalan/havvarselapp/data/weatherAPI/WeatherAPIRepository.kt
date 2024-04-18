@@ -87,89 +87,36 @@ class WeatherAPIRepository (
         return units?.get("wind_from_direction")
     }
 
-    //METALERTREPOSITORY
-    private suspend fun getAlertMap(): Map<String, List<Properties>> {
-        // Holds a MetAlertDataClass that contains a list of Feature
+    suspend fun getProperty(coordinate: List<List<List<Any?>>>?, propertyName: String): Any? {
+        // Fetch the MetAlertDataClass containing all the features
         val metAlertDataClass: MetAlertDataClass? = metAlertDataSource.getMetAlert()
 
-        // alertMap = MutableMap<String, MutableList<Properties>>: String = area, MutableList<Properties> = List<MetAlertDataSource.feature.properties>
-        val alertMap: MutableMap<String, MutableList<Properties>> = mutableMapOf()
-        metAlertDataClass?.features?.forEach { feature ->
-            val area = feature.properties.area
-            if (area.isNotBlank()) {
-                alertMap.getOrPut(area) { mutableListOf() }.add(feature.properties)
+        return metAlertDataClass?.features
+            ?.find { feature ->
+                feature.geometry.coordinates == coordinate
+            }
+            ?.properties
+            ?.let { property ->
+                when (propertyName) {
+                    "awarenessSeriousness" -> property.awarenessSeriousness
+                    "riskMatrixColor" -> property.riskMatrixColor
+                    "description" -> property.description
+                    "triggerLevel" -> property.triggerLevel
+                    // Add more cases for other properties as needed
+                    else -> null
+                }
+            }
+    }
+
+
+    suspend fun checkGeographicDomain(coordinate: List<List<List<Any?>>>?) : Boolean {
+        val metAlertDataClass: MetAlertDataClass? = metAlertDataSource.getMetAlert()
+        if (metAlertDataClass != null) {
+            for (feature in metAlertDataClass.features) {
+                return feature.properties.geographicDomain == "marine"
             }
         }
-        return alertMap
-    }
-
-    //TODO: Write comments to explain this method
-    suspend fun getAlertsForArea(area: String): List<Properties>? {
-        val alertMap = getAlertMap()
-        return alertMap[area]
-    }
-
-    //TODO: Write comments to explain this method
-    suspend fun getCoordinates(): List<List<List<Any?>>>? {
-        val metAlertDataClass: MetAlertDataClass? = metAlertDataSource.getMetAlert()
-        return metAlertDataClass?.features?.map { feature ->
-            feature.geometry.coordinates
-        }
-    }
-
-    //TODO: Write method
-    suspend fun getRiskMatrixColor(areaName : String): String?{
-
-        //The variable holds a MetAlertDataClass that contains a list of Feature
-        val metAlertDataClass : MetAlertDataClass? = metAlertDataSource.getMetAlert()
-
-        // checking if metAlertDataClass is null or areaName is blank
-        if(metAlertDataClass == null || areaName.isBlank()){
-            return null
-        }
-
-        // finding the feature corresponding to the specific area, if the area is not found, return null
-        val feature = metAlertDataClass.features.find{it.properties.area == areaName} ?: return null
-
-        // returning the risk matrix color for the specific area
-        return feature.properties.riskMatrixColor
-    }
-
-    //TODO: Write method
-    // The method fetches the awarness seriousness for a specific area
-    suspend fun getAwarenessSeriousness(areaName : String): String?{
-
-        //The variable holds a MetAlertDataClass that contains a list of Feature
-        val metAlertDataClass : MetAlertDataClass? = metAlertDataSource.getMetAlert()
-
-        // checking if metAlertDataClass is null or areaName is blank
-        if(metAlertDataClass == null || areaName.isBlank()){
-            return null
-        }
-        // finding the feature corresponding to the specific area, if the area is not found, return null
-        val feature = metAlertDataClass.features.find{it.properties.area == areaName} ?: return null
-
-        // returning the awarness seriousness for the specific area
-        return feature.properties.awarenessSeriousness
-    }
-
-    // a method that fetches the name of a specific area from MetAlertDataClass
-    //USIKKER PÅ OM DET ER SÅNN VI VIL HENTE NAVNET TIL AREA PÅ!!
-    suspend fun getAreaName(areaIndex : Int): String?{
-        // This variable holds a MetAlertDataClass that contains a list of Feature
-        val metAlertDataClass : MetAlertDataClass? = metAlertDataSource.getMetAlert()
-
-        // if metAlertDataClass i null or the areaIndex is out of bounds, return null
-        if(metAlertDataClass == null || areaIndex < 0 || areaIndex > metAlertDataClass.features.size){
-            return null
-        }
-
-        // getting the feature based on a specific index
-
-        val feature = metAlertDataClass.features[areaIndex]
-
-        // returning the area name from the specific feature
-        return feature.properties.area
+        return false
     }
 
 }
