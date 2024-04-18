@@ -92,13 +92,14 @@ fun InfoScreen(navController: NavController) {
                 ) {
                     GoToMap(navController)
                 }
+                Spacer(modifier = Modifier.height(12.dp))
                 Box(
                     modifier = Modifier
                         .layoutId("kiteConditionInfoBox")
                 ) {
                     KiteConditionInfoBox()
                 }
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(10.dp))
                 Box(
                     modifier = Modifier
                         .layoutId("infoColorsColumn")

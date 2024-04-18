@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.paddingFromBaseline
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
@@ -23,6 +24,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -40,12 +44,14 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import no.uio.ifi.in2000.natalan.havvarselapp.R
 import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.Spot
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.theme.*
@@ -196,7 +202,7 @@ fun KiteConditionInfoBox() {
     Column(
         modifier = Modifier
             .background(color = White, shape = RoundedCornerShape(size = StandardRadius))
-            .padding(top = 16.dp)
+            //.padding(top = 0.dp, start = 16.dp)
             .fillMaxWidth(),
             // Setter en minimumsbredde på 200dp og en maksimal bredde på 400dp
             //.heightIn(min = 100.dp, max = 424.dp),
@@ -238,7 +244,6 @@ fun KiteConditionInfoBox() {
                     color = TextColor,
                 )
             )
-            Spacer(modifier = Modifier.height(12.dp))
         }
     }
 }
@@ -248,7 +253,7 @@ fun KiteConditionInfoBox() {
             fun InfoColorsColumn(){
                 LazyColumn(modifier = Modifier
                     .verticalScroll(rememberScrollState())
-                    .padding(16.dp)
+                    //.padding(16.dp)
                     .height(360.dp)
                 )
                 {
@@ -314,7 +319,7 @@ fun KiteConditionInfoBox() {
                         "Ingen kiteforhold",
                         "19< m/s. Ekstrem fare\nog ekstremvær"
                     )
-                    Spacer(modifier = Modifier.height(48.dp))
+                    Spacer(modifier = Modifier.height(16.dp))
                 }
             }
 
@@ -328,6 +333,7 @@ fun KiteConditionColorBox(color: Color, icon: Int, title: String, info: String) 
             horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.Start),
             verticalAlignment = Alignment.CenterVertically,
         ) {
+            //Box with Circle, color and thumb
             Box(
                 Modifier
                     .size(32.dp) // Du kan justere størrelsen etter behov
@@ -380,13 +386,18 @@ fun KiteConditionColorBox(color: Color, icon: Int, title: String, info: String) 
 
 
 
+
+//SpotBox that pops up on HomeScreen when a marker with spot is clicked
+//Shows relevant information from that spot
 @Composable
-fun SpotBox(navController: NavController, spot: Spot){
+fun SpotBox(
+    //navController: NavController, spot: Spot
+) {
 
 
     Box(
         modifier = Modifier
-            .widthIn(max = 266.dp)
+            .widthIn(max = 238.dp)
     )
     {
         Column(
@@ -394,24 +405,31 @@ fun SpotBox(navController: NavController, spot: Spot){
             horizontalAlignment = Alignment.Start,
         ) {
             //Row with title of spot and "goToSpot" button
-            Row {
-                Box(modifier = Modifier){
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            )
+            {
+
+                Box(modifier = Modifier) {
                     Column(
-                        verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Top),
+                        verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.Top),
                         horizontalAlignment = Alignment.Start,
                     ) {
                         Text(
-                        text = spot.spotName,
-                        style = TextStyle(
-                            fontSize = 24.sp,
-                            fontFamily = FontFamily(Font(R.font.inter_font)),
-                            fontWeight = FontWeight(700),
-                            color = Color(0xFF08134A),
+                            text = "Hamresanden",
+                            //text = spot.spotName,
+                            style = TextStyle(
+                                fontSize = 24.sp,
+                                fontFamily = FontFamily(Font(R.font.inter_font)),
+                                fontWeight = FontWeight(700),
+                                color = Color(0xFF08134A),
 
-                            )
-                    )
+                                )
+                        )
                         Text(
-                            text = spot.cityName,
+                            text = "Kristiansand",
+                            //text = spot.cityName,
                             style = TextStyle(
                                 fontSize = 12.sp,
                                 fontFamily = FontFamily(Font(R.font.inter_font)),
@@ -423,6 +441,7 @@ fun SpotBox(navController: NavController, spot: Spot){
                     }
                 }
 
+                Spacer(modifier = Modifier.width(8.dp))
 
 
                 Box(
@@ -430,46 +449,45 @@ fun SpotBox(navController: NavController, spot: Spot){
 //                        .clickable {
                     //navigate to SpotScreen with the chosen spot
 //                            navController.navigate("SpotScrren/${spot.id}") },
-                ){
+                ) {
                     Image(
                         painter = painterResource(id = R.drawable.gotospot),
                         contentDescription = "go to spot",
-                        contentScale = ContentScale.None
+                        contentScale = ContentScale.Fit
                     )
                 }
             }
 
 
-
-
-
-
             // Picture of spot
             Box(
                 Modifier
-                ){
+            ) {
                 AsyncImage(
                     modifier = Modifier
-                        .padding(10.dp)
+                        .width(285.dp)
+                        .height(135.dp)
+                        //.padding(10.dp)
                         .clip(RectangleShape),
+
                     contentScale = ContentScale.Crop,
-                    model = spot.photo,
+                    model = "https://lh6.googleusercontent.com/proxy/gmU_Yq4-20N9nUrJq12vqi4OJxAHI489kc-tKw6kEW4YfTZPE8H7cIQbBNcF2_Fu7e2c7aC1_jIU-1bB43gmPwqBj-IuBwwl7wWeLZVMnkHrpolHLx1-,",
                     contentDescription = "Photo of spot"
                 )
-                }
+            }
 
 
             //Box with condition for kiting (including thumb, color, wind info)
             Box(
                 Modifier
 
-            ){
+            ) {
 
                 Column(
-                verticalArrangement = Arrangement.SpaceBetween,
-                horizontalAlignment = Alignment.Start,
-            ) {
-                //Time right now - can be replaced by actual time
+                    verticalArrangement = Arrangement.SpaceBetween,
+                    horizontalAlignment = Alignment.Start,
+                ) {
+                    //Time right now - can be replaced by actual time
                     Text(
                         text = "Akkurat nå:",
                         style = TextStyle(
@@ -479,72 +497,82 @@ fun SpotBox(navController: NavController, spot: Spot){
                             color = BlueSignature,
                         )
                     )
-                Row {
-                    //ConditonCircle with thumb
-                    Box(
-                        Modifier
-                            .width(50.dp)
-                            .height(50.dp)
-                            .background(
-                                color = GreenCircle,
-                                shape = RoundedCornerShape(size = 32.dp)
-                            )
 
-                        //denne må brukes får å få inn riktig ikon med tommel opp eller ned...
-                     ){
-//                            Image(
-//                                painter = painterResource(id = icon),
-//                                contentDescription = "image description",
-//                                contentScale = ContentScale.None
-//                            )
-                    }
+                    Row(
+                        Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    )
+                    {
+                        //ConditonCircle with thumb
+                        Box(
+                            Modifier
+                                .size(32.dp) // Du kan justere størrelsen etter behov
+                                .background(color = GreenCircle, shape = CircleShape)
+                                .width(32.dp)
+                                .height(32.dp)
 
-
-                    Column(
-                        verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.Top),
-                        horizontalAlignment = Alignment.End,
-                    ) {
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.Start),
-                            verticalAlignment = Alignment.Bottom,
+                                .padding(8.dp)
                         ) {
+                            Column(
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                            ) {
+                                Image(
+                                    painter = painterResource(R.drawable.thumbup),
+                                    contentDescription = "image description",
+                                    contentScale = ContentScale.None
+                                )
+                            }
+                        }
+
+                        Column(
+                            verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.Top),
+                            horizontalAlignment = Alignment.End,
+                        ) {
+                            Row(
+                                horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.Start),
+                                verticalAlignment = Alignment.Bottom,
+                            ) {
+                                Text(
+                                    text = "8",
+                                    //text = "${spot.windSpeed}",
+                                    style = TextStyle(
+                                        fontSize = 24.sp,
+                                        fontFamily = FontFamily(Font(R.font.inter_font)),
+                                        fontWeight = FontWeight(300),
+                                        color = TextColor,
+
+                                )
+
+                                )
+                                Text(
+                                    text = "m/s",
+                                    style = TextStyle(
+                                        fontSize = 24.sp,
+                                        fontFamily = FontFamily(Font(R.font.inter_font)),
+                                        fontWeight = FontWeight(400),
+                                        color = TextColor,
+                                    )
+                                )
+                            }
                             Text(
-                            text = "${spot.windSpeed}",
-                            style = TextStyle(
-                                fontSize = 32.sp,
-                                fontFamily = FontFamily(Font(R.font.inter_font)),
-                                fontWeight = FontWeight(300),
-                                color = TextColor,
-                            )
-                        )
-                            Text(
-                                text = "m/s",
+                                text = "vindstyrke",
                                 style = TextStyle(
-                                    fontSize = 14.sp,
+                                    fontSize = 9.sp,
                                     fontFamily = FontFamily(Font(R.font.inter_font)),
                                     fontWeight = FontWeight(400),
                                     color = TextColor,
                                 )
                             )
+
+
                         }
-                        Text(
-                            text = "vindstyrke",
-                            style = TextStyle(
-                                fontSize = 9.sp,
-                                fontFamily = FontFamily(Font(R.font.inter_font)),
-                                fontWeight = FontWeight(400),
-                                color = TextColor,
-                            )
-                        )
 
-
-                    }
-
-                    //Coloumn with wind direction
-                    Column {
-                        Row (
-                                    horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.Start),
-                                    verticalAlignment = Alignment.Bottom
+                        //Column with wind direction
+                        Column (
+                            verticalArrangement = Arrangement.SpaceBetween,
+                            horizontalAlignment = Alignment.End,
                             ){
                             //Box with wind direction arrow
 //                                Image(
@@ -552,39 +580,73 @@ fun SpotBox(navController: NavController, spot: Spot){
 //                                    contentDescription = "arrow shows wind direction",
 //                                    contentScale = ContentScale.None
 //                                )
-                                    Text(
-                                        text = "${spot.windDirection}",
-                                        style = TextStyle(
-                                            fontSize = 14.sp,
-                                            fontFamily = FontFamily(Font(R.font.inter_font)),
-                                            fontWeight = FontWeight(400),
-                                            color = TextColor,
+                            Text(
+                                text = "sørvest",
+                                //text = "${spot.windDirection}",
+                                style = TextStyle(
+                                    fontSize = 24.sp,
+                                    fontFamily = FontFamily(Font(R.font.inter_font)),
+                                    fontWeight = FontWeight(400),
+                                    color = TextColor,
 
-                                            )
                                     )
-                            }
-                        }
-                    Text(
-                        text = "vindretning",
-                        style = TextStyle(
-                            fontSize = 9.sp,
-                            fontFamily = FontFamily(Font(R.font.inter_font)),
-                            fontWeight = FontWeight(400),
-                            color = TextColor,
-
                             )
-                    )
+
+                            Text(
+                                text = "vindretning",
+                                style = TextStyle(
+                                    fontSize = 9.sp,
+                                    fontFamily = FontFamily(Font(R.font.inter_font)),
+                                    fontWeight = FontWeight(400),
+                                    color = TextColor,
+
+                                    )
+                            )
+
+                        }
                     }
                 }
-                }
             }
+        }
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SpotBottomSheet()
+{
+    Surface {
+        ModalBottomSheet(onDismissRequest = { /*TODO*/ }
+        ) {
+            SpotBox()
+
+        }
+    }
+
+
+}
+
+
+    @Preview
+@Composable
+fun KiteConditionColorBoxPreview() {
+  KiteConditionColorBox(GreenCircle, R.drawable.thumbdown, "Hei", "dette er en prove\nharflere linjer\nggjeoheoiio")
+}
 
 
 @Preview
 @Composable
-fun KiteConditionColorBoxPreview() {
-  KiteConditionColorBox(GreenCircle, R.drawable.thumbdown, "Hei", "dette er en prove\nharflere linjer\nggjeoheoiio")
+fun SpotBoxPreview(){
+    SpotBox( )
+}
+
+@Preview
+@Composable
+fun SpotBoxWithFrame(){
+    Box(modifier = Modifier
+
+        .background(White, shape = RoundedCornerShape(size = 16.dp))
+        .padding(16.dp)) {
+        SpotBox()
+    }
 }
