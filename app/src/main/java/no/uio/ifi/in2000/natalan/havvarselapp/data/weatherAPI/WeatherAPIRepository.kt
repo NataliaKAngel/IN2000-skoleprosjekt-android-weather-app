@@ -109,22 +109,16 @@ class WeatherAPIRepository (
         return emptyList()
     }
 
-    private fun getCorrectCoordinates(coordinates: String, allCoordinates: List<List<List<List<Any?>>>>?): List<List<List<Any?>>>? {
-        val details = coordinates.split(", ")
-        val first = details[0]
-        val second = details[1]
-        val reversedCoordinate = "${second}, ${first}"
-        println(reversedCoordinate)
-
-        if (allCoordinates != null) {
-            return allCoordinates.filter { coordinatesList ->
-                coordinatesList.flatten().any { coordinateString ->
-                    coordinateString.toString() == reversedCoordinate
-                }
-            }
+    private fun getCorrectCoordinates(coordinates: String, allCoordinates: List<List<List<List<Any?>>>>?): List<List<Any?>>? {
+        val flattenedCoordinates = allCoordinates.orEmpty().flatten()
+        return flattenedCoordinates.find { list ->
+            list.flatten().contains(coordinates.toDouble())
         }
-        return null
     }
+
+    /*
+
+     */
 
     fun getProperty(coordinate: List<List<List<Any?>>>?, propertyName: String, metAlertDataClass: MetAlertDataClass): Any? {
         if(checkGeographicDomain(coordinate, metAlertDataClass)) {
