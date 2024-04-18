@@ -17,6 +17,10 @@ class WeatherAPIRepository (
         return predefinedSpotsList.associateWith { predefinedSpot ->
             //Gets a new WeatherResponse based on the coordinates in the PredefinedSpots-object
             val weatherResponse = getWeatherResponse(predefinedSpot.coordinates)
+            val metAlert = getMetAlert()
+
+            //val correctCoordinates = getCorrectCoordinates(predefinedSpot.coordinates, metAlert)
+
             //Using let-blocks to secure that weatherResponse, windSpeed, windDirection and units is not null
             weatherResponse?.let {
                 val windSpeed = getWindSpeedMap(it)
@@ -86,10 +90,41 @@ class WeatherAPIRepository (
         return units?.get("wind_from_direction")
     }
 
-    suspend fun getMetAlert() : MetAlertDataClass?{
+    private suspend fun getMetAlert() : MetAlertDataClass?{
         return metAlertDataSource.getMetAlert()
     }
-     fun getProperty(coordinate: List<List<List<Any?>>>?, propertyName: String, metAlertDataClass: MetAlertDataClass): Any? {
+
+    private fun checkGeographicDomain(coordinate: List<List<List<Any?>>>?, metAlertDataClass: MetAlertDataClass) : Boolean {
+        return metAlertDataClass.features.find { feature ->
+            feature.properties.geographicDomain == "marine"
+        } != null
+    }
+
+    private fun getAllCoordinates(metAlertDataClass: MetAlertDataClass): List<List<List<List<Any?>>>> {
+        return metAlertDataClass.features.map { feature ->
+            feature.geometry.coordinates
+        }
+
+    }
+
+    private fun getCorrectCoordinates(coordinates: String, allCoordinates: List<List<List<List<Any?>>>>?): List<List<List<Any?>>>? {
+        val details = coordinates.split(", ")
+        val first = details[0]
+        val second = details[1]
+        val reversedCoordinate = "${second}, ${first}"
+        println(reversedCoordinate)
+
+        if (allCoordinates != null) {
+            return allCoordinates.filter { coordinatesList ->
+                coordinatesList.flatten().any { coordinateString ->
+                    coordinateString.toString() == reversedCoordinate
+                }
+            }
+        }
+        return null
+    }
+
+    fun getProperty(coordinate: List<List<List<Any?>>>?, propertyName: String, metAlertDataClass: MetAlertDataClass): Any? {
         if(checkGeographicDomain(coordinate, metAlertDataClass)) {
             return metAlertDataClass.features
                 .find { feature ->
@@ -110,12 +145,6 @@ class WeatherAPIRepository (
          return null
     }
 
-
-    private fun checkGeographicDomain(coordinate: List<List<List<Any?>>>?, metAlertDataClass: MetAlertDataClass) : Boolean {
-        return metAlertDataClass.features.find { feature ->
-            feature.properties.geographicDomain == "marine"
-        } != null
-    }
 
 }
 
