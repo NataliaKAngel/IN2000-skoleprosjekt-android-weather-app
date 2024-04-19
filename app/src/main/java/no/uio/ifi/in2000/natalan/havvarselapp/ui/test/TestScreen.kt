@@ -61,6 +61,12 @@ fun SpotCard(
             //RiskMatrixColor - MetAlerts
             Text("Farevarselfarge: ${spot?.riskMatrixColor}")
             Spacer(modifier = Modifier.height(5.dp))
+            //Description - MetAlerts
+            Text("Beskrivelse: ${spot?.description}")
+            Spacer(modifier = Modifier.height(5.dp))
+            //TriggerLevel - MetAlerts
+            Text("TriggerLevel: ${spot?.triggerLevel}")
+            Spacer(modifier = Modifier.height(5.dp))
             //WindSpeed - LocationForecast
             Text("Vindstyrke: ${spot?.windSpeed}, ${spot?.windSpeedUnit}")
             Spacer(modifier = Modifier.height(5.dp))
