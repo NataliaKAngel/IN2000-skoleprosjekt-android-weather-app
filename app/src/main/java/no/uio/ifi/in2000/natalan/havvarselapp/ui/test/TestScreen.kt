@@ -49,18 +49,25 @@ fun SpotCard(
 ){
     Card{
         Column {
+            //Coordinates
             Text("Koordinater: ${spot?.coordinates}")
             Spacer(modifier = Modifier.height(5.dp))
+            //SpotName
             Text("Spotnavn: ${spot?.spotName}")
             Spacer(modifier = Modifier.height(5.dp))
+            //CityName
             Text("By: ${spot?.cityName}")
             Spacer(modifier = Modifier.height(5.dp))
+            //RiskMatrixColor - MetAlerts
+            Text("Farevarselfarge: ${spot?.riskMatrixColor}")
+            Spacer(modifier = Modifier.height(5.dp))
+            //WindSpeed - LocationForecast
             Text("Vindstyrke: ${spot?.windSpeed}, ${spot?.windSpeedUnit}")
             Spacer(modifier = Modifier.height(5.dp))
+            //WindDirection - LocationForecast
             Text("Vindretning: ${spot?.windDirection}, ${spot?.windDirectionUnit}")
             Spacer(modifier = Modifier.height(5.dp))
             Text("Beregning: ${spot?.recommendationColor}")
-            Spacer(modifier = Modifier.height(5.dp))
         }
     }
 }

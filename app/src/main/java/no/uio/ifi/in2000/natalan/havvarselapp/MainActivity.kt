@@ -42,9 +42,9 @@ class MainActivity : ComponentActivity() {
                 ) {
                     //Predefined spots
                     val predefinedSpots : List<PredefinedSpots> = listOf(
-                        //PredefinedSpots(coordinates = "58,8.1", spotName = "Hamresanden", cityName = "Kristiansand"),
+                        PredefinedSpots(coordinates = "58,8.1", spotName = "Hamresanden", cityName = "Kristiansand"),
                         //PredefinedSpots(coordinates = "60,10.7", spotName = "Aker Brygge", cityName = "Oslo"),
-                        PredefinedSpots(coordinates = "80,10", spotName = "TestNavn", cityName = "TestBy")
+                        //PredefinedSpots(coordinates = "80,10", spotName = "TestNavn", cityName = "TestBy")
                     )
 
                     //Creates instances of datasources and repositories

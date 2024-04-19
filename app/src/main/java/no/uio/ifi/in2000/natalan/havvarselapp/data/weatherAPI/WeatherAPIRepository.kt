@@ -19,9 +19,10 @@ class WeatherAPIRepository (
             //Gets a new WeatherResponse based on the coordinates in the PredefinedSpots-object
             val weatherResponse = getWeatherResponse(predefinedSpot.coordinates)
 
-            //Det man får tilbake fra et API-kall er en MetAlertDataClass.
-            //Enten med features = [] eller med features = List<Feature>
+            //Gets a new MetAlertDataClass based on the coordinates in the PredefinedSpots-object
             val metAlert = getMetAlert(predefinedSpot.coordinates)
+            val features: List<Feature>? = metAlert?.features
+            val feature: Feature? = features?.get(0)
 
             //Using let-blocks to secure that weatherResponse, windSpeed, windDirection and units is not null
             weatherResponse?.let {
@@ -96,17 +97,20 @@ class WeatherAPIRepository (
         return metAlertsDataSource.getMetAlert(coordinates)
     }
 
-    fun getFeatureProperties(feature: Feature, propertyName: String): String?{
+    fun getProperty(feature: Feature?, propertyName: String): String?{
         //Return the property of the Feature
-        return feature.properties.let { property ->
-            when (propertyName) {
-                "awarenessSeriousness" -> property.awarenessSeriousness
-                "riskMatrixColor" -> property.riskMatrixColor
-                "description" -> property.description
-                "triggerLevel" -> property.triggerLevel
-                else -> null
+        if (feature != null) {
+            return feature.properties.let { property ->
+                when (propertyName) {
+                    "awarenessSeriousness" -> property.awarenessSeriousness
+                    "riskMatrixColor" -> property.riskMatrixColor
+                    "description" -> property.description
+                    "triggerLevel" -> property.triggerLevel
+                    else -> null
+                }
             }
         }
+        return null
     }
 }
 
