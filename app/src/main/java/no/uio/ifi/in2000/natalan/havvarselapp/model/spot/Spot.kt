@@ -23,11 +23,11 @@ data class Spot (
 
     //MET-ALERT:
     //Color of the alert
-    val riskMatrixColor: String,
+    val riskMatrixColor: String?,
     //Description for the alert
-    val description: String,
+    val description: String?,
     //Wind speed level for triggering the alert
-    val triggerLevel: String,
+    val triggerLevel: String?,
 
     //CALCULATION:
     //Recommended windDirection for the spot
