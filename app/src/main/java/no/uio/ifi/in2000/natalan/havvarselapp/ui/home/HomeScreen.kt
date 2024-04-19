@@ -1,11 +1,13 @@
 package no.uio.ifi.in2000.natalan.havvarselapp.ui.home
 
 import android.content.Context
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -20,6 +22,7 @@ import com.mapbox.geojson.Point
 import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.MapView
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.components.*
+import no.uio.ifi.in2000.natalan.havvarselapp.ui.theme.White
 
 @Composable
 fun HomeScreen(
@@ -71,7 +74,6 @@ fun HomeScreen(
                 NavBar(navController)
             }
         }
-
     }
 
 
