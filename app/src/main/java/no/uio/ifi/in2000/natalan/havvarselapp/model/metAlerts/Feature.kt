@@ -7,6 +7,6 @@ data class Feature(
     val properties: Properties,
     val type: String,
     @JsonProperty("when")
-    val when_field: When,
+    val whenField: When,
 )
 
