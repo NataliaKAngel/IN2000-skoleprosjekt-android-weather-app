@@ -96,22 +96,6 @@ class WeatherAPIRepository (
     private suspend fun getMetAlert(coordinates: String) : MetAlertDataClass?{
         return metAlertsDataSource.getMetAlert(coordinates)
     }
-
-    fun getProperty(feature: Feature?, propertyName: String): String?{
-        //Return the property of the Feature
-        if (feature != null) {
-            return feature.properties.let { property ->
-                when (propertyName) {
-                    "awarenessSeriousness" -> property.awarenessSeriousness
-                    "riskMatrixColor" -> property.riskMatrixColor
-                    "description" -> property.description
-                    "triggerLevel" -> property.triggerLevel
-                    else -> null
-                }
-            }
-        }
-        return null
-    }
 }
 
 
