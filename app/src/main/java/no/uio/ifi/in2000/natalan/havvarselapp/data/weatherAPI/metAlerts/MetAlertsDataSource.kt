@@ -16,30 +16,37 @@ class MetAlertsDataSource {
     private val proxyKey = "ab4e9a8e7-469d-499e-822a-7df85483df8c"
     private val apiKey = "X-Gravitee-API-Key"
 
-    // Connect to IFI Proxy
+    // Creating a client and using the apiKey and proxyKey to connect
     private val client = HttpClient(CIO) {
         defaultRequest {
             url(METALERT)
             headers.appendIfNameAbsent(apiKey, proxyKey)
         }
 
+        //Installing gson to deserialize the data from the API
         install(ContentNegotiation) {
           gson()
         }
     }
 
-    // Method returns a list of features that contains coordinates to a given area and properties (MetAlertDataClass)
+    // Gets one MetAlertDataClass-object from MetAlerts (API)
     suspend fun getMetAlert(coordinates: String): MetAlertDataClass? {
-        //Create correct URL based on the coordinates
+        //Creating correct URL based on the coordinates
+        val details = coordinates.split(",")
+        val latitude = details[0]
+        val longitude = details[1]
+        val coordinatesURL = "lat=$latitude&lon=$longitude"
 
-        //
         return try {
+            // Connects to the API with correct URL
             client.use { httpClient ->
-                val response = httpClient.get(METALERT)
+                // Holds and returns response body
+                val response = httpClient.get(METALERT + coordinatesURL)
                 response.body<MetAlertDataClass>()
             }
         } catch (e: Exception) {
             e.printStackTrace()
+            // Returns null
             null
         }
     }
