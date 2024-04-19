@@ -11,7 +11,7 @@ import io.ktor.util.appendIfNameAbsent
 import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.Endpoint.METALERT
 import no.uio.ifi.in2000.natalan.havvarselapp.model.metAlerts.MetAlertDataClass
 
-class MetAlertDataSource {
+class MetAlertsDataSource {
     // Variables holds information for API connection
     private val proxyKey = "ab4e9a8e7-469d-499e-822a-7df85483df8c"
     private val apiKey = "X-Gravitee-API-Key"
@@ -23,15 +23,16 @@ class MetAlertDataSource {
             headers.appendIfNameAbsent(apiKey, proxyKey)
         }
 
-        //TODO: gson or json
-        // Set up for handling JSON data and configuring the JSON serializer/deserializer
         install(ContentNegotiation) {
           gson()
         }
     }
 
     // Method returns a list of features that contains coordinates to a given area and properties (MetAlertDataClass)
-    suspend fun getMetAlert(): MetAlertDataClass? {
+    suspend fun getMetAlert(coordinates: String): MetAlertDataClass? {
+        //Create correct URL based on the coordinates
+
+        //
         return try {
             client.use { httpClient ->
                 val response = httpClient.get(METALERT)

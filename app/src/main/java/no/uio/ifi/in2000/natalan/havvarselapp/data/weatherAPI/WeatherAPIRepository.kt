@@ -1,8 +1,9 @@
 package no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI
 
 import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.locationForecast.LocationForecastDataSource
-import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.metAlerts.MetAlertDataSource
+import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.metAlerts.MetAlertsDataSource
 import no.uio.ifi.in2000.natalan.havvarselapp.model.locationForecast.WeatherResponse
+import no.uio.ifi.in2000.natalan.havvarselapp.model.metAlerts.Feature
 import no.uio.ifi.in2000.natalan.havvarselapp.model.metAlerts.MetAlertDataClass
 import no.uio.ifi.in2000.natalan.havvarselapp.model.predefinedSpots.PredefinedSpots
 import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.Spot
@@ -10,16 +11,17 @@ import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.Spot
 class WeatherAPIRepository (
     private val predefinedSpotsList: List<PredefinedSpots>,
     private val locationForecastDataSource: LocationForecastDataSource,
-    private val metAlertDataSource: MetAlertDataSource
+    private val metAlertsDataSource: MetAlertsDataSource
 ){
     //Creates: Map<PredefinedSpots, Spot?>
     private suspend fun createPredefinedSpots(): Map<PredefinedSpots, Spot?>{
         return predefinedSpotsList.associateWith { predefinedSpot ->
             //Gets a new WeatherResponse based on the coordinates in the PredefinedSpots-object
             val weatherResponse = getWeatherResponse(predefinedSpot.coordinates)
-            val metAlert = getMetAlert()
 
-            val correctCoordinates = getCorrectCoordinates(predefinedSpot.coordinates, getAllCoordinates(metAlert))
+            //Det man får tilbake fra et API-kall er en MetAlertDataClass.
+            //Enten med features = [] eller med features = List<Feature>
+            val metAlert = getMetAlert(predefinedSpot.coordinates)
 
             //Using let-blocks to secure that weatherResponse, windSpeed, windDirection and units is not null
             weatherResponse?.let {
@@ -54,7 +56,7 @@ class WeatherAPIRepository (
         return createPredefinedSpots()
     }
 
-    //Returns one Spot-object based on coordinates
+    //Returns one Spot-object based on coordinates to ViewModel
     suspend fun getOneSpot(coordinates: String): Spot? {
         //List of all the Spots
         val spots = createPredefinedSpots().values.toList()
@@ -90,8 +92,21 @@ class WeatherAPIRepository (
         return units?.get("wind_from_direction")
     }
 
-    private suspend fun getMetAlert() : MetAlertDataClass?{
-        return metAlertDataSource.getMetAlert()
+    private suspend fun getMetAlert(coordinates: String) : MetAlertDataClass?{
+        return metAlertsDataSource.getMetAlert(coordinates)
+    }
+
+    fun getFeatureProperties(feature: Feature, propertyName: String): String?{
+        //Return the property of the Feature
+        return feature.properties.let { property ->
+            when (propertyName) {
+                "awarenessSeriousness" -> property.awarenessSeriousness
+                "riskMatrixColor" -> property.riskMatrixColor
+                "description" -> property.description
+                "triggerLevel" -> property.triggerLevel
+                else -> null
+            }
+        }
     }
 
     /*
@@ -177,9 +192,6 @@ class WeatherAPIRepository (
 
         return null
     }
-
-
-
 
 }
 
