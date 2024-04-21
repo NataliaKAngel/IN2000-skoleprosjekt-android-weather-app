@@ -18,43 +18,38 @@ class WeatherAPIRepository (
         return predefinedSpotsList.associateWith { predefinedSpot ->
             //Gets a new WeatherResponse based on the coordinates in the PredefinedSpots-object
             val weatherResponse = getWeatherResponse(predefinedSpot.coordinates)
+            val windSpeed = getWindSpeedMap(weatherResponse)
+            val windDirection = getWindDirectionMap(weatherResponse)
+            val windSpeedUnit = getWindSpeedUnit(weatherResponse)
+            val windDirectionUnit = getWindDirectionUnit(weatherResponse)
 
             //Gets a new MetAlertDataClass based on the coordinates in the PredefinedSpots-object
-            val metAlert = getMetAlert(predefinedSpot.coordinates)
+            val metAlert = getMetAlerts(predefinedSpot.coordinates)
             val features: List<Feature>? = metAlert?.features
             val feature: Feature? = features?.get(0)
+            val riskMatrixColor = feature?.properties?.riskMatrixColor
+            val description = feature?.properties?.description
+            val triggerLevel = feature?.properties?.triggerLevel
 
-            //Using let-blocks to secure that weatherResponse, windSpeed, windDirection and units is not null
-            weatherResponse?.let {
-                val windSpeed = getWindSpeedMap(it)
-                val windDirection = getWindDirectionMap(it)
-                val windSpeedUnit = getWindSpeedUnit(it)
-                val windDirectionUnit = getWindDirectionUnit(it)
-
-                feature.let{
-                    val riskMatrixColor = feature?.properties?.riskMatrixColor
-                    val description = feature?.properties?.description
-                    val triggerLevel = feature?.properties?.triggerLevel
-
-                //Creates one Spot-object per PredefinedSpot-object
-                    Spot(
-                        coordinates = predefinedSpot.coordinates, //The coordinates of the spot
-                        spotName = predefinedSpot.spotName, //The name of the spot
-                        cityName = predefinedSpot.cityName, //The city the spot lies in
-                        areaName = "",  //The name of the area the spot is a part of (from MetAlert)
-                        photo = "",  //Photo of the spot as URL
-                        windSpeed = windSpeed, //Map<String, Double>
-                        windSpeedUnit = windSpeedUnit,
-                        windDirection = windDirection, //Map<String, Double>
-                        windDirectionUnit = windDirectionUnit, //String
-                        riskMatrixColor = riskMatrixColor,  // From MetAlerts
-                        description = description,  // From MetAlerts
-                        triggerLevel = triggerLevel, //From MetAlerts
-                        bestWindDirection = 0.0,  //Recommended windDirection for the spot
-                        recommendationColor = "" //Recommended color for kiting
-                    )
-                }
-            }
+            //Creates one Spot-object per PredefinedSpot-object
+            Spot(
+                coordinates = predefinedSpot.coordinates, //The coordinates of the spot
+                spotName = predefinedSpot.spotName, //The name of the spot
+                cityName = predefinedSpot.cityName, //The city the spot lies in
+                areaName = "",  //The name of the area the spot is a part of (from MetAlert)
+                photo = "",  //Photo of the spot as URL
+                windSpeed = windSpeed, //Map<String, Double>
+                windSpeedUnit = windSpeedUnit,
+                windDirection = windDirection, //Map<String, Double>
+                windDirectionUnit = windDirectionUnit, //String
+                metAlert = metAlert,
+                feature = feature,
+                riskMatrixColor = riskMatrixColor,  // From MetAlerts
+                description = description,  // From MetAlerts
+                triggerLevel = triggerLevel, //From MetAlerts
+                bestWindDirection = 0.0,  //Recommended windDirection for the spot
+                recommendationColor = "" //Recommended color for kiting
+            )
         }
     }
 
@@ -77,29 +72,29 @@ class WeatherAPIRepository (
     }
 
     // Different methods to transform the data from a WeatherResponse.
-    private fun getWindSpeedMap(weatherResponse: WeatherResponse): Map<String, Double> { //Return value: Map<time: String, windSpeed: Double>
-        return weatherResponse.properties?.timeseries?.associate { timeSeries ->
+    private fun getWindSpeedMap(weatherResponse: WeatherResponse?): Map<String, Double> { //Return value: Map<time: String, windSpeed: Double>
+        return weatherResponse?.properties?.timeseries?.associate { timeSeries ->
             timeSeries.time to (timeSeries.data.instant.details["wind_speed"] ?: 0.0)
         } ?: emptyMap()
     }
 
-    private fun getWindDirectionMap(weatherResponse: WeatherResponse): Map<String, Double>{ //Return value: Map<time : String, windDirection: Double>
-        return weatherResponse.properties?.timeseries?.associate {timeSeries ->
+    private fun getWindDirectionMap(weatherResponse: WeatherResponse?): Map<String, Double>{ //Return value: Map<time : String, windDirection: Double>
+        return weatherResponse?.properties?.timeseries?.associate {timeSeries ->
             timeSeries.time to (timeSeries.data.instant.details["wind_from_direction"] ?: 0.0)
         } ?: emptyMap()
     }
 
-    private fun getWindSpeedUnit(weatherResponse: WeatherResponse): String? {
-        val units = weatherResponse.properties?.meta?.units
+    private fun getWindSpeedUnit(weatherResponse: WeatherResponse?): String? {
+        val units = weatherResponse?.properties?.meta?.units
         return units?.get("wind_speed")
     }
 
-    private fun getWindDirectionUnit(weatherResponse: WeatherResponse): String?{
-        val units = weatherResponse.properties?.meta?.units
+    private fun getWindDirectionUnit(weatherResponse: WeatherResponse?): String?{
+        val units = weatherResponse?.properties?.meta?.units
         return units?.get("wind_from_direction")
     }
 
-    private suspend fun getMetAlert(coordinates: String) : MetAlertDataClass?{
+    private suspend fun getMetAlerts(coordinates: String) : MetAlertDataClass?{
         return metAlertsDataSource.getMetAlert(coordinates)
     }
 }

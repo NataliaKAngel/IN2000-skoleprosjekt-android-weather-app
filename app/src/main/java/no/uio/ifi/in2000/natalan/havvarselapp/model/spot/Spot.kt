@@ -1,5 +1,9 @@
 package no.uio.ifi.in2000.natalan.havvarselapp.model.spot
 
+import no.uio.ifi.in2000.natalan.havvarselapp.model.locationForecast.WeatherResponse
+import no.uio.ifi.in2000.natalan.havvarselapp.model.metAlerts.Feature
+import no.uio.ifi.in2000.natalan.havvarselapp.model.metAlerts.MetAlertDataClass
+
 data class Spot (
     //The coordinates of the spot
     val coordinates: String,
@@ -22,6 +26,8 @@ data class Spot (
     val windDirectionUnit: String?,
 
     //MET-ALERT:
+    val metAlert: MetAlertDataClass?,
+    val feature: Feature?,
     //Color of the alert
     val riskMatrixColor: String?,
     //Description for the alert

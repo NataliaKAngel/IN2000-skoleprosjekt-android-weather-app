@@ -58,6 +58,12 @@ fun SpotCard(
             //CityName
             Text("By: ${spot?.cityName}")
             Spacer(modifier = Modifier.height(5.dp))
+            //MetAlertDataClass
+            Text("MetAlertDataClass: ${spot?.metAlert}")
+            Spacer(modifier = Modifier.height(5.dp))
+            //Feature
+            Text("Feature: ${spot?.feature}")
+            Spacer(modifier = Modifier.height(5.dp))
             //RiskMatrixColor - MetAlerts
             Text("Farevarselfarge: ${spot?.riskMatrixColor}")
             Spacer(modifier = Modifier.height(5.dp))
