@@ -32,6 +32,7 @@ class MetAlertsDataSource {
     // Gets one MetAlertDataClass-object from MetAlerts (API)
     suspend fun getMetAlert(coordinates: String): MetAlertDataClass? {
         //Creating correct URL based on the coordinates
+        // PredefinedSpots(coordinates = "58,8.1")
         val details = coordinates.split(",")
         val latitude = details[0]
         val longitude = details[1]
