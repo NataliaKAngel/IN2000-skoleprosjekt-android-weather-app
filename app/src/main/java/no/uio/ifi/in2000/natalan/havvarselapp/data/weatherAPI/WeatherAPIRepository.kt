@@ -18,6 +18,7 @@ class WeatherAPIRepository (
         return predefinedSpotsList.associateWith { predefinedSpot ->
             //Gets a new WeatherResponse based on the coordinates in the PredefinedSpots-object
             val weatherResponse = getWeatherResponse(predefinedSpot.coordinates)
+            //Gets the data that the Spot-object holds
             val windSpeed = getWindSpeedMap(weatherResponse)
             val windDirection = getWindDirectionMap(weatherResponse)
             val windSpeedUnit = getWindSpeedUnit(weatherResponse)
@@ -27,6 +28,7 @@ class WeatherAPIRepository (
             val metAlert = getMetAlerts(predefinedSpot.coordinates)
             val features: List<Feature>? = metAlert?.features
             val feature: Feature? = features?.get(0)
+            //Gets the data that the Spot-object holds
             val riskMatrixColor = feature?.properties?.riskMatrixColor
             val description = feature?.properties?.description
             val triggerLevel = feature?.properties?.triggerLevel
@@ -36,7 +38,6 @@ class WeatherAPIRepository (
                 coordinates = predefinedSpot.coordinates, //The coordinates of the spot
                 spotName = predefinedSpot.spotName, //The name of the spot
                 cityName = predefinedSpot.cityName, //The city the spot lies in
-                areaName = "",  //The name of the area the spot is a part of (from MetAlert)
                 photo = "",  //Photo of the spot as URL
                 windSpeed = windSpeed, //Map<String, Double>
                 windSpeedUnit = windSpeedUnit,

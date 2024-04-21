@@ -11,8 +11,6 @@ data class Spot (
     val spotName: String,
     //The city the spot is in (example: "Kristiansand")
     val cityName: String,
-    //The name of the area the spot is a part of (from MetAlert)
-    val areaName: String,
     //Photo of the spot as URL
     val photo: String,
 
