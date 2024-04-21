@@ -16,40 +16,42 @@ class WeatherAPIRepository (
     //Creates: Map<PredefinedSpots, Spot?>
     private suspend fun createPredefinedSpots(): Map<PredefinedSpots, Spot?>{
         return predefinedSpotsList.associateWith { predefinedSpot ->
-            //Gets a new WeatherResponse based on the coordinates in the PredefinedSpots-object
-            val weatherResponse = getWeatherResponse(predefinedSpot.coordinates)
-            //Gets the data that the Spot-object holds
-            val windSpeed = getWindSpeedMap(weatherResponse)
-            val windDirection = getWindDirectionMap(weatherResponse)
-            val windSpeedUnit = getWindSpeedUnit(weatherResponse)
-            val windDirectionUnit = getWindDirectionUnit(weatherResponse)
-
-            //Gets a new MetAlertDataClass based on the coordinates in the PredefinedSpots-object
-            val metAlert = getMetAlerts(predefinedSpot.coordinates)
-            val features: List<Feature>? = metAlert?.features
-            val feature: Feature? = features?.get(0)
-            //Gets the data that the Spot-object holds
-            val riskMatrixColor = feature?.properties?.riskMatrixColor
-            val description = feature?.properties?.description
-            val triggerLevel = feature?.properties?.triggerLevel
-
-            //Creates one Spot-object per PredefinedSpot-object
-            Spot(
-                coordinates = predefinedSpot.coordinates, //The coordinates of the spot
-                spotName = predefinedSpot.spotName, //The name of the spot
-                cityName = predefinedSpot.cityName, //The city the spot lies in
-                photo = "",  //Photo of the spot as URL
-                windSpeed = windSpeed, //Map<String, Double>
-                windSpeedUnit = windSpeedUnit,
-                windDirection = windDirection, //Map<String, Double>
-                windDirectionUnit = windDirectionUnit, //String
-                riskMatrixColor = riskMatrixColor,  // From MetAlerts
-                description = description,  // From MetAlerts
-                triggerLevel = triggerLevel, //From MetAlerts
-                bestWindDirection = 0.0,  //Recommended windDirection for the spot
-                recommendationColor = "" //Recommended color for kiting
+            createSpot(
+                predefinedSpot,
+                getWeatherResponse(predefinedSpot.coordinates),
+                getMetAlerts(predefinedSpot.coordinates)?.features?.get(0)
             )
         }
+    }
+
+    private fun createSpot(predefinedSpot: PredefinedSpots, weatherResponse: WeatherResponse?, feature: Feature?): Spot{
+        //Gets data from LocationForecast-API
+        val windSpeed = getWindSpeedMap(weatherResponse)
+        val windDirection = getWindDirectionMap(weatherResponse)
+        val windSpeedUnit = getWindSpeedUnit(weatherResponse)
+        val windDirectionUnit = getWindDirectionUnit(weatherResponse)
+
+        //Gets data from MetAlerts-API
+        val riskMatrixColor = feature?.properties?.riskMatrixColor
+        val description = feature?.properties?.description
+        val triggerLevel = feature?.properties?.triggerLevel
+
+        //Creates and returns one Spot-object
+        return Spot(
+            coordinates = predefinedSpot.coordinates, //The coordinates of the spot
+            spotName = predefinedSpot.spotName, //The name of the spot
+            cityName = predefinedSpot.cityName, //The city the spot lies in
+            photo = "",  //Photo of the spot as URL
+            windSpeed = windSpeed, //Map<String, Double>
+            windSpeedUnit = windSpeedUnit, //String
+            windDirection = windDirection, //Map<String, Double>
+            windDirectionUnit = windDirectionUnit, //String
+            riskMatrixColor = riskMatrixColor,  //String
+            description = description,  //String
+            triggerLevel = triggerLevel, //String
+            bestWindDirection = 0.0,  //Recommended windDirection for the spot
+            recommendationColor = "" //Recommended color for kiting
+        )
     }
 
     //Creates a Map<PredefinedSpots, Spot?> and returns it. Offers the map of predefined kite spots to ViewModel
