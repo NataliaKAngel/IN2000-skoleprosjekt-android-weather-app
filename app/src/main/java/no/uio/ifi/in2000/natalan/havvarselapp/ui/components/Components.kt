@@ -1,9 +1,7 @@
 package no.uio.ifi.in2000.natalan.havvarselapp.ui.components
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -25,6 +23,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -416,6 +416,7 @@ fun SpotBox(
                                 fontFamily = FontFamily(Font(R.font.inter_font)),
                                 fontWeight = FontWeight(700),
                                 color = Color(0xFF08134A),
+                                letterSpacing = (-0.05).em,
 
                                 )
                         )
@@ -444,7 +445,7 @@ fun SpotBox(
                     Image(
                         painter = painterResource(id = R.drawable.gotospot),
                         contentDescription = "go to spot",
-                        contentScale = ContentScale.Fit
+                        contentScale = ContentScale.FillBounds
                     )
                 }
             }
@@ -603,6 +604,54 @@ fun SpotBox(
     }
 }
 
+
+
+//SettingsScreen text
+@Composable
+fun SettingsScreenText() {
+    Column(
+        modifier = Modifier
+    ) {
+        Text(
+            text = "Innstillinger",
+            style = TextStyle(
+                fontSize = 24.sp,
+                fontFamily = FontFamily(Font(R.font.inter_font)),
+                fontWeight = FontWeight(600),
+                color = TextColor,
+            )
+        )
+        Spacer(modifier = Modifier.height(24.dp))
+        Row(
+            Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.Bottom,
+        ) {
+            Text(
+                text = "Skru på push-varsler\nfor favorittsted",
+                style = TextStyle(
+                    fontSize = 14.sp,
+                    lineHeight = 20.sp,
+                    fontFamily = FontFamily(Font(R.font.inter_font)),
+                    fontWeight = FontWeight(400),
+                    color = TextColor,
+                    letterSpacing = 0.5.sp,
+                )
+            )
+            SwitchSettings()
+        }
+    }
+}
+
+
+
+
+
+
+
+//Bottom Sheet to HomeScreen
+//Includes NavBar
+// and SpotBox when a spot is clicked
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SpotBottomSheet()
@@ -615,6 +664,31 @@ fun SpotBottomSheet()
     }
 }
 
+//Switch to turn on or of push notifications
+@Composable
+fun SwitchSettings() {
+    var checked by remember { mutableStateOf(true) }
+
+    Switch(
+        checked = checked,
+        onCheckedChange = {
+            checked = it
+        },
+        colors = SwitchDefaults.colors (
+            checkedThumbColor = TextColor,
+            checkedTrackColor = ActionBlue,
+            uncheckedThumbColor = White,
+            uncheckedTrackColor = LightGrayCircle,
+        )
+    )
+}
+
+
+@Preview
+@Composable
+fun SwitchSettingsPreview() {
+    SwitchSettings()
+}
 
 //Previews
     @Preview
@@ -639,4 +713,10 @@ fun SpotBoxWithFrame(){
         .padding(16.dp)) {
         SpotBox()
     }
+}
+
+@Preview
+@Composable
+fun SettingsScreenTextPreview (){
+    SettingsScreenText()
 }
