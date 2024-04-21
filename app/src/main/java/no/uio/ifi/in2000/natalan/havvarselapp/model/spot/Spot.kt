@@ -1,5 +1,9 @@
 package no.uio.ifi.in2000.natalan.havvarselapp.model.spot
 
+import no.uio.ifi.in2000.natalan.havvarselapp.model.locationForecast.WeatherResponse
+import no.uio.ifi.in2000.natalan.havvarselapp.model.metAlerts.Feature
+import no.uio.ifi.in2000.natalan.havvarselapp.model.metAlerts.MetAlertDataClass
+
 data class Spot (
     //The coordinates of the spot
     val coordinates: String,
@@ -7,8 +11,6 @@ data class Spot (
     val spotName: String,
     //The city the spot is in (example: "Kristiansand")
     val cityName: String,
-    //The name of the area the spot is a part of (from MetAlert)
-    val areaName: String,
     //Photo of the spot as URL
     val photo: String,
 
@@ -22,8 +24,12 @@ data class Spot (
     val windDirectionUnit: String?,
 
     //MET-ALERT:
-    val riskMatrixColor: String,
-    val awarenessSeriousness: String,
+    //Color of the alert
+    val riskMatrixColor: String?,
+    //Description for the alert
+    val description: String?,
+    //Wind speed level for triggering the alert
+    val triggerLevel: String?,
 
     //CALCULATION:
     //Recommended windDirection for the spot

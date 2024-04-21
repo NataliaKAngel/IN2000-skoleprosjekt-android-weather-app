@@ -18,7 +18,7 @@ import androidx.navigation.navArgument
 import no.uio.ifi.in2000.natalan.havvarselapp.model.predefinedSpots.PredefinedSpots
 import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.WeatherAPIRepository
 import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.locationForecast.LocationForecastDataSource
-import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.metAlerts.MetAlertDataSource
+import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.metAlerts.MetAlertsDataSource
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.favourite.FavouriteScreen
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.favourite.FavouriteScreenViewModel
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.home.HomeScreen
@@ -27,6 +27,8 @@ import no.uio.ifi.in2000.natalan.havvarselapp.ui.info.InfoScreen
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.settings.SettingsScreen
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.spot.SpotScreen
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.spot.SpotScreenViewModel
+import no.uio.ifi.in2000.natalan.havvarselapp.ui.test.TestScreen
+import no.uio.ifi.in2000.natalan.havvarselapp.ui.test.TestScreenViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,23 +43,25 @@ class MainActivity : ComponentActivity() {
                     //Predefined spots
                     val predefinedSpots : List<PredefinedSpots> = listOf(
                         PredefinedSpots(coordinates = "58,8.1", spotName = "Hamresanden", cityName = "Kristiansand"),
-                        PredefinedSpots(coordinates = "60,10.7", spotName = "Aker Brygge", cityName = "Oslo"),
-                        //PredefinedSpots(coordinate = "", spotName = "", cityName = "")
+                        //PredefinedSpots(coordinates = "60,10.7", spotName = "Aker Brygge", cityName = "Oslo"),
+                        //PredefinedSpots(coordinates = "80,10", spotName = "TestNavn", cityName = "TestBy")
                     )
 
                     //Creates instances of datasources and repositories
                     val locationForecastDataSource = LocationForecastDataSource()
-                    val metAlertDataSource = MetAlertDataSource()
-                    val weatherAPIRepository = WeatherAPIRepository(predefinedSpots, locationForecastDataSource, metAlertDataSource)
+                    val metAlertsDataSource = MetAlertsDataSource()
+                    val weatherAPIRepository = WeatherAPIRepository(predefinedSpots, locationForecastDataSource, metAlertsDataSource)
 
                     // Creates instances of viewModels and Screens
                     val homeScreenViewModel = HomeScreenViewModel(weatherAPIRepository)
                     val favouriteScreenViewModel = FavouriteScreenViewModel(weatherAPIRepository)
+                    val testScreenViewModel = TestScreenViewModel(weatherAPIRepository)
 
                     // Creates navController and NavHost
                     val navController = rememberNavController()
-                    NavHost(navController = navController, startDestination = "HomeScreen") {
+                    NavHost(navController = navController, startDestination = "TestScreen") {
                      // Navigating routes
+                        composable("TestScreen") { TestScreen(testScreenViewModel = testScreenViewModel)}
                         composable("HomeScreen") { HomeScreen(navController = navController, homeScreenViewModel = homeScreenViewModel) }
                         composable("InfoScreen") { InfoScreen(navController = navController)}
                         composable("SpotScreen/{coordinates}",
@@ -74,3 +78,4 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+
