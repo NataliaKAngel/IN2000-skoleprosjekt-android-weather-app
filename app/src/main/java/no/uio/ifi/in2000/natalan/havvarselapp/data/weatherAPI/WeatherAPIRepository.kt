@@ -43,8 +43,6 @@ class WeatherAPIRepository (
                 windSpeedUnit = windSpeedUnit,
                 windDirection = windDirection, //Map<String, Double>
                 windDirectionUnit = windDirectionUnit, //String
-                metAlert = metAlert,
-                feature = feature,
                 riskMatrixColor = riskMatrixColor,  // From MetAlerts
                 description = description,  // From MetAlerts
                 triggerLevel = triggerLevel, //From MetAlerts

@@ -24,8 +24,6 @@ data class Spot (
     val windDirectionUnit: String?,
 
     //MET-ALERT:
-    val metAlert: MetAlertDataClass?,
-    val feature: Feature?,
     //Color of the alert
     val riskMatrixColor: String?,
     //Description for the alert
