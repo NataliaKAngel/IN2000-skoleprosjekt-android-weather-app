@@ -70,7 +70,7 @@ fun TopBar(infoButtonClick: () -> Unit) {
                 color = White,
                 shape = RoundedCornerShape(size = StandardRadius)
             )
-            .padding(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 16.dp)
+            .padding(StandardRadius)
     ) {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -97,7 +97,7 @@ fun InfoButton(text: String, onClick: () -> Unit){
                 color = DefaultBlue,
                 shape = RoundedCornerShape(size = 12.dp)
             )
-            .padding(start = 12.dp, top = 12.dp, end = 12.dp, bottom = 12.dp)
+            .padding(12.dp)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -169,7 +169,7 @@ fun NavBar(navController: NavController){ //NavBar on the bottom of the screen. 
                 color = White,
                 shape = RoundedCornerShape(size = StandardRadius)
             )
-            .padding(16.dp)
+            .padding(StandardRadius)
     ){
         Row(
             horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.Start),
@@ -319,7 +319,6 @@ fun InfoColorsColumn(){
 
 @Composable
 fun KiteConditionColorBox(icon: Int, title: String, info: String) {
-
         Row(
             horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.Start),
             verticalAlignment = Alignment.CenterVertically,
@@ -329,12 +328,10 @@ fun KiteConditionColorBox(icon: Int, title: String, info: String) {
                 contentDescription = "image description",
                 contentScale = ContentScale.None
             )
-
                 Column(
                     verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.Top),
                     horizontalAlignment = Alignment.Start,
                 ) {
-
                     Text(
                         text = title,
                         style = TextStyle(
@@ -388,7 +385,7 @@ fun SpotBox() {
                                 fontSize = 24.sp,
                                 fontFamily = FontFamily(Font(R.font.inter_font)),
                                 fontWeight = FontWeight(700),
-                                color = Color(0xFF08134A),
+                                color = TextColor,
                                 letterSpacing = (-0.05).sp
                             )
                         )
@@ -398,7 +395,7 @@ fun SpotBox() {
                                 fontSize = 12.sp,
                                 fontFamily = FontFamily(Font(R.font.inter_font)),
                                 fontWeight = FontWeight(400),
-                                color = Color(0xFF08134A)
+                                color = TextColor
                             )
                         )
                     }
@@ -417,14 +414,14 @@ fun SpotBox() {
 
             // Picture of spot
             Box(
-                modifier = Modifier.fillMaxWidth() // Her legger vi til fillMaxWidth()
+                modifier = Modifier.fillMaxWidth()
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.hamresanden),
                     contentDescription = null,
                     modifier = Modifier
-                        .fillMaxWidth() // Legg til fillMaxWidth her
-                        .height(96.dp) // Sett en fast høyde for bildet
+                        .fillMaxWidth()
+                        .height(96.dp)
                         .clip(shape = RoundedCornerShape(8.dp)),
                     contentScale = ContentScale.Crop
                 )
@@ -442,7 +439,7 @@ fun SpotBox() {
                             fontSize = 9.sp,
                             fontFamily = FontFamily(Font(R.font.inter_font)),
                             fontWeight = FontWeight(500),
-                            color = Color(0xFF08134A)
+                            color = TextColor
                         )
                     )
 
@@ -475,7 +472,7 @@ fun SpotBox() {
                                         fontSize = 24.sp,
                                         fontFamily = FontFamily(Font(R.font.inter_font)),
                                         fontWeight = FontWeight(300),
-                                        color = Color(0xFF08134A)
+                                        color = TextColor
                                     )
                                 )
                                 Text(
@@ -484,7 +481,7 @@ fun SpotBox() {
                                         fontSize = 24.sp,
                                         fontFamily = FontFamily(Font(R.font.inter_font)),
                                         fontWeight = FontWeight(400),
-                                        color = Color(0xFF08134A)
+                                        color = TextColor
                                     )
                                 )
                             }
@@ -494,7 +491,7 @@ fun SpotBox() {
                                     fontSize = 9.sp,
                                     fontFamily = FontFamily(Font(R.font.inter_font)),
                                     fontWeight = FontWeight(400),
-                                    color = Color(0xFF08134A)
+                                    color = TextColor
                                 )
                             )
                         }
@@ -516,7 +513,7 @@ fun SpotBox() {
                                     fontSize = 24.sp,
                                     fontFamily = FontFamily(Font(R.font.inter_font)),
                                     fontWeight = FontWeight(400),
-                                    color = Color(0xFF08134A)
+                                    color = TextColor
                                 )
                             )
 
@@ -526,7 +523,7 @@ fun SpotBox() {
                                     fontSize = 9.sp,
                                     fontFamily = FontFamily(Font(R.font.inter_font)),
                                     fontWeight = FontWeight(400),
-                                    color = Color(0xFF08134A)
+                                    color = TextColor
                                 )
                             )
                         }
@@ -642,8 +639,8 @@ fun SpotBoxPreview(){
 fun SpotBoxWithFrame(){
     Box(modifier = Modifier
 
-        .background(White, shape = RoundedCornerShape(size = 16.dp))
-        .padding(16.dp)) {
+        .background(White, shape = RoundedCornerShape(size = StandardRadius))
+        .padding(StandardRadius)) {
         SpotBox()
     }
 }
