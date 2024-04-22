@@ -2,12 +2,14 @@ package no.uio.ifi.in2000.natalan.havvarselapp.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -16,6 +18,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -48,7 +51,7 @@ import androidx.navigation.NavController
 import no.uio.ifi.in2000.natalan.havvarselapp.R
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.theme.*
 
-//Standard radius for box corners
+//Standard radius for box corners and often padding
 private val StandardRadius: Dp = 16.dp
 
 @Composable
@@ -357,7 +360,8 @@ fun SpotBox() {
             .widthIn(max = 254.dp)
     ) {
         Column(
-            verticalArrangement = Arrangement.SpaceBetween,
+            verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.Top),
+//            verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.Start,
         ) {
             //Row with title of spot and "goToSpot" button
@@ -421,7 +425,7 @@ fun SpotBox() {
             //Box with condition for kiting (including thumb, color, wind info)
             Box {
                 Column(
-                    verticalArrangement = Arrangement.SpaceBetween,
+                    verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.Top),
                     horizontalAlignment = Alignment.Start,
                 ) {
                     Text(
@@ -440,14 +444,14 @@ fun SpotBox() {
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         //ConditonCircle with thumb
-                        Box(
-                        ) {
+                        Box {
                             Image(
                                 painter = painterResource(id = R.drawable.bgreenthumb),
                                 contentDescription = "color thumb",
                                 contentScale = ContentScale.None
                             )
                         }
+
 
                         Column(
                             verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.Top),
@@ -529,6 +533,174 @@ fun SpotBox() {
         }
     }
 }
+
+
+//Takes a warning message from Spot, and changes background color accordingly
+@Composable
+fun WarningBox (
+    //Shows text from warning
+    //spot.description
+){
+    Box(modifier = Modifier
+        .widthIn(max = 286.dp)
+        .background(
+            //color = spot.warningColor? tror dette er feil..
+            color = YellowCircle,
+            shape = RoundedCornerShape(size = StandardRadius)
+        )
+        .padding(StandardRadius))
+
+    {
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.Start),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(
+                text = "Farevarsel!",
+                style = TextStyle(
+                    fontSize = 22.sp,
+                    fontFamily = FontFamily(Font(R.font.inter_font)),
+                    fontWeight = FontWeight(600),
+                    color = TextColor,
+                    letterSpacing = (-0.05).sp
+                )
+            )
+            Text(
+                //Text("${spot?.description}") //bruke denne
+                text = "I dag, fredag, sørvest periodevis stiv kuling. I ettermiddag minkende.", //fjerne denne
+                style = TextStyle(
+                    fontSize = 9.sp,
+                    fontFamily = FontFamily(Font(R.font.inter_font)),
+                    fontWeight = FontWeight(400),
+                    color = TextColor,
+                )
+            )
+        }
+    }
+}
+
+@Composable
+fun TimeBox(){
+    Box (
+        modifier = Modifier
+            .border(
+                width = 3.dp,
+                //color = spot.color ?? color after calculation
+                color = GreenCircle,
+                shape = RoundedCornerShape(size = StandardRadius)
+            )
+            .width(56.dp)
+            .height(68.dp)
+            .background(color = White, shape = RoundedCornerShape(size = StandardRadius))
+            .padding(12.dp)
+    )
+        {
+            Column(
+                Modifier.fillMaxHeight(),
+                verticalArrangement = Arrangement.SpaceBetween,
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Text(
+                    //text = text from spot time...
+                    text = "12:00",
+                    style = TextStyle(
+                        fontSize = 9.sp,
+                        fontFamily = FontFamily(Font(R.font.inter_font)),
+                        fontWeight = FontWeight(400),
+                        color = TextColor,
+                    )
+                )
+                Text(
+                    //text from spot time
+                    text = "8 m/s",
+                    style = TextStyle(
+                        fontSize = 9.sp,
+                        fontFamily = FontFamily(Font(R.font.inter_font)),
+                        fontWeight = FontWeight(400),
+                        color = TextColor,
+                        )
+                )
+                Text(
+                    //text wind direction from spot
+                    text = "nordøst",
+                    style = TextStyle(
+                        fontSize = 9.sp,
+                        fontFamily = FontFamily(Font(R.font.inter_font)),
+                        fontWeight = FontWeight(400),
+                        color = TextColor,
+                    )
+                )
+            }
+    }
+}
+
+
+
+@Composable
+fun DaysBoxRow(){
+    Column(
+        verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Top),
+        horizontalAlignment = Alignment.Start,)
+    {
+        Text(
+            text = "De neste dagene:",
+            style = TextStyle(
+                fontSize = 9.sp,
+                fontFamily = FontFamily(Font(R.font.inter_font)),
+                fontWeight = FontWeight(400),
+                color = TextColor
+            )
+        )
+
+        LazyRow {
+            item {
+                TimeBox()
+            }
+            item {
+                Spacer(modifier = Modifier.width(8.dp))
+            }
+            item {
+                TimeBox()
+            }
+            item {
+                Spacer(modifier = Modifier.width(8.dp))
+            }
+            item {
+                TimeBox()
+            }
+            item {
+                Spacer(modifier = Modifier.width(8.dp))
+            }
+            item {
+                TimeBox()
+            }
+        }
+    }
+}
+
+
+@Composable
+fun HourBoxRow(){
+    Text(
+        text = "I dag:",
+        style = TextStyle(
+            fontSize = 9.sp,
+            fontFamily = FontFamily(Font(R.font.inter_font)),
+            fontWeight = FontWeight(400),
+            color = TextColor
+        )
+    )
+    LazyRow {
+        item {
+
+        }
+    }
+}
+
+
+
+
+
 
 //SettingsScreen text
 @Composable
@@ -630,16 +802,43 @@ fun SpotBoxPreview(){
     SpotBox( )
 }*/
 
+
+//Shows how pull-up box on HomeScreen will show relevant information.
+//implement an "if-check" to see it there is a WarningBox to display
 @Preview
 @Composable
 fun SpotBoxWithFrame(){
-    Box(modifier = Modifier
-
+    Column(modifier = Modifier
         .background(White, shape = RoundedCornerShape(size = StandardRadius))
-        .padding(StandardRadius)) {
+        .padding(StandardRadius))
+    {
+        WarningBox()
+        Spacer(modifier = Modifier.height(12.dp))
         SpotBox()
     }
 }
+
+//Option if we want the Warning box to add on top of the SpotBox
+@Preview
+@Composable
+fun SpotBoxWithFrameOption(){
+
+    Box(modifier = Modifier
+
+    ){
+        Column {
+            WarningBox()
+            Box(
+                Modifier
+                    .background(White, shape = RoundedCornerShape(size = StandardRadius))
+                    .padding(StandardRadius)){
+                SpotBox()
+            }
+        }
+    }
+}
+
+
 
 /*
 @Preview
@@ -647,3 +846,21 @@ fun SpotBoxWithFrame(){
 fun SettingsScreenTextPreview (){
     SettingsScreenText()
 }*/
+
+@Preview
+@Composable
+fun WarningBoxWithFramePreview () {
+    WarningBox()
+}
+
+@Preview
+@Composable
+fun TimeBoxPreview(){
+    TimeBox()
+}
+
+@Preview
+@Composable
+fun DaysBoxRowPreview(){
+    DaysBoxRow()
+}
