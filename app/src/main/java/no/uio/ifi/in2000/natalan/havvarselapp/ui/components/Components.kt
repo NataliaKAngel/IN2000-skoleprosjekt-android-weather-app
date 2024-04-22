@@ -27,6 +27,7 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,6 +37,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -51,6 +53,8 @@ import androidx.navigation.NavController
 import no.uio.ifi.in2000.natalan.havvarselapp.R
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.theme.*
 import coil.compose.AsyncImage
+import coil.compose.rememberAsyncImagePainter
+import coil.compose.rememberImagePainter
 //OBS! Må legge inn avhengighet?
 
 //Standard radius for box corners
@@ -222,7 +226,7 @@ fun KiteConditionInfoBox() {
             Text(
                 text = "Informasjon",
                 style = TextStyle(
-                    fontSize = 12.sp,
+                    fontSize = 16.sp,
                     fontFamily = FontFamily(Font(R.font.inter_font)),
                     fontWeight = FontWeight(400),
                     color = TextColor,
@@ -233,7 +237,7 @@ fun KiteConditionInfoBox() {
                 modifier = Modifier.width(300.dp),
                 text = "Kitevarsel gir kitere anbefalinger om kiteforhold på utvalgte kitespotter langs kysten av Norge. Anbefalingene er fargekodet slik:",
                 style = TextStyle(
-                    fontSize = 9.sp,
+                    fontSize = 12.sp,
                     fontFamily = FontFamily(Font(R.font.inter_font)),
                     fontWeight = FontWeight(400),
                     color = TextColor,
@@ -253,19 +257,17 @@ fun InfoColorsColumn(){
                 {
                 item {
                     KiteConditionColorBox(
-                        LightGrayCircle,
-                        icon = R.drawable.thumbdown,
+                        icon = R.drawable.sgreythumb,
                         "Ingen kiteforhold",
                         "0-5 m/s og/eller feil\n vindretning. Umulig å kite."
                     )
                 }
                 item {
-                    Spacer(modifier = Modifier.height(12.dp))
+                    Spacer(modifier = Modifier.height(8.dp))
                 }
                 item {
                     KiteConditionColorBox(
-                        BlueCircle,
-                        icon = R.drawable.thumbup,
+                        icon = R.drawable.sbluethumb,
                         "Middels kiteforhold",
                         "5<7 m/s og riktig vindretning.\nBør ha større kite."
                     )
@@ -275,8 +277,7 @@ fun InfoColorsColumn(){
                 }
                 item {
                     KiteConditionColorBox(
-                        GreenCircle,
-                        icon = R.drawable.thumbup,
+                        icon = R.drawable.sgreenthumb,
                         "Anbefalte kiteforhold",
                         "7<11 m/s. Riktig vindstyrke\nog vindretning."
                     )
@@ -286,8 +287,7 @@ fun InfoColorsColumn(){
                 }
                 item {
                     KiteConditionColorBox(
-                        YellowCircle,
-                        icon = R.drawable.thumbup,
+                        icon = R.drawable.syellowthumb,
                         "Vanskelige kiteforhold",
                         "11<15 m/s. Sterk vind\nFare for overrigging"
                     )
@@ -297,8 +297,7 @@ fun InfoColorsColumn(){
                 }
                 item {
                     KiteConditionColorBox(
-                        OrangeCircle,
-                        icon = R.drawable.thumbdown,
+                        icon = R.drawable.sorangethumb,
                         "Ingen kiteforhold",
                         "15<19 m/s\nKan være stor fare."
                     )
@@ -308,8 +307,7 @@ fun InfoColorsColumn(){
                 }
                 item {
                     KiteConditionColorBox(
-                        RedCircle,
-                        icon = R.drawable.thumbdown,
+                        icon = R.drawable.sredthumb,
                         "Ingen kiteforhold",
                         "19< m/s. Ekstrem fare\nog ekstremvær"
                     )
@@ -320,33 +318,17 @@ fun InfoColorsColumn(){
         }
 
 @Composable
-fun KiteConditionColorBox(color: Color, icon: Int, title: String, info: String) {
+fun KiteConditionColorBox(icon: Int, title: String, info: String) {
 
         Row(
             horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.Start),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            //Box with Circle, color and thumb
-            Box(
-                Modifier
-                    .size(32.dp) // Du kan justere størrelsen etter behov
-                    .background(color = color, shape = CircleShape)
-//                    .width(32.dp)
-//                    .height(32.dp)
-//                    .background(color = color, shape = CircleShape)
-                    .padding(8.dp)
-            ) {
-                Column(
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    Image(
-                        painter = painterResource(id = icon),
-                        contentDescription = "image description",
-                        contentScale = ContentScale.None
-                    )
-                }
-            }
+            Image(
+                painter = painterResource(id = icon),
+                contentDescription = "image description",
+                contentScale = ContentScale.None
+            )
 
                 Column(
                     verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.Top),
@@ -377,22 +359,15 @@ fun KiteConditionColorBox(color: Color, icon: Int, title: String, info: String) 
     }
 
 
-
-
-
-
 //Currently working on:
 //SpotBox that pops up on HomeScreen when a marker with spot is clicked
 //Shows relevant information from that spot
 @Composable
-fun SpotBox(
-    //navController: NavController, spot: Spot
-) {
+fun SpotBox() {
     Box(
         modifier = Modifier
             .widthIn(max = 238.dp)
-    )
-    {
+    ) {
         Column(
             verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.Start,
@@ -401,8 +376,7 @@ fun SpotBox(
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
-            )
-            {
+            ) {
                 Box(modifier = Modifier) {
                     Column(
                         verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.Top),
@@ -410,38 +384,29 @@ fun SpotBox(
                     ) {
                         Text(
                             text = "Hamresanden",
-                            //text = spot.spotName,
                             style = TextStyle(
                                 fontSize = 24.sp,
                                 fontFamily = FontFamily(Font(R.font.inter_font)),
                                 fontWeight = FontWeight(700),
                                 color = Color(0xFF08134A),
-                                letterSpacing = (-0.05).em,
-
-                                )
+                                letterSpacing = (-0.05).sp
+                            )
                         )
                         Text(
                             text = "Kristiansand",
-                            //text = spot.cityName,
                             style = TextStyle(
                                 fontSize = 12.sp,
                                 fontFamily = FontFamily(Font(R.font.inter_font)),
                                 fontWeight = FontWeight(400),
-                                color = Color(0xFF08134A),
-
-                                )
+                                color = Color(0xFF08134A)
+                            )
                         )
                     }
                 }
 
                 Spacer(modifier = Modifier.width(8.dp))
 
-                Box(
-                    Modifier
-//                        .clickable {
-                    //navigate to SpotScreen with the chosen spot
-//                            navController.navigate("SpotScrren/${spot.id}") },
-                ) {
+                Box {
                     Image(
                         painter = painterResource(id = R.drawable.gotospot),
                         contentDescription = "go to spot",
@@ -450,44 +415,34 @@ fun SpotBox(
                 }
             }
 
-
             // Picture of spot
-            //OBS!!! does not load image
             Box(
-                Modifier
+                modifier = Modifier.fillMaxWidth() // Her legger vi til fillMaxWidth()
             ) {
-                AsyncImage(
+                Image(
+                    painter = painterResource(id = R.drawable.hamresanden),
+                    contentDescription = null,
                     modifier = Modifier
-                        .width(285.dp)
-                        .height(135.dp)
-                        //.padding(10.dp)
-                        .clip(RectangleShape),
-
-                    contentScale = ContentScale.Crop,
-                    model = "https://lh6.googleusercontent.com/proxy/gmU_Yq4-20N9nUrJq12vqi4OJxAHI489kc-tKw6kEW4YfTZPE8H7cIQbBNcF2_Fu7e2c7aC1_jIU-1bB43gmPwqBj-IuBwwl7wWeLZVMnkHrpolHLx1-,",
-                    contentDescription = "Photo of spot"
+                        .fillMaxWidth() // Legg til fillMaxWidth her
+                        .height(96.dp) // Sett en fast høyde for bildet
+                        .clip(shape = RoundedCornerShape(8.dp)),
+                    contentScale = ContentScale.Crop
                 )
             }
 
-
             //Box with condition for kiting (including thumb, color, wind info)
-            Box(
-                Modifier
-
-            ) {
-
+            Box {
                 Column(
                     verticalArrangement = Arrangement.SpaceBetween,
                     horizontalAlignment = Alignment.Start,
                 ) {
-                    //Time right now - can be replaced by actual time
                     Text(
                         text = "Akkurat nå:",
                         style = TextStyle(
                             fontSize = 9.sp,
                             fontFamily = FontFamily(Font(R.font.inter_font)),
                             fontWeight = FontWeight(500),
-                            color = BlueSignature,
+                            color = Color(0xFF08134A)
                         )
                     )
 
@@ -495,28 +450,15 @@ fun SpotBox(
                         Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
-                    )
-                    {
+                    ) {
                         //ConditonCircle with thumb
                         Box(
-                            Modifier
-                                .size(32.dp) // Du kan justere størrelsen etter behov
-                                .background(color = GreenCircle, shape = CircleShape)
-                                .width(32.dp)
-                                .height(32.dp)
-
-                                .padding(8.dp)
                         ) {
-                            Column(
-                                verticalArrangement = Arrangement.Center,
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                            ) {
-                                Image(
-                                    painter = painterResource(R.drawable.thumbup),
-                                    contentDescription = "image description",
-                                    contentScale = ContentScale.None
-                                )
-                            }
+                            Image(
+                                painter = painterResource(id = R.drawable.bgreenthumb),
+                                contentDescription = "color thumb",
+                                contentScale = ContentScale.None
+                            )
                         }
 
                         Column(
@@ -529,15 +471,12 @@ fun SpotBox(
                             ) {
                                 Text(
                                     text = "8",
-                                    //text = "${spot.windSpeed}",
                                     style = TextStyle(
                                         fontSize = 24.sp,
                                         fontFamily = FontFamily(Font(R.font.inter_font)),
                                         fontWeight = FontWeight(300),
-                                        color = TextColor,
-
-                                )
-
+                                        color = Color(0xFF08134A)
+                                    )
                                 )
                                 Text(
                                     text = "m/s",
@@ -545,7 +484,7 @@ fun SpotBox(
                                         fontSize = 24.sp,
                                         fontFamily = FontFamily(Font(R.font.inter_font)),
                                         fontWeight = FontWeight(400),
-                                        color = TextColor,
+                                        color = Color(0xFF08134A)
                                     )
                                 )
                             }
@@ -555,34 +494,30 @@ fun SpotBox(
                                     fontSize = 9.sp,
                                     fontFamily = FontFamily(Font(R.font.inter_font)),
                                     fontWeight = FontWeight(400),
-                                    color = TextColor,
+                                    color = Color(0xFF08134A)
                                 )
                             )
-
-
                         }
-
+                        Image(
+                            painter = painterResource(id = R.drawable.arrow_southwest),
+                            contentDescription = "arrow shows wind direction",
+                            contentScale = ContentScale.None,
+                            modifier = Modifier.size(32.dp)
+                        )
                         //Column with wind direction
-                        Column (
+                        Column(
                             verticalArrangement = Arrangement.SpaceBetween,
                             horizontalAlignment = Alignment.End,
-                            ){
-                            //Box with wind direction arrow
-//                                Image(
-//                                    painter = painterResource(id = R.drawable.arrowSouthwest),
-//                                    contentDescription = "arrow shows wind direction",
-//                                    contentScale = ContentScale.None
-//                                )
+                        ) {
+
                             Text(
                                 text = "sørvest",
-                                //text = "${spot.windDirection}",
                                 style = TextStyle(
                                     fontSize = 24.sp,
                                     fontFamily = FontFamily(Font(R.font.inter_font)),
                                     fontWeight = FontWeight(400),
-                                    color = TextColor,
-
-                                    )
+                                    color = Color(0xFF08134A)
+                                )
                             )
 
                             Text(
@@ -591,11 +526,9 @@ fun SpotBox(
                                     fontSize = 9.sp,
                                     fontFamily = FontFamily(Font(R.font.inter_font)),
                                     fontWeight = FontWeight(400),
-                                    color = TextColor,
-
-                                    )
+                                    color = Color(0xFF08134A)
+                                )
                             )
-
                         }
                     }
                 }
@@ -603,8 +536,6 @@ fun SpotBox(
         }
     }
 }
-
-
 
 //SettingsScreen text
 @Composable
@@ -684,25 +615,27 @@ fun SwitchSettings() {
 }
 
 
+/*
+//Previews
 @Preview
 @Composable
 fun SwitchSettingsPreview() {
     SwitchSettings()
 }
 
-//Previews
-    @Preview
+@Preview
 @Composable
 fun KiteConditionColorBoxPreview() {
-  KiteConditionColorBox(GreenCircle, R.drawable.thumbdown, "Hei", "dette er en prove\nharflere linjer\nggjeoheoiio")
+  KiteConditionColorBox(R.drawable.sgreenthumb, "Hei", "dette er en prove\nharflere linjer\nggjeoheoiio")
 }
+*/
 
 
-@Preview
+/*@Preview
 @Composable
 fun SpotBoxPreview(){
     SpotBox( )
-}
+}*/
 
 @Preview
 @Composable
@@ -715,8 +648,9 @@ fun SpotBoxWithFrame(){
     }
 }
 
+/*
 @Preview
 @Composable
 fun SettingsScreenTextPreview (){
     SettingsScreenText()
-}
+}*/
