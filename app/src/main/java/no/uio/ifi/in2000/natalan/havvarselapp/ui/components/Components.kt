@@ -226,7 +226,7 @@ fun KiteConditionInfoBox() {
             Text(
                 text = "Informasjon",
                 style = TextStyle(
-                    fontSize = 16.sp,
+                    fontSize = 12.sp,
                     fontFamily = FontFamily(Font(R.font.inter_font)),
                     fontWeight = FontWeight(400),
                     color = TextColor,
@@ -237,7 +237,7 @@ fun KiteConditionInfoBox() {
                 modifier = Modifier.width(300.dp),
                 text = "Kitevarsel gir kitere anbefalinger om kiteforhold på utvalgte kitespotter langs kysten av Norge. Anbefalingene er fargekodet slik:",
                 style = TextStyle(
-                    fontSize = 12.sp,
+                    fontSize = 9.sp,
                     fontFamily = FontFamily(Font(R.font.inter_font)),
                     fontWeight = FontWeight(400),
                     color = TextColor,
