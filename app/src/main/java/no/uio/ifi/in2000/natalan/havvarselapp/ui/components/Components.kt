@@ -700,6 +700,29 @@ fun SpotBoxWithFrame(){
     }
 }
 
+//Option if we want the Warning box to add on top of the SpotBox
+@Preview
+@Composable
+fun SpotBoxWithFrameOption(){
+
+    Box(modifier = Modifier
+        .widthIn(max = 254.dp)
+    ){
+        Column {
+            WarningBox()
+            Box(
+                Modifier
+                    .background(White, shape = RoundedCornerShape(size = StandardRadius))
+                    .padding(StandardRadius)){
+                SpotBox()
+            }
+        }
+    }
+
+}
+
+
+
 /*
 @Preview
 @Composable
