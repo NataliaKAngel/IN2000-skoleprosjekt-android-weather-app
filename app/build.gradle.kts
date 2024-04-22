@@ -88,5 +88,6 @@ dependencies {
 
     //Coil for AsyncImage
     implementation("io.coil-kt:coil-compose:2.5.0")
+    implementation("io.coil-kt:coil:1.4.0")
 
 }
