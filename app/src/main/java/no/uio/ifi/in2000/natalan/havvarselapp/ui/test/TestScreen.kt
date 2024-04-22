@@ -39,6 +39,7 @@ fun TestScreen(
             SpotCard(
                 spot = spot
             )
+            Spacer(modifier = Modifier.height(20.dp))
         }
     }
 }
@@ -68,10 +69,10 @@ fun SpotCard(
             Text("TriggerLevel: ${spot?.triggerLevel}")
             Spacer(modifier = Modifier.height(5.dp))
             //WindSpeed - LocationForecast
-            Text("Vindstyrke: ${spot?.windSpeed}, ${spot?.windSpeedUnit}")
+            Text("Vindstyrke: ${spot?.windSpeed?.values?.toList()?.get(0)}, ${spot?.windSpeedUnit}")
             Spacer(modifier = Modifier.height(5.dp))
             //WindDirection - LocationForecast
-            Text("Vindretning: ${spot?.windDirection}, ${spot?.windDirectionUnit}")
+            Text("Vindretning: ${spot?.windDirection?.values?.toList()?.get(0)}, ${spot?.windDirectionUnit}")
             Spacer(modifier = Modifier.height(5.dp))
             Text("Beregning: ${spot?.recommendationColor}")
         }

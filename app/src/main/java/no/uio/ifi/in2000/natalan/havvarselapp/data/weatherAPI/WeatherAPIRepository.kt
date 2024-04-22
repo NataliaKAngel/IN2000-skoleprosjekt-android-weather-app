@@ -1,5 +1,6 @@
 package no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI
 
+import android.util.Log
 import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.locationForecast.LocationForecastDataSource
 import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.metAlerts.MetAlertsDataSource
 import no.uio.ifi.in2000.natalan.havvarselapp.model.locationForecast.WeatherResponse
@@ -22,6 +23,7 @@ class WeatherAPIRepository (
                 getMetAlerts(predefinedSpot.coordinates)?.features?.get(0)
             )
         }
+        Log.i("Debug", "Hei:)")
     }
 
     private fun createSpot(predefinedSpot: PredefinedSpots, weatherResponse: WeatherResponse?, feature: Feature?): Spot{

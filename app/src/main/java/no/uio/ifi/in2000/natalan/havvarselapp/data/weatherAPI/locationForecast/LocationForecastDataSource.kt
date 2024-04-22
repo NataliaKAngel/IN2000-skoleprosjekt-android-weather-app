@@ -10,6 +10,7 @@ import io.ktor.client.request.get
 import io.ktor.client.request.header
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
+import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.Endpoint
 import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.Endpoint.LOCATIONFORECAST
 import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.Endpoint.LF_WEATHERRESPONSE
 import no.uio.ifi.in2000.natalan.havvarselapp.model.locationForecast.WeatherResponse
@@ -43,6 +44,7 @@ class LocationForecastDataSource {
         val latitude = details[0]
         val longitude = details[1]
         val coordinatesURL = "lat=$latitude&lon=$longitude"
+        Log.i("Debug", "IIIIIIIIIIIIIIIIIIIIIIIIII $LF_WEATHERRESPONSE + $coordinatesURL")
 
         // Logging: coordinates
         Log.d("LocationForecastDataSource", "Requesting weather data for coordinates: $coordinates")
@@ -50,12 +52,7 @@ class LocationForecastDataSource {
         return try {
             // Connects to the API with correct URL
             val response = client.get(LF_WEATHERRESPONSE + coordinatesURL)
-
-            // Holds response body
-            val weatherResponse = response.body<WeatherResponse>()
-
-            // Returns response body
-            weatherResponse
+            response.body<WeatherResponse>()
         } catch (e: Exception) {
             // Logging: Failed to connect to the API
             Log.e("LocationForecastDataSource", "Error during HTTP request for locationforecast", e)
