@@ -1,6 +1,5 @@
 package no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI
 
-import android.util.Log
 import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.locationForecast.LocationForecastDataSource
 import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.metAlerts.MetAlertsDataSource
 import no.uio.ifi.in2000.natalan.havvarselapp.model.locationForecast.WeatherResponse
@@ -20,13 +19,12 @@ class WeatherAPIRepository (
             createSpot(
                 predefinedSpot,
                 getWeatherResponse(predefinedSpot.coordinates),
-                getMetAlerts(predefinedSpot.coordinates)?.features?.get(0)
+                getMetAlerts(predefinedSpot.coordinates)?.features
             )
         }
-        Log.i("Debug", "Hei:)")
     }
 
-    private fun createSpot(predefinedSpot: PredefinedSpots, weatherResponse: WeatherResponse?, feature: Feature?): Spot{
+    private fun createSpot(predefinedSpot: PredefinedSpots, weatherResponse: WeatherResponse?, features: List<Feature>?): Spot{
         //Gets data from LocationForecast-API
         val windSpeed = getWindSpeedMap(weatherResponse)
         val windDirection = getWindDirectionMap(weatherResponse)
@@ -34,9 +32,17 @@ class WeatherAPIRepository (
         val windDirectionUnit = getWindDirectionUnit(weatherResponse)
 
         //Gets data from MetAlerts-API
-        val riskMatrixColor = feature?.properties?.riskMatrixColor
-        val description = feature?.properties?.description
-        val triggerLevel = feature?.properties?.triggerLevel
+        var riskMatrixColor = ""
+        var description = ""
+        var triggerLevel = ""
+
+        if (!features.isNullOrEmpty()){
+            val feature = features[0]
+            riskMatrixColor = feature.properties.riskMatrixColor
+            description = feature.properties.description
+            triggerLevel = feature.properties.triggerLevel
+        }
+
 
         //Creates and returns one Spot-object
         return Spot(
