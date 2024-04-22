@@ -87,8 +87,4 @@ dependencies {
     implementation ("androidx.constraintlayout:constraintlayout-compose:1.0.1")
     implementation ("androidx.appcompat:appcompat:1.3.0")
 
-    //Coil for AsyncImage
-    implementation("io.coil-kt:coil-compose:2.5.0")
-    implementation("io.coil-kt:coil:1.4.0")
-
 }

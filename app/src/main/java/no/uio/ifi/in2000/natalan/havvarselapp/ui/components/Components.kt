@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -27,7 +26,6 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,9 +33,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -52,10 +47,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import no.uio.ifi.in2000.natalan.havvarselapp.R
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.theme.*
-import coil.compose.AsyncImage
-import coil.compose.rememberAsyncImagePainter
-import coil.compose.rememberImagePainter
-//OBS! Må legge inn avhengighet?
 
 //Standard radius for box corners
 private val StandardRadius: Dp = 16.dp
@@ -70,7 +61,7 @@ fun TopBar(infoButtonClick: () -> Unit) {
                 color = White,
                 shape = RoundedCornerShape(size = StandardRadius)
             )
-            .padding(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 16.dp)
+            .padding(StandardRadius)
     ) {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -97,7 +88,7 @@ fun InfoButton(text: String, onClick: () -> Unit){
                 color = DefaultBlue,
                 shape = RoundedCornerShape(size = 12.dp)
             )
-            .padding(start = 12.dp, top = 12.dp, end = 12.dp, bottom = 12.dp)
+            .padding(12.dp)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -169,7 +160,7 @@ fun NavBar(navController: NavController){ //NavBar on the bottom of the screen. 
                 color = White,
                 shape = RoundedCornerShape(size = StandardRadius)
             )
-            .padding(16.dp)
+            .padding(StandardRadius)
     ){
         Row(
             horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.Start),
@@ -226,7 +217,7 @@ fun KiteConditionInfoBox() {
             Text(
                 text = "Informasjon",
                 style = TextStyle(
-                    fontSize = 16.sp,
+                    fontSize = 12.sp,
                     fontFamily = FontFamily(Font(R.font.inter_font)),
                     fontWeight = FontWeight(400),
                     color = TextColor,
@@ -237,7 +228,7 @@ fun KiteConditionInfoBox() {
                 modifier = Modifier.width(300.dp),
                 text = "Kitevarsel gir kitere anbefalinger om kiteforhold på utvalgte kitespotter langs kysten av Norge. Anbefalingene er fargekodet slik:",
                 style = TextStyle(
-                    fontSize = 12.sp,
+                    fontSize = 9.sp,
                     fontFamily = FontFamily(Font(R.font.inter_font)),
                     fontWeight = FontWeight(400),
                     color = TextColor,
@@ -319,7 +310,6 @@ fun InfoColorsColumn(){
 
 @Composable
 fun KiteConditionColorBox(icon: Int, title: String, info: String) {
-
         Row(
             horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.Start),
             verticalAlignment = Alignment.CenterVertically,
@@ -329,12 +319,10 @@ fun KiteConditionColorBox(icon: Int, title: String, info: String) {
                 contentDescription = "image description",
                 contentScale = ContentScale.None
             )
-
                 Column(
                     verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.Top),
                     horizontalAlignment = Alignment.Start,
                 ) {
-
                     Text(
                         text = title,
                         style = TextStyle(
@@ -366,7 +354,7 @@ fun KiteConditionColorBox(icon: Int, title: String, info: String) {
 fun SpotBox() {
     Box(
         modifier = Modifier
-            .widthIn(max = 238.dp)
+            .widthIn(max = 254.dp)
     ) {
         Column(
             verticalArrangement = Arrangement.SpaceBetween,
@@ -388,7 +376,7 @@ fun SpotBox() {
                                 fontSize = 24.sp,
                                 fontFamily = FontFamily(Font(R.font.inter_font)),
                                 fontWeight = FontWeight(700),
-                                color = Color(0xFF08134A),
+                                color = TextColor,
                                 letterSpacing = (-0.05).sp
                             )
                         )
@@ -398,7 +386,7 @@ fun SpotBox() {
                                 fontSize = 12.sp,
                                 fontFamily = FontFamily(Font(R.font.inter_font)),
                                 fontWeight = FontWeight(400),
-                                color = Color(0xFF08134A)
+                                color = TextColor
                             )
                         )
                     }
@@ -417,14 +405,14 @@ fun SpotBox() {
 
             // Picture of spot
             Box(
-                modifier = Modifier.fillMaxWidth() // Her legger vi til fillMaxWidth()
+                modifier = Modifier.fillMaxWidth()
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.hamresanden),
                     contentDescription = null,
                     modifier = Modifier
-                        .fillMaxWidth() // Legg til fillMaxWidth her
-                        .height(96.dp) // Sett en fast høyde for bildet
+                        .fillMaxWidth()
+                        .height(96.dp)
                         .clip(shape = RoundedCornerShape(8.dp)),
                     contentScale = ContentScale.Crop
                 )
@@ -442,7 +430,7 @@ fun SpotBox() {
                             fontSize = 9.sp,
                             fontFamily = FontFamily(Font(R.font.inter_font)),
                             fontWeight = FontWeight(500),
-                            color = Color(0xFF08134A)
+                            color = TextColor
                         )
                     )
 
@@ -466,7 +454,7 @@ fun SpotBox() {
                             horizontalAlignment = Alignment.End,
                         ) {
                             Row(
-                                horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.Start),
+                                horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.Start),
                                 verticalAlignment = Alignment.Bottom,
                             ) {
                                 Text(
@@ -475,7 +463,7 @@ fun SpotBox() {
                                         fontSize = 24.sp,
                                         fontFamily = FontFamily(Font(R.font.inter_font)),
                                         fontWeight = FontWeight(300),
-                                        color = Color(0xFF08134A)
+                                        color = TextColor
                                     )
                                 )
                                 Text(
@@ -484,7 +472,7 @@ fun SpotBox() {
                                         fontSize = 24.sp,
                                         fontFamily = FontFamily(Font(R.font.inter_font)),
                                         fontWeight = FontWeight(400),
-                                        color = Color(0xFF08134A)
+                                        color = TextColor
                                     )
                                 )
                             }
@@ -494,31 +482,36 @@ fun SpotBox() {
                                     fontSize = 9.sp,
                                     fontFamily = FontFamily(Font(R.font.inter_font)),
                                     fontWeight = FontWeight(400),
-                                    color = Color(0xFF08134A)
+                                    color = TextColor
                                 )
                             )
                         }
-                        Image(
-                            painter = painterResource(id = R.drawable.arrow_southwest),
-                            contentDescription = "arrow shows wind direction",
-                            contentScale = ContentScale.None,
-                            modifier = Modifier.size(32.dp)
-                        )
+
                         //Column with wind direction
                         Column(
                             verticalArrangement = Arrangement.SpaceBetween,
                             horizontalAlignment = Alignment.End,
                         ) {
 
-                            Text(
-                                text = "sørvest",
-                                style = TextStyle(
-                                    fontSize = 24.sp,
-                                    fontFamily = FontFamily(Font(R.font.inter_font)),
-                                    fontWeight = FontWeight(400),
-                                    color = Color(0xFF08134A)
+                            Row (horizontalArrangement = Arrangement.spacedBy(0.dp, Alignment.Start)){
+                                Image(
+                                    painter = painterResource(id = R.drawable.arrow_southwest),
+                                    contentDescription = "arrow shows wind direction",
+                                    contentScale = ContentScale.None,
+                                    modifier = Modifier.size(32.dp)
                                 )
-                            )
+                                Text(
+                                    text = "sørvest",
+                                    style = TextStyle(
+                                        fontSize = 24.sp,
+                                        fontFamily = FontFamily(Font(R.font.inter_font)),
+                                        fontWeight = FontWeight(400),
+                                        color = TextColor
+                                    )
+                                )
+
+                            }
+
 
                             Text(
                                 text = "vindretning",
@@ -526,7 +519,7 @@ fun SpotBox() {
                                     fontSize = 9.sp,
                                     fontFamily = FontFamily(Font(R.font.inter_font)),
                                     fontWeight = FontWeight(400),
-                                    color = Color(0xFF08134A)
+                                    color = TextColor
                                 )
                             )
                         }
@@ -642,8 +635,8 @@ fun SpotBoxPreview(){
 fun SpotBoxWithFrame(){
     Box(modifier = Modifier
 
-        .background(White, shape = RoundedCornerShape(size = 16.dp))
-        .padding(16.dp)) {
+        .background(White, shape = RoundedCornerShape(size = StandardRadius))
+        .padding(StandardRadius)) {
         SpotBox()
     }
 }
