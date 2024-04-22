@@ -1,5 +1,6 @@
 package no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.metAlerts
 
+import android.util.Log
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.engine.cio.CIO
@@ -15,7 +16,6 @@ class MetAlertsDataSource {
     // Variables holds information for API connection
     private val proxyKey = "ab4e9a8e7-469d-499e-822a-7df85483df8c"
     private val apiKey = "X-Gravitee-API-Key"
-
     // Creating a client and using the apiKey and proxyKey to connect
     private val client = HttpClient(CIO) {
         defaultRequest {
@@ -25,7 +25,7 @@ class MetAlertsDataSource {
 
         //Installing gson to deserialize the data from the API
         install(ContentNegotiation) {
-          gson()
+            gson()
         }
     }
 
@@ -36,14 +36,13 @@ class MetAlertsDataSource {
         val latitude = details[0]
         val longitude = details[1]
         val coordinatesURL = "lat=$latitude&lon=$longitude"
+        Log.i("Debug", "OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO $METALERT + $coordinatesURL")
 
         return try {
             // Connects to the API with correct URL
-            client.use { httpClient ->
-                // Holds and returns response body
-                val response = httpClient.get(METALERT + coordinatesURL)
-                response.body<MetAlertDataClass>()
-            }
+            val response = client.get(METALERT + coordinatesURL)
+            response.body()
+
         } catch (e: Exception) {
             e.printStackTrace()
             // Returns null
