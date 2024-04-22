@@ -363,7 +363,7 @@ fun KiteConditionColorBox(icon: Int, title: String, info: String) {
 fun SpotBox() {
     Box(
         modifier = Modifier
-            .widthIn(max = 238.dp)
+            .widthIn(max = 254.dp)
     ) {
         Column(
             verticalArrangement = Arrangement.SpaceBetween,
@@ -463,7 +463,7 @@ fun SpotBox() {
                             horizontalAlignment = Alignment.End,
                         ) {
                             Row(
-                                horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.Start),
+                                horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.Start),
                                 verticalAlignment = Alignment.Bottom,
                             ) {
                                 Text(
@@ -495,27 +495,32 @@ fun SpotBox() {
                                 )
                             )
                         }
-                        Image(
-                            painter = painterResource(id = R.drawable.arrow_southwest),
-                            contentDescription = "arrow shows wind direction",
-                            contentScale = ContentScale.None,
-                            modifier = Modifier.size(32.dp)
-                        )
+
                         //Column with wind direction
                         Column(
                             verticalArrangement = Arrangement.SpaceBetween,
                             horizontalAlignment = Alignment.End,
                         ) {
 
-                            Text(
-                                text = "sørvest",
-                                style = TextStyle(
-                                    fontSize = 24.sp,
-                                    fontFamily = FontFamily(Font(R.font.inter_font)),
-                                    fontWeight = FontWeight(400),
-                                    color = TextColor
+                            Row (horizontalArrangement = Arrangement.spacedBy(0.dp, Alignment.Start)){
+                                Image(
+                                    painter = painterResource(id = R.drawable.arrow_southwest),
+                                    contentDescription = "arrow shows wind direction",
+                                    contentScale = ContentScale.None,
+                                    modifier = Modifier.size(32.dp)
                                 )
-                            )
+                                Text(
+                                    text = "sørvest",
+                                    style = TextStyle(
+                                        fontSize = 24.sp,
+                                        fontFamily = FontFamily(Font(R.font.inter_font)),
+                                        fontWeight = FontWeight(400),
+                                        color = TextColor
+                                    )
+                                )
+
+                            }
+
 
                             Text(
                                 text = "vindretning",
