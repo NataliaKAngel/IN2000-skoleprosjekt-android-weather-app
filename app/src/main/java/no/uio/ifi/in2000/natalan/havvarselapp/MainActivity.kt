@@ -31,6 +31,20 @@ import no.uio.ifi.in2000.natalan.havvarselapp.ui.test.TestScreen
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.test.TestScreenViewModel
 
 class MainActivity : ComponentActivity() {
+
+    companion object {
+        // Defining a static method to return predefinedSpots, so I can fetch them in HomeScreen
+        fun getPredefinedSpots(): List<PredefinedSpots> {
+            return listOf(
+                //PredefinedSpots(coordinates = "60,10.7", spotName = "Aker Brygge", cityName = "Oslo"),
+                PredefinedSpots(coordinates = "59.9099278,10.7250417", spotName = "Aker Brygge", cityName = "Oslo"), // To get it accurately on the map
+                //PredefinedSpots(coordinates = "58,8.1", spotName = "Hamresanden", cityName = "Kristiansand"),
+                PredefinedSpots(coordinates = "58.1884698,8.0860386", spotName = "Hamresanden", cityName = "Kristiansand"), // To get it accurately on the map
+                PredefinedSpots(coordinates = "80,10.6", spotName = "TestNavn", cityName = "TestBy")
+            )
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -40,12 +54,9 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+
                     //Predefined spots
-                    val predefinedSpots : List<PredefinedSpots> = listOf(
-                        PredefinedSpots(coordinates = "60,10.7", spotName = "Aker Brygge", cityName = "Oslo"),
-                        PredefinedSpots(coordinates = "58,8.1", spotName = "Hamresanden", cityName = "Kristiansand"),
-                        PredefinedSpots(coordinates = "80,10.6", spotName = "TestNavn", cityName = "TestBy")
-                    )
+                    val predefinedSpots = getPredefinedSpots()
 
                     //Creates instances of datasources and repositories
                     val locationForecastDataSource = LocationForecastDataSource()
@@ -59,10 +70,10 @@ class MainActivity : ComponentActivity() {
 
                     // Creates navController and NavHost
                     val navController = rememberNavController()
-                    NavHost(navController = navController, startDestination = "TestScreen") {
-                     // Navigating routes
+                    NavHost(navController = navController, startDestination = "HomeScreen") {
+                        // Navigating routes
                         composable("TestScreen") { TestScreen(testScreenViewModel = testScreenViewModel)}
-                        composable("HomeScreen") { HomeScreen(navController = navController, homeScreenViewModel = homeScreenViewModel) }
+                        composable("HomeScreen") { HomeScreen(navController = navController, homeScreenViewModel = homeScreenViewModel, predefinedSpots = predefinedSpots) }
                         composable("InfoScreen") { InfoScreen(navController = navController)}
                         composable("SpotScreen/{coordinates}",
                             arguments = listOf(navArgument("coordinates") { type = NavType.StringType })

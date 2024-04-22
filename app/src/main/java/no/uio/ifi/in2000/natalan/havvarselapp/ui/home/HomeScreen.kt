@@ -1,14 +1,18 @@
 package no.uio.ifi.in2000.natalan.havvarselapp.ui.home
 
 import android.content.Context
-import androidx.compose.foundation.background
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import androidx.appcompat.content.res.AppCompatResources
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -21,13 +25,19 @@ import androidx.navigation.NavController
 import com.mapbox.geojson.Point
 import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.MapView
+import com.mapbox.maps.Style
+import com.mapbox.maps.plugin.annotation.annotations
+import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
+import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
+import no.uio.ifi.in2000.natalan.havvarselapp.R
+import no.uio.ifi.in2000.natalan.havvarselapp.model.predefinedSpots.PredefinedSpots
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.components.*
-import no.uio.ifi.in2000.natalan.havvarselapp.ui.theme.White
 
 @Composable
 fun HomeScreen(
     navController: NavController,
-    homeScreenViewModel: HomeScreenViewModel
+    homeScreenViewModel: HomeScreenViewModel,
+    predefinedSpots: List<PredefinedSpots>
 ) {
     //Collecting the state flow from spotScreenViewModel
     val spotsUIState by homeScreenViewModel.spotsUIState.collectAsState()
@@ -41,6 +51,9 @@ fun HomeScreen(
     //Variables for map
     val context = LocalContext.current.applicationContext
     val mapView = createMapScreen(context)
+
+
+    AddAnnotationsToMap(predefinedSpots, context, mapView, "sgreenthumb")
 
     Column(
         verticalArrangement = Arrangement.SpaceBetween,
@@ -56,7 +69,6 @@ fun HomeScreen(
                 factory = { mapView },
                 modifier = Modifier.fillMaxSize()
             )
-
             Box(
                 modifier = Modifier
                     .padding(top = 16.dp, start = 16.dp, end = 16.dp)
@@ -75,8 +87,6 @@ fun HomeScreen(
             }
         }
     }
-
-
 }
 
 @Composable
@@ -92,4 +102,55 @@ fun createMapScreen(context: Context): MapView {
             .build()
     )
     return mapView
+}
+
+@Composable
+fun AddAnnotationsToMap(
+    predefinedSpots: List<PredefinedSpots>,
+    context: Context,
+    mapView: MapView,
+    iconId: String // Name to icon
+) {
+    LaunchedEffect(mapView) {
+        mapView.mapboxMap.loadStyle(Style.MAPBOX_STREETS) {style ->
+            val annotationManager = mapView.annotations.createPointAnnotationManager()
+            predefinedSpots.forEach { spot ->
+                // Load your custom icon as a Bitmap
+                val drawable = AppCompatResources.getDrawable(context, R.drawable.sgreenthumb)
+                val bitmap = convertDrawableToBitmap(drawable)
+                if (bitmap != null) {
+                    // Add the bitmap as a custom icon in the Mapbox style.
+                    style.addImage(iconId, bitmap)
+                    val coordinates = spot.coordinates.split(",").map { it.toDouble() }
+                    val point = Point.fromLngLat(coordinates[1], coordinates[0])
+                    val annotationOptions = PointAnnotationOptions()
+                        .withPoint(point)
+                        .withIconImage(iconId) // Bruk det definerte ikonnavnet
+                    annotationManager.create(annotationOptions)
+                }
+            }
+        }
+    }
+}
+
+// Convert Drawable to Bitmap using this method
+private fun convertDrawableToBitmap(sourceDrawable: Drawable?): Bitmap? {
+    if (sourceDrawable == null) {
+        return null
+    }
+    return if (sourceDrawable is BitmapDrawable) {
+        sourceDrawable.bitmap
+    } else {
+        // Copy the drawable object to avoid manipulation on the same reference
+        val constantState = sourceDrawable.constantState ?: return null
+        val drawable = constantState.newDrawable().mutate()
+        val bitmap: Bitmap = Bitmap.createBitmap(
+            drawable.intrinsicWidth, drawable.intrinsicHeight,
+            Bitmap.Config.ARGB_8888
+        )
+        val canvas = Canvas(bitmap)
+        drawable.setBounds(0, 0, canvas.width, canvas.height)
+        drawable.draw(canvas)
+        bitmap
+    }
 }
