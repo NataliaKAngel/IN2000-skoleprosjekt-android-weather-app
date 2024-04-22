@@ -31,7 +31,7 @@ class Properties(
     val severity: String,
     val status: String,
     val title: String,
-    val triggerLevel: String?,
+    val triggerLevel: String,
     val type: String,
     val web: String,
     val municipality: List<String>?,
