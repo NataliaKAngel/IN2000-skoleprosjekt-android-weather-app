@@ -33,4 +33,14 @@ class HomeScreenViewModel(
         }
     }
 
+    //HomeScreen can use this method to update spotUIState to hold the correct Spot-object
+    fun updateSpotUIState(coordinates: String){
+        viewModelScope.launch {
+            _spotUIState.update {
+                it.copy(
+                    spot = weatherAPIRepository.getOneSpot(coordinates)
+                )
+            }
+        }
+    }
 }
