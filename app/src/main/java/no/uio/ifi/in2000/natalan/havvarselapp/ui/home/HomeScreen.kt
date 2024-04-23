@@ -39,14 +39,14 @@ fun HomeScreen(
     navController: NavController,
     homeScreenViewModel: HomeScreenViewModel
 ) {
-    //Collecting the state flow from spotScreenViewModel
+    //UI-state: Map<PredefinedSpots, Spot?>
     val spotsUIState by homeScreenViewModel.spotsUIState.collectAsState()
-
-    //Getting the map from the UI-state (Map<PredefinedSpots, Spot?>)
     val spotMap = spotsUIState.spots
-
-    //Getting the spots objects from the map (List<Spot?>)
+    //List<Spot?>
     val spots = spotMap.values.toList()
+
+    //UI-state: Spot?
+    val spotUIState by homeScreenViewModel.spotUIState.collectAsState()
 
     //Variables for map
     val context = LocalContext.current.applicationContext
