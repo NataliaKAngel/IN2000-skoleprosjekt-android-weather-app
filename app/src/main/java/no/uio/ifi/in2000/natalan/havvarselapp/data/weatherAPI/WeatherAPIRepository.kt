@@ -49,6 +49,7 @@ class WeatherAPIRepository (
             coordinates = predefinedSpot.coordinates, //The coordinates of the spot
             spotName = predefinedSpot.spotName, //The name of the spot
             cityName = predefinedSpot.cityName, //The city the spot lies in
+            optimalWindConditions = predefinedSpot.optimalWindConditions, //Min and max value for wind direction
             photo = "",  //Photo of the spot as URL
             windSpeed = windSpeed, //Map<String, Double>
             windSpeedUnit = windSpeedUnit, //String
@@ -57,7 +58,6 @@ class WeatherAPIRepository (
             riskMatrixColor = riskMatrixColor,  //String
             description = description,  //String
             triggerLevel = triggerLevel, //String
-            bestWindDirection = 0.0,  //Recommended windDirection for the spot
             recommendationColor = "" //Recommended color for kiting
         )
     }
