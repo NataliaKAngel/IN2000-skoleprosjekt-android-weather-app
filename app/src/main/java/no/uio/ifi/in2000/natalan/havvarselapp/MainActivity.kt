@@ -102,7 +102,15 @@ class MainActivity : ComponentActivity() {
                                 "max" to 292.5
                             )
                         ),
-                        PredefinedSpots(coordinates = "", spotName = "", cityName = "", optimalWindConditions = mapOf())
+                        PredefinedSpots(
+                            coordinates = "58.06814063685252, 6.731489560823652",
+                            spotName = "Haviksanden",
+                            cityName = "Lista",
+                            optimalWindConditions = mapOf(
+                                "min" to 112.5,
+                                "max" to 247.5
+                            )
+                        )
                     )
 
                     //Creates instances of datasources and repositories
