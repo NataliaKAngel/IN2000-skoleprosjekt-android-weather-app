@@ -61,6 +61,7 @@ class MainActivity : ComponentActivity() {
                                 "max" to 247.5
                             )
                         ),
+                        /*
                         PredefinedSpots(
                             coordinates = "58.07625203318467, 7.811114127684619",
                             spotName = "Høllesanden",
@@ -97,6 +98,8 @@ class MainActivity : ComponentActivity() {
                                 "max" to 247.5
                             )
                         )
+
+                         */
                     )
 
                     //Creates instances of datasources and repositories
