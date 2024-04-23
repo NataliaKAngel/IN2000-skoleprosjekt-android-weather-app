@@ -76,11 +76,12 @@ class MainActivity : ComponentActivity() {
                             )
                         ),
                         PredefinedSpots(
-                            coordinates = "",
-                            spotName = "",
-                            cityName = "",
+                            coordinates = "58.07625203318467, 7.811114127684619",
+                            spotName = "Høllesanden",
+                            cityName = "Søgne",
                             optimalWindConditions = mapOf(
-
+                                "min" to 157.5,
+                                "max" to 247.5
                             )
                         ),
                         PredefinedSpots(coordinates = "", spotName = "", cityName = "", optimalWindConditions = mapOf()),
