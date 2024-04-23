@@ -37,10 +37,10 @@ class MainActivity : ComponentActivity() {
         fun getPredefinedSpots(): List<PredefinedSpots> {
             return listOf(
                 //PredefinedSpots(coordinates = "60,10.7", spotName = "Aker Brygge", cityName = "Oslo"),
-                PredefinedSpots(coordinates = "59.9099278,10.7250417", spotName = "Aker Brygge", cityName = "Oslo"), // To get it accurately on the map
+                //PredefinedSpots(coordinates = "59.9099278,10.7250417", spotName = "Aker Brygge", cityName = "Oslo"), // To get it accurately on the map
                 //PredefinedSpots(coordinates = "58,8.1", spotName = "Hamresanden", cityName = "Kristiansand"),
-                PredefinedSpots(coordinates = "58.1884698,8.0860386", spotName = "Hamresanden", cityName = "Kristiansand"), // To get it accurately on the map
-                PredefinedSpots(coordinates = "80,10.6", spotName = "TestNavn", cityName = "TestBy")
+                //PredefinedSpots(coordinates = "58.1884698,8.0860386", spotName = "Hamresanden", cityName = "Kristiansand"), // To get it accurately on the map
+                //PredefinedSpots(coordinates = "80,10.6", spotName = "TestNavn", cityName = "TestBy")
             )
         }
     }
@@ -56,7 +56,29 @@ class MainActivity : ComponentActivity() {
                 ) {
 
                     //Predefined spots
-                    val predefinedSpots = getPredefinedSpots()
+                    val predefinedSpots: List<PredefinedSpots> = listOf(
+                        PredefinedSpots(
+                            coordinates = "58.07037852078236, 6.778011069088529",
+                            spotName = "Husebysanden",
+                            cityName = "Lista",
+                            optimalWindConditions = mapOf(
+                                "min" to 180.0,
+                                "max" to 270.0
+                            )
+                        ),
+                        PredefinedSpots(
+                            coordinates = "",
+                            spotName = "",
+                            cityName = "",
+                            optimalWindConditions = mapOf(
+
+                            )
+                        ),
+                        PredefinedSpots(coordinates = "", spotName = "", cityName = "", optimalWindConditions = mapOf()),
+                        PredefinedSpots(coordinates = "", spotName = "", cityName = "", optimalWindConditions = mapOf()),
+                        PredefinedSpots(coordinates = "", spotName = "", cityName = "", optimalWindConditions = mapOf()),
+                        PredefinedSpots(coordinates = "", spotName = "", cityName = "", optimalWindConditions = mapOf())
+                    )
 
                     //Creates instances of datasources and repositories
                     val locationForecastDataSource = LocationForecastDataSource()
