@@ -27,9 +27,10 @@ class HomeScreenViewModel(
         viewModelScope.launch {
             _spotsUIState.update {
                 it.copy(
-                    spots = weatherAPIRepository.getPredefinedSpots()
+                    spots = weatherAPIRepository.getAllSpots()
                 )
             }
         }
     }
+
 }

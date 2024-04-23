@@ -15,9 +15,9 @@ class WeatherAPIRepository (
     private val metAlertsDataSource: MetAlertsDataSource
 ){
     //Creates: Map<PredefinedSpots, Spot?>
-    private suspend fun createPredefinedSpots(): Map<PredefinedSpots, Spot?>{
+    private suspend fun createAllSpots(): Map<PredefinedSpots, Spot?>{
         return predefinedSpotsDataSource.getPredefinedSpots().associateWith { predefinedSpot ->
-            createSpot(
+            createOneSpot(
                 predefinedSpot,
                 getWeatherResponse(predefinedSpot.coordinates),
                 getMetAlerts(predefinedSpot.coordinates)?.features
@@ -25,7 +25,7 @@ class WeatherAPIRepository (
         }
     }
 
-    private fun createSpot(predefinedSpot: PredefinedSpots, weatherResponse: WeatherResponse?, features: List<Feature>?): Spot{
+    private fun createOneSpot(predefinedSpot: PredefinedSpots, weatherResponse: WeatherResponse?, features: List<Feature>?): Spot{
         //Gets data from LocationForecast-API
         val windSpeed = getWindSpeedMap(weatherResponse)
         val windDirection = getWindDirectionMap(weatherResponse)
@@ -64,16 +64,18 @@ class WeatherAPIRepository (
     }
 
     //Creates a Map<PredefinedSpots, Spot?> and returns it. Offers the map of predefined kite spots to ViewModel
-    suspend fun getPredefinedSpots(): Map<PredefinedSpots, Spot?>{
-        return createPredefinedSpots()
+    suspend fun getAllSpots(): Map<PredefinedSpots, Spot?>{
+        return createAllSpots()
     }
 
     //Returns one Spot-object based on coordinates to ViewModel
     suspend fun getOneSpot(coordinates: String): Spot? {
-        //List of all the Spots
-        val spots = createPredefinedSpots().values.toList()
+        //Getting predefinedSpot, WeatherResponse and Feature to create Spot-object
+        val predefinedSpot = predefinedSpotsDataSource.getPredefinedSpots().find { it.coordinates == coordinates }
+        val weatherResponse = getWeatherResponse(coordinates)
+        val feature = getMetAlerts(coordinates)?.features
 
-        return spots.find { (it?.coordinates ?: "") == coordinates }
+        return predefinedSpot?.let { createOneSpot(it, weatherResponse, feature) }
     }
 
     //Gets one WeatherResponse object from locationForecastDataSource
