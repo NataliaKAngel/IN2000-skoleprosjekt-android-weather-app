@@ -67,6 +67,15 @@ class MainActivity : ComponentActivity() {
                             )
                         ),
                         PredefinedSpots(
+                            coordinates = "58.18857641754766, 8.086584207780076",
+                            spotName = "Hamresanden",
+                            cityName = "Kristiansand",
+                            optimalWindConditions = mapOf(
+                                "min" to 157.5,
+                                "max" to 247.5
+                            )
+                        ),
+                        PredefinedSpots(
                             coordinates = "",
                             spotName = "",
                             cityName = "",
@@ -74,7 +83,6 @@ class MainActivity : ComponentActivity() {
 
                             )
                         ),
-                        PredefinedSpots(coordinates = "", spotName = "", cityName = "", optimalWindConditions = mapOf()),
                         PredefinedSpots(coordinates = "", spotName = "", cityName = "", optimalWindConditions = mapOf()),
                         PredefinedSpots(coordinates = "", spotName = "", cityName = "", optimalWindConditions = mapOf()),
                         PredefinedSpots(coordinates = "", spotName = "", cityName = "", optimalWindConditions = mapOf())
