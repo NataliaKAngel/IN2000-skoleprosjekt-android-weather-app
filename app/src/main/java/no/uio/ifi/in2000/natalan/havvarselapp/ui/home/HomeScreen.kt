@@ -31,13 +31,13 @@ import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
 import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
 import no.uio.ifi.in2000.natalan.havvarselapp.R
 import no.uio.ifi.in2000.natalan.havvarselapp.model.predefinedSpots.PredefinedSpots
+import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.Spot
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.components.*
 
 @Composable
 fun HomeScreen(
     navController: NavController,
-    homeScreenViewModel: HomeScreenViewModel,
-    predefinedSpots: List<PredefinedSpots>
+    homeScreenViewModel: HomeScreenViewModel
 ) {
     //Collecting the state flow from spotScreenViewModel
     val spotsUIState by homeScreenViewModel.spotsUIState.collectAsState()
@@ -53,7 +53,7 @@ fun HomeScreen(
     val mapView = createMapScreen(context)
 
 
-    AddAnnotationsToMap(predefinedSpots, context, mapView, "sgreenthumb")
+    AddAnnotationsToMap(spots, context, mapView, "sgreenthumb")
 
     Column(
         verticalArrangement = Arrangement.SpaceBetween,
@@ -106,7 +106,7 @@ fun createMapScreen(context: Context): MapView {
 
 @Composable
 fun AddAnnotationsToMap(
-    predefinedSpots: List<PredefinedSpots>,
+    spots: List<Spot?>,
     context: Context,
     mapView: MapView,
     iconId: String // Name to icon
@@ -114,15 +114,15 @@ fun AddAnnotationsToMap(
     LaunchedEffect(mapView) {
         mapView.mapboxMap.loadStyle(Style.MAPBOX_STREETS) {style ->
             val annotationManager = mapView.annotations.createPointAnnotationManager()
-            predefinedSpots.forEach { spot ->
+            spots.forEach { spot ->
                 // Load your custom icon as a Bitmap
                 val drawable = AppCompatResources.getDrawable(context, R.drawable.sgreenthumb)
                 val bitmap = convertDrawableToBitmap(drawable)
                 if (bitmap != null) {
                     // Add the bitmap as a custom icon in the Mapbox style.
                     style.addImage(iconId, bitmap)
-                    val coordinates = spot.coordinates.split(",").map { it.toDouble() }
-                    val point = Point.fromLngLat(coordinates[1], coordinates[0])
+                    val coordinates = spot?.coordinates?.split(",")?.map { it.toDouble() }
+                    val point = Point.fromLngLat(coordinates?.get(1) ?: 0.0, coordinates?.get(0) ?: 0.0)
                     val annotationOptions = PointAnnotationOptions()
                         .withPoint(point)
                         .withIconImage(iconId) // Bruk det definerte ikonnavnet
