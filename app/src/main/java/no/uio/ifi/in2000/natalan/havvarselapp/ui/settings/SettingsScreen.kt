@@ -22,30 +22,8 @@ import no.uio.ifi.in2000.natalan.havvarselapp.ui.theme.White
 fun SettingsScreen (
     navController: NavController
 ) {
-//
-//    Column {
-//
-//        Box(
-//            modifier = Modifier
-//                .fillMaxSize()
-//                .background(color = DefaultBlue)
-//                .padding(16.dp)
-//        ) {
-//            Box(
-//                modifier = Modifier
-//                    .layoutId("whiteBox")
-//                    .fillMaxSize() // Fill the entire ConstraintLayout
-//                    .background(color = White, shape = RoundedCornerShape(size = 16.dp))
-//                    .padding(start = 16.dp, top = 16.dp, end = 16.dp)
-//            ) {
-//                SettingsScreenText()
-//                NavBar(navController)
-//            }
-//        }
-//    }
-//}
 
-// Define constraints
+ //Define constraints
     val constraints = ConstraintSet {
         // Create refs to use
         val whiteBox = createRefFor("whiteBox")
@@ -71,7 +49,6 @@ fun SettingsScreen (
             end.linkTo(parent.end)
         }
     }
-
 // Apply constraints to ConstraintLayout
     ConstraintLayout(
         constraints,
@@ -94,7 +71,6 @@ fun SettingsScreen (
                 ) {
                     SettingsScreenText()
                 }
-
             }
         }
 
@@ -104,8 +80,16 @@ fun SettingsScreen (
         ) {
             NavBar(navController = navController)
         }
+
     }
 }
+
+
+
+
+
+
+
 
 
 

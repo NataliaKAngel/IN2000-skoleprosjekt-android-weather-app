@@ -357,7 +357,7 @@ fun KiteConditionColorBox(icon: Int, title: String, info: String) {
 fun SpotBox() {
     Box(
         modifier = Modifier
-            .widthIn(max = 254.dp)
+            .widthIn(max = 296.dp)
     ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.Top),
@@ -369,7 +369,8 @@ fun SpotBox() {
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Box(modifier = Modifier) {
+                Box(modifier = Modifier
+                ) {
                     Column(
                         verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.Top),
                         horizontalAlignment = Alignment.Start,
@@ -398,11 +399,14 @@ fun SpotBox() {
 
                 Spacer(modifier = Modifier.width(8.dp))
 
-                Box {
+                Box (
+                    modifier = Modifier.fillMaxWidth(),
+                    contentAlignment = Alignment.CenterEnd
+                ){
                     Image(
                         painter = painterResource(id = R.drawable.gotospot),
                         contentDescription = "go to spot",
-                        contentScale = ContentScale.FillBounds
+                        contentScale = ContentScale.Fit
                     )
                 }
             }
@@ -535,6 +539,183 @@ fun SpotBox() {
 }
 
 
+@Composable
+fun SpotBoxForSpotScreen() {
+    Box(
+        modifier = Modifier
+//            .widthIn(max = 296.dp)
+//            .background(White, shape = RoundedCornerShape(size = StandardRadius))
+//            .padding(StandardRadius)
+    ) {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.Top),
+//            verticalArrangement = Arrangement.SpaceBetween,
+            horizontalAlignment = Alignment.Start,
+        ) {
+            //Row with title of spot and "goToSpot" button
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Box(modifier = Modifier) {
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.Top),
+                        horizontalAlignment = Alignment.Start,
+                    ) {
+                        Text(
+                            text = "Hamresanden",
+                            style = TextStyle(
+                                fontSize = 24.sp,
+                                fontFamily = FontFamily(Font(R.font.inter_font)),
+                                fontWeight = FontWeight(700),
+                                color = TextColor,
+                                letterSpacing = (-0.05).sp
+                            )
+                        )
+                        Text(
+                            text = "Kristiansand",
+                            style = TextStyle(
+                                fontSize = 12.sp,
+                                fontFamily = FontFamily(Font(R.font.inter_font)),
+                                fontWeight = FontWeight(400),
+                                color = TextColor
+                            )
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.width(8.dp))
+
+                Box {
+                    Image(
+                        painter = painterResource(id = R.drawable.setfavourite),
+                        contentDescription = "go to spot",
+                        contentScale = ContentScale.Fit
+
+
+                    )
+                }
+            }
+
+            //Box with condition for kiting (including thumb, color, wind info)
+            Box {
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.Top),
+                    horizontalAlignment = Alignment.Start,
+                ) {
+                    Spacer(modifier = Modifier.height(12.dp))
+                    Text(
+                        text = "Akkurat nå:",
+                        style = TextStyle(
+                            fontSize = 9.sp,
+                            fontFamily = FontFamily(Font(R.font.inter_font)),
+                            fontWeight = FontWeight(500),
+                            color = TextColor
+                        )
+                    )
+
+                    Row(
+                        Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        //ConditonCircle with thumb
+                        Box {
+                            Image(
+                                painter = painterResource(id = R.drawable.bgreenthumb),
+                                contentDescription = "color thumb",
+                                contentScale = ContentScale.None
+                            )
+                        }
+
+
+                        Column(
+                            verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.Top),
+                            horizontalAlignment = Alignment.End,
+                        ) {
+                            Row(
+                                horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.Start),
+                                verticalAlignment = Alignment.Bottom,
+                            ) {
+                                Text(
+                                    text = "8",
+                                    style = TextStyle(
+                                        fontSize = 24.sp,
+                                        fontFamily = FontFamily(Font(R.font.inter_font)),
+                                        fontWeight = FontWeight(300),
+                                        color = TextColor
+                                    )
+                                )
+                                Text(
+                                    text = "m/s",
+                                    style = TextStyle(
+                                        fontSize = 24.sp,
+                                        fontFamily = FontFamily(Font(R.font.inter_font)),
+                                        fontWeight = FontWeight(400),
+                                        color = TextColor
+                                    )
+                                )
+                            }
+                            Text(
+                                text = "vindstyrke",
+                                style = TextStyle(
+                                    fontSize = 9.sp,
+                                    fontFamily = FontFamily(Font(R.font.inter_font)),
+                                    fontWeight = FontWeight(400),
+                                    color = TextColor
+                                )
+                            )
+                        }
+
+                        //Column with wind direction
+                        Column(
+                            verticalArrangement = Arrangement.SpaceBetween,
+                            horizontalAlignment = Alignment.End,
+                        ) {
+
+                            Row (horizontalArrangement = Arrangement.spacedBy(0.dp, Alignment.Start)){
+                                Image(
+                                    painter = painterResource(id = R.drawable.arrow_southwest),
+                                    contentDescription = "arrow shows wind direction",
+                                    contentScale = ContentScale.None,
+                                    modifier = Modifier.size(32.dp)
+                                )
+                                Text(
+                                    text = "sørvest",
+                                    style = TextStyle(
+                                        fontSize = 24.sp,
+                                        fontFamily = FontFamily(Font(R.font.inter_font)),
+                                        fontWeight = FontWeight(400),
+                                        color = TextColor
+                                    )
+                                )
+
+                            }
+
+
+                            Text(
+                                text = "vindretning",
+                                style = TextStyle(
+                                    fontSize = 9.sp,
+                                    fontFamily = FontFamily(Font(R.font.inter_font)),
+                                    fontWeight = FontWeight(400),
+                                    color = TextColor
+                                )
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+
+
+
+
 //Takes a warning message from Spot, and changes background color accordingly
 @Composable
 fun WarningBox (
@@ -542,9 +723,9 @@ fun WarningBox (
     //spot.description
 ){
     Box(modifier = Modifier
-        .widthIn(max = 286.dp)
+        //.widthIn(max = 296.dp)
+        .fillMaxWidth() // Legg til denne linjen for å fylle tilgjengelig bredde
         .background(
-            //color = spot.warningColor? tror dette er feil..
             color = YellowCircle,
             shape = RoundedCornerShape(size = StandardRadius)
         )
@@ -584,16 +765,16 @@ fun TimeBox(){
     Box (
         modifier = Modifier
             .border(
-                width = 3.dp,
+                width = 4.dp,
                 //color = spot.color ?? color after calculation
                 color = GreenCircle,
                 shape = RoundedCornerShape(size = StandardRadius)
             )
-            .width(56.dp)
-            .height(68.dp)
+            .width(64.dp)
+            .height(72.dp)
             .background(color = White, shape = RoundedCornerShape(size = StandardRadius))
-            .padding(12.dp)
-    )
+            .padding(12.dp),
+        contentAlignment = Alignment.Center     )
         {
             Column(
                 Modifier.fillMaxHeight(),
@@ -622,7 +803,7 @@ fun TimeBox(){
                 )
                 Text(
                     //text wind direction from spot
-                    text = "nordøst",
+                    text = "sørvest",
                     style = TextStyle(
                         fontSize = 9.sp,
                         fontFamily = FontFamily(Font(R.font.inter_font)),
@@ -674,30 +855,120 @@ fun DaysBoxRow(){
             item {
                 TimeBox()
             }
+            item {
+                Spacer(modifier = Modifier.width(8.dp))
+            }
+            item {
+                TimeBox()
+            }
+            item {
+                Spacer(modifier = Modifier.width(8.dp))
+            }
+            item {
+                TimeBox()
+            }
+            item {
+                Spacer(modifier = Modifier.width(8.dp))
+            }
+            item {
+                TimeBox()
+            }
         }
     }
 }
 
 
 @Composable
-fun HourBoxRow(){
-    Text(
-        text = "I dag:",
-        style = TextStyle(
-            fontSize = 9.sp,
-            fontFamily = FontFamily(Font(R.font.inter_font)),
-            fontWeight = FontWeight(400),
-            color = TextColor
+fun NextHoursRow() {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Top),
+        horizontalAlignment = Alignment.Start
+    ){
+        Text(
+            text = "I dag:",
+            style = TextStyle(
+                fontSize = 9.sp,
+                fontFamily = FontFamily(Font(R.font.inter_font)),
+                fontWeight = FontWeight(400),
+                color = TextColor
+            )
         )
-    )
-    LazyRow {
-        item {
-
+        LazyRow {
+            item {
+                TimeBox()
+            }
+            item {
+                Spacer(modifier = Modifier.width(8.dp))
+            }
+            item {
+                TimeBox()
+            }
+            item {
+                Spacer(modifier = Modifier.width(8.dp))
+            }
+            item {
+                TimeBox()
+            }
+            item {
+                Spacer(modifier = Modifier.width(8.dp))
+            }
+            item {
+                TimeBox()
+            }
+            item {
+                Spacer(modifier = Modifier.width(8.dp))
+            }
+            item {
+                TimeBox()
+            }
+            item {
+                Spacer(modifier = Modifier.width(8.dp))
+            }
+            item {
+                TimeBox()
+            }
+            item {
+                Spacer(modifier = Modifier.width(8.dp))
+            }
+            item {
+                TimeBox()
+            }
         }
     }
 }
 
 
+@Composable
+fun ButtonRow(navController : NavController){
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Box (
+            Modifier.clickable {
+                navController.popBackStack()},
+            contentAlignment = Alignment.CenterStart
+        ){
+            Image(
+                painter = painterResource(id = R.drawable.gotomap),
+                contentDescription = "gå til kart",
+                contentScale = ContentScale.Fit
+            )
+        }
+        Box (
+            contentAlignment = Alignment.CenterEnd
+        ){
+            Image(
+                painter = painterResource(id = R.drawable.infospotbutton),
+                contentDescription = "go to spot",
+                contentScale = ContentScale.Fit
+            )
+        }
+
+    }
+
+}
 
 
 
@@ -739,6 +1010,47 @@ fun SettingsScreenText() {
     }
 }
 
+//Favourite Screen text
+@Composable
+fun FavouriteScreenText() {
+    Column(
+        modifier = Modifier
+    ) {
+        Text(
+            text = "Favoritter",
+            style = TextStyle(
+                fontSize = 24.sp,
+                fontFamily = FontFamily(Font(R.font.inter_font)),
+                fontWeight = FontWeight(600),
+                color = TextColor,
+            )
+        )
+        Spacer(modifier = Modifier.height(24.dp))
+        Row(
+            Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.Top,
+        ) {
+            Text(
+                text = "Her kan du legge til\nditt favorittsted.\nTrykk på knappen\netter at du har valgt\nstedet på kartet.",
+                style = TextStyle(
+                    fontSize = 14.sp,
+                    lineHeight = 20.sp,
+                    fontFamily = FontFamily(Font(R.font.inter_font)),
+                    fontWeight = FontWeight(400),
+                    color = TextColor,
+                    letterSpacing = 0.5.sp,
+                )
+            )
+            Spacer(modifier = Modifier.width(24.dp))
+            Image(
+                painter = painterResource(R.drawable.setfavourite),
+                contentDescription = "sett som favoritt",
+                contentScale = ContentScale.Fit
+            )
+        }
+    }
+}
 
 
 
@@ -809,8 +1121,10 @@ fun SpotBoxPreview(){
 @Composable
 fun SpotBoxWithFrame(){
     Column(modifier = Modifier
+        .width(296.dp)
         .background(White, shape = RoundedCornerShape(size = StandardRadius))
         .padding(StandardRadius))
+
     {
         WarningBox()
         Spacer(modifier = Modifier.height(12.dp))
@@ -823,13 +1137,11 @@ fun SpotBoxWithFrame(){
 @Composable
 fun SpotBoxWithFrameOption(){
 
-    Box(modifier = Modifier
-
-    ){
+    Box(Modifier.width(296.dp)){
         Column {
             WarningBox()
             Box(
-                Modifier
+                modifier = Modifier
                     .background(White, shape = RoundedCornerShape(size = StandardRadius))
                     .padding(StandardRadius)){
                 SpotBox()
@@ -864,3 +1176,15 @@ fun TimeBoxPreview(){
 fun DaysBoxRowPreview(){
     DaysBoxRow()
 }
+
+@Preview
+@Composable
+fun SpotBoxForSpotScreenPreview() {
+    SpotBoxForSpotScreen()
+}
+
+//@Preview
+//@Composable
+//fun ButtonRowPreview(){
+//    ButtonRow()
+//}
