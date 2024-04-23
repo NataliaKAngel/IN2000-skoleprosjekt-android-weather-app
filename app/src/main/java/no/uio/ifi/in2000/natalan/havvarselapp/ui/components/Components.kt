@@ -739,6 +739,47 @@ fun SettingsScreenText() {
     }
 }
 
+//Favourite Screen text
+@Composable
+fun FavouriteScreenText() {
+    Column(
+        modifier = Modifier
+    ) {
+        Text(
+            text = "Favoritter",
+            style = TextStyle(
+                fontSize = 24.sp,
+                fontFamily = FontFamily(Font(R.font.inter_font)),
+                fontWeight = FontWeight(600),
+                color = TextColor,
+            )
+        )
+        Spacer(modifier = Modifier.height(24.dp))
+        Row(
+            Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.Top,
+        ) {
+            Text(
+                text = "Her kan du legge til\nditt favorittsted.\nTrykk på knappen\netter at du har valgt\nstedet på kartet.",
+                style = TextStyle(
+                    fontSize = 14.sp,
+                    lineHeight = 20.sp,
+                    fontFamily = FontFamily(Font(R.font.inter_font)),
+                    fontWeight = FontWeight(400),
+                    color = TextColor,
+                    letterSpacing = 0.5.sp,
+                )
+            )
+            Spacer(modifier = Modifier.width(24.dp))
+            Image(
+                painter = painterResource(R.drawable.setfavourite),
+                contentDescription = "sett som favoritt",
+                contentScale = ContentScale.Fit
+            )
+        }
+    }
+}
 
 
 
