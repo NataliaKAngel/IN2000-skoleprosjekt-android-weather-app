@@ -1,5 +1,6 @@
 package no.uio.ifi.in2000.natalan.havvarselapp.ui.home
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow

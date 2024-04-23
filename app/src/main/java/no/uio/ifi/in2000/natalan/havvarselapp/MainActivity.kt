@@ -4,10 +4,15 @@ package no.uio.ifi.in2000.natalan.havvarselapp
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.theme.HavvarselAppTheme
@@ -15,6 +20,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import no.uio.ifi.in2000.natalan.havvarselapp.model.predefinedSpots.PredefinedSpots
 import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.WeatherAPIRepository
 import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.locationForecast.LocationForecastDataSource
@@ -32,8 +39,16 @@ import no.uio.ifi.in2000.natalan.havvarselapp.ui.test.TestScreen
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.test.TestScreenViewModel
 
 class MainActivity : ComponentActivity() {
+
+    private lateinit var connectivityObserver: ConnectivityObserver
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Creates instance of NetworkConnectivityObserver
+        connectivityObserver = NetworkConnectivityObserver(applicationContext)
+        connectivityObserver.observe().onEach {
+            println("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMStatus is: $it")
+        }.launchIn(lifecycleScope)
         setContent {
 
             HavvarselAppTheme {
@@ -41,6 +56,10 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+                    // Collect the staus of the internet in a val
+                    val staus by connectivityObserver.observe().collectAsState(
+                        initial = ConnectivityObserver.Status.Unavailable
+                    )
 
                     //Creates instances of datasources and repositories
                     val predefinedSpotsDataSource = PredefinedSpotsDataSource()
@@ -68,6 +87,13 @@ class MainActivity : ComponentActivity() {
                             SpotScreen(navController = navController, spotScreenViewModel = viewModel)}
                         composable("FavouriteScreen") { FavouriteScreen(navController = navController, favouriteScreenViewModel = favouriteScreenViewModel)}
                         composable("SettingsScreen") { SettingsScreen(navController = navController)}
+                    }
+                    // Box that shows network status
+                    // TODO need to make snackbar instead
+                    Box(
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        Text(text = "Network status: $staus")
                     }
                 }
             }
