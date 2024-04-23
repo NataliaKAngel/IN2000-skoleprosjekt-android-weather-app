@@ -31,20 +31,6 @@ import no.uio.ifi.in2000.natalan.havvarselapp.ui.test.TestScreen
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.test.TestScreenViewModel
 
 class MainActivity : ComponentActivity() {
-
-    companion object {
-        // Defining a static method to return predefinedSpots, so I can fetch them in HomeScreen
-        fun getPredefinedSpots(): List<PredefinedSpots> {
-            return listOf(
-                //PredefinedSpots(coordinates = "60,10.7", spotName = "Aker Brygge", cityName = "Oslo"),
-                PredefinedSpots(coordinates = "59.9099278,10.7250417", spotName = "Aker Brygge", cityName = "Oslo"), // To get it accurately on the map
-                //PredefinedSpots(coordinates = "58,8.1", spotName = "Hamresanden", cityName = "Kristiansand"),
-                PredefinedSpots(coordinates = "58.1884698,8.0860386", spotName = "Hamresanden", cityName = "Kristiansand"), // To get it accurately on the map
-                PredefinedSpots(coordinates = "80,10.6", spotName = "TestNavn", cityName = "TestBy")
-            )
-        }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -56,7 +42,65 @@ class MainActivity : ComponentActivity() {
                 ) {
 
                     //Predefined spots
-                    val predefinedSpots = getPredefinedSpots()
+                    val predefinedSpots: List<PredefinedSpots> = listOf(
+                        PredefinedSpots(
+                            coordinates = "58.07037852078236, 6.778011069088529",
+                            spotName = "Husebysanden",
+                            cityName = "Lista",
+                            optimalWindConditions = mapOf(
+                                "min" to 180.0,
+                                "max" to 270.0
+                            )
+                        ),
+                        PredefinedSpots(
+                            coordinates = "58.18857641754766, 8.086584207780076",
+                            spotName = "Hamresanden",
+                            cityName = "Kristiansand",
+                            optimalWindConditions = mapOf(
+                                "min" to 157.5,
+                                "max" to 247.5
+                            )
+                        ),
+                        /*
+                        PredefinedSpots(
+                            coordinates = "58.07625203318467, 7.811114127684619",
+                            spotName = "Høllesanden",
+                            cityName = "Søgne",
+                            optimalWindConditions = mapOf(
+                                "min" to 157.5,
+                                "max" to 247.5
+                            )
+                        ),
+                        PredefinedSpots(
+                            coordinates = "58.135371306063874, 7.034859484463499",
+                            spotName = "Kvaviksanden",
+                            cityName = "Lyngdal",
+                            optimalWindConditions = mapOf(
+                                "min" to 180.0,
+                                "max" to 247.5
+                            )
+                        ),
+                        PredefinedSpots(
+                            coordinates = "58.0697096704821, 6.685477207426811",
+                            spotName = "Kviljosanden",
+                            cityName = "Lista",
+                            optimalWindConditions = mapOf(
+                                "min" to 112.5,
+                                "max" to 292.5
+                            )
+                        ),
+                        PredefinedSpots(
+                            coordinates = "58.06814063685252, 6.731489560823652",
+                            spotName = "Haviksanden",
+                            cityName = "Lista",
+                            optimalWindConditions = mapOf(
+                                "min" to 112.5,
+                                "max" to 247.5
+                            )
+                        )
+
+                         */
+                    )
 
                     //Creates instances of datasources and repositories
                     val locationForecastDataSource = LocationForecastDataSource()
@@ -73,7 +117,7 @@ class MainActivity : ComponentActivity() {
                     NavHost(navController = navController, startDestination = "HomeScreen") {
                         // Navigating routes
                         composable("TestScreen") { TestScreen(testScreenViewModel = testScreenViewModel)}
-                        composable("HomeScreen") { HomeScreen(navController = navController, homeScreenViewModel = homeScreenViewModel, predefinedSpots = predefinedSpots) }
+                        composable("HomeScreen") { HomeScreen(navController = navController, homeScreenViewModel = homeScreenViewModel)}
                         composable("InfoScreen") { InfoScreen(navController = navController)}
                         composable("SpotScreen/{coordinates}",
                             arguments = listOf(navArgument("coordinates") { type = NavType.StringType })

@@ -11,6 +11,8 @@ data class Spot (
     val spotName: String,
     //The city the spot is in (example: "Kristiansand")
     val cityName: String,
+    //Recommended windDirection for the spot
+    val optimalWindConditions: Map<String, Double>, //Min and max value for wind direction
     //Photo of the spot as URL
     val photo: String,
 
@@ -32,8 +34,6 @@ data class Spot (
     val triggerLevel: String?,
 
     //CALCULATION:
-    //Recommended windDirection for the spot
-    val bestWindDirection : Double,
     //Color recommendation for kiting
     val recommendationColor: String,
 )
