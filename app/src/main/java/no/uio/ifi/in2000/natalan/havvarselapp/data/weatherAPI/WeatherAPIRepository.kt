@@ -2,6 +2,7 @@ package no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI
 
 import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.locationForecast.LocationForecastDataSource
 import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.metAlerts.MetAlertsDataSource
+import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.predefinedSpots.PredefinedSpotsDataSource
 import no.uio.ifi.in2000.natalan.havvarselapp.model.locationForecast.WeatherResponse
 import no.uio.ifi.in2000.natalan.havvarselapp.model.metAlerts.Feature
 import no.uio.ifi.in2000.natalan.havvarselapp.model.metAlerts.MetAlertDataClass
@@ -9,13 +10,13 @@ import no.uio.ifi.in2000.natalan.havvarselapp.model.predefinedSpots.PredefinedSp
 import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.Spot
 
 class WeatherAPIRepository (
-    private val predefinedSpotsList: List<PredefinedSpots>,
+    private val predefinedSpotsDataSource: PredefinedSpotsDataSource,
     private val locationForecastDataSource: LocationForecastDataSource,
     private val metAlertsDataSource: MetAlertsDataSource
 ){
     //Creates: Map<PredefinedSpots, Spot?>
     private suspend fun createPredefinedSpots(): Map<PredefinedSpots, Spot?>{
-        return predefinedSpotsList.associateWith { predefinedSpot ->
+        return predefinedSpotsDataSource.getPredefinedSpots().associateWith { predefinedSpot ->
             createSpot(
                 predefinedSpot,
                 getWeatherResponse(predefinedSpot.coordinates),
