@@ -93,7 +93,15 @@ class MainActivity : ComponentActivity() {
                                 "max" to 247.5
                             )
                         ),
-                        PredefinedSpots(coordinates = "", spotName = "", cityName = "", optimalWindConditions = mapOf()),
+                        PredefinedSpots(
+                            coordinates = "58.0697096704821, 6.685477207426811",
+                            spotName = "Kviljosanden",
+                            cityName = "Lista",
+                            optimalWindConditions = mapOf(
+                                "min" to 112.5,
+                                "max" to 292.5
+                            )
+                        ),
                         PredefinedSpots(coordinates = "", spotName = "", cityName = "", optimalWindConditions = mapOf())
                     )
 
