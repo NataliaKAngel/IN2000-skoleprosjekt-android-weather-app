@@ -61,8 +61,19 @@ class WeatherAPIRepository (
     }
 
     private fun createAllAlertInfos(features: List<Feature>?): List<AlertInfo> {
-
+        return features?.map { createAlertInfo(it) } ?: emptyList()
     }
+
+    private fun createAlertInfo(feature: Feature): AlertInfo {
+        return AlertInfo(
+            riskMatrixColor = feature.properties.riskMatrixColor,
+            description = feature.properties.description,
+            event = feature.properties.event,
+            startTime = feature.whenField.interval.get(0),
+            endTime = feature.whenField.interval.get(1)
+        )
+    }
+
 
     //Creates a Map<PredefinedSpots, Spot?> and returns it. Offers the map of predefined kite spots to ViewModel
     suspend fun getAllSpots(): Map<PredefinedSpots, Spot?>{
