@@ -113,7 +113,7 @@ class WeatherAPIRepository (
 
 
     //Creates a Map<PredefinedSpots, Spot?> and returns it. Offers the map of predefined kite spots to ViewModel
-    suspend fun getAllSpots(): Map<PredefinedSpots, Spot?>{
+    suspend fun getAllSpots(): List<Spot>{
         return createAllSpots()
     }
 
