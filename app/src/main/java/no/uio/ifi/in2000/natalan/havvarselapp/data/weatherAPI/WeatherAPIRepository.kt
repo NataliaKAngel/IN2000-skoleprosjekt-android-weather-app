@@ -17,8 +17,8 @@ class WeatherAPIRepository (
     private val metAlertsDataSource: MetAlertsDataSource
 ){
     //Creates: Map<PredefinedSpots, Spot?>
-    private suspend fun createAllSpots(): Map<PredefinedSpots, Spot?>{
-        return predefinedSpotsDataSource.getPredefinedSpots().associateWith { predefinedSpot ->
+    private suspend fun createAllSpots(): List<Spot>{
+        return predefinedSpotsDataSource.getPredefinedSpots().map { predefinedSpot ->
             createOneSpot(
                 predefinedSpot,
                 getWeatherResponse(predefinedSpot.coordinates),
@@ -52,7 +52,13 @@ class WeatherAPIRepository (
         return Spot(
             predefinedSpot = predefinedSpot,
             alerts = alerts,
-            spotDetails = createAllSpotInfos(alerts, windSpeed, windDirection, windSpeedUnit, windDirectionUnit, predefinedSpot.optimalWindConditions)
+            spotDetails = createAllSpotInfos(
+                alerts,
+                windSpeed,
+                windDirection,
+                windSpeedUnit,
+                windDirectionUnit,
+                predefinedSpot.optimalWindConditions)
         )
     }
 
