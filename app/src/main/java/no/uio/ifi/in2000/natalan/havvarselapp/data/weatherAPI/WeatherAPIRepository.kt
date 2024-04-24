@@ -104,7 +104,9 @@ class WeatherAPIRepository (
     }
 
     private fun transformTime(time: String): String {
-        TODO("Not yet implemented")
+        val (hour, minutes, seconds) = time.split(":")
+
+        return "$hour.$minutes"
     }
 
     private fun transformWindDirection(windDirectionVal: Double?): String {
