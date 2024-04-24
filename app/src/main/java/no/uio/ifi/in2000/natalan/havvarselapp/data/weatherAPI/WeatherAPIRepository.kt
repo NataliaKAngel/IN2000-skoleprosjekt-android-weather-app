@@ -36,19 +36,6 @@ class WeatherAPIRepository (
         val windDirectionUnit = getWindDirectionUnit(weatherResponse)
         val alerts = createAllAlertInfos(features)
 
-        //Gets data from MetAlerts-API
-        var riskMatrixColor = ""
-        var description = ""
-        var triggerLevel = ""
-
-        if (!features.isNullOrEmpty()){
-            val feature = features[0]
-            riskMatrixColor = feature.properties.riskMatrixColor
-            description = feature.properties.description
-            triggerLevel = feature.properties.triggerLevel
-        }
-
-
         //Creates and returns one Spot-object
         return Spot(
             predefinedSpot = predefinedSpot,
