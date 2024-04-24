@@ -120,7 +120,7 @@ fun AddAnnotationsToMap(
                 if (bitmap != null) {
                     // Add the bitmap as a custom icon in the Mapbox style.
                     style.addImage(iconId, bitmap)
-                    val coordinates = spot?.coordinates?.split(",")?.map { it.toDouble() }
+                    val coordinates = spot?.predefinedSpots?.coordinates?.split(",")?.map { it.toDouble() }
                     val point = Point.fromLngLat(coordinates?.get(1) ?: 0.0, coordinates?.get(0) ?: 0.0)
                     val annotationOptions = PointAnnotationOptions()
                         .withPoint(point)
