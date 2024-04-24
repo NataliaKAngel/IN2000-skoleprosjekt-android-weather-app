@@ -7,6 +7,8 @@ import no.uio.ifi.in2000.natalan.havvarselapp.model.locationForecast.WeatherResp
 import no.uio.ifi.in2000.natalan.havvarselapp.model.metAlerts.Feature
 import no.uio.ifi.in2000.natalan.havvarselapp.model.metAlerts.MetAlertDataClass
 import no.uio.ifi.in2000.natalan.havvarselapp.model.predefinedSpots.PredefinedSpots
+import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.AlertInfo
+import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.KiteSpotInfo
 import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.Spot
 
 class WeatherAPIRepository (
@@ -31,6 +33,7 @@ class WeatherAPIRepository (
         val windDirection = getWindDirectionMap(weatherResponse)
         val windSpeedUnit = getWindSpeedUnit(weatherResponse)
         val windDirectionUnit = getWindDirectionUnit(weatherResponse)
+        val alerts = createAllAlertInfos(features)
 
         //Gets data from MetAlerts-API
         var riskMatrixColor = ""
@@ -47,20 +50,18 @@ class WeatherAPIRepository (
 
         //Creates and returns one Spot-object
         return Spot(
-            coordinates = predefinedSpot.coordinates, //The coordinates of the spot
-            spotName = predefinedSpot.spotName, //The name of the spot
-            cityName = predefinedSpot.cityName, //The city the spot lies in
-            optimalWindConditions = predefinedSpot.optimalWindConditions, //Min and max value for wind direction
-            photo = "",  //Photo of the spot as URL
-            windSpeed = windSpeed, //Map<String, Double>
-            windSpeedUnit = windSpeedUnit, //String
-            windDirection = windDirection, //Map<String, Double>
-            windDirectionUnit = windDirectionUnit, //String
-            riskMatrixColor = riskMatrixColor,  //String
-            description = description,  //String
-            triggerLevel = triggerLevel, //String
-            recommendationColor = "" //Recommended color for kiting
+            predefinedSpots = predefinedSpot,
+            alerts = alerts,
+            spotDetails = createAllSpotInfos(alerts, windSpeed, windDirection, windSpeedUnit, windDirectionUnit, predefinedSpot.optimalWindConditions)
         )
+    }
+
+    private fun createAllSpotInfos(alerts: List<AlertInfo>, windSpeed: Map<String, Double>, windDirection: Map<String, Double>, windSpeedUnit: String?, windDirectionUnit: String?, optimalWindConditions: Map<String, Double>): List<KiteSpotInfo> {
+
+    }
+
+    private fun createAllAlertInfos(features: List<Feature>?): List<AlertInfo> {
+
     }
 
     //Creates a Map<PredefinedSpots, Spot?> and returns it. Offers the map of predefined kite spots to ViewModel
