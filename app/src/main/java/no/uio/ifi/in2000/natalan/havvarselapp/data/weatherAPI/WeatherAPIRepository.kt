@@ -76,7 +76,7 @@ class WeatherAPIRepository (
                 windSpeedUnit = windSpeedUnit,
                 windDirectionValue = windDirectionValue,
                 windDirectionUnit = windDirectionUnit,
-                windDirectionString = transformWindDirection(windDirectionValue),
+                windDirectionString = windDirectionValue?.let { transformWindDirection(it) },
                 kiteRecommendationColor = calculateKiteRecommendation(alerts, windSpeedValue, windDirectionValue, optimalWindConditions, timeStamp)
             )
         }
@@ -109,11 +109,21 @@ class WeatherAPIRepository (
         return "$hour.$minutes"
     }
 
-    private fun transformWindDirection(windDirectionVal: Double?): String {
-        TODO("Not yet implemented")
+    private fun transformWindDirection(windDirectionValue: Double): String {
+        return when (windDirectionValue) {
+            in 337.5..360.0, in 0.0..22.5 -> "nord"
+            in 22.5..67.5 -> "nordøst"
+            in 67.5..112.5 -> "øst"
+            in 112.5..157.5 -> "sørøst"
+            in 157.5..202.5 -> "sør"
+            in 202.5..247.5 -> "sørvest"
+            in 247.5..292.5 -> "vest"
+            in 292.5..337.5 -> "nordvest"
+            else -> "Ugyldige grader"
+        }
     }
 
-    private fun calculateKiteRecommendation(alerts: List<AlertInfo>, windSpeedVal: Double?, windDirectionVal: Double?, optimalWindConditions: Map<String, Double>, timeStamp: String): String {
+    private fun calculateKiteRecommendation(alerts: List<AlertInfo>, windSpeedValue: Double?, windDirectionValue: Double?, optimalWindConditions: Map<String, Double>, timeStamp: String): String {
         TODO("Not yet implemented")
     }
 
