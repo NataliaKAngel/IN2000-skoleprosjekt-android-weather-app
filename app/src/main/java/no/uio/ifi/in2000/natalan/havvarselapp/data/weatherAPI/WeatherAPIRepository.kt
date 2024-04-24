@@ -57,7 +57,38 @@ class WeatherAPIRepository (
     }
 
     private fun createAllSpotInfos(alerts: List<AlertInfo>, windSpeed: Map<String, Double>, windDirection: Map<String, Double>, windSpeedUnit: String?, windDirectionUnit: String?, optimalWindConditions: Map<String, Double>): List<KiteSpotInfo> {
+        return windSpeed.keys.map { timeStamp ->
+            val (date, time) = timeStamp.split("T")
+            val windSpeedVal = windSpeed[timeStamp].toString()
+            val windDirectionVal = windDirection[timeStamp]
+            KiteSpotInfo(
+                date = transformDate(date),
+                time = transformTime(time),
+                windSpeed = windSpeedVal,
+                windSpeedUnit = windSpeedUnit,
+                windDirectionDegree = windDirectionVal,
+                windDirectionUnit = windDirectionUnit,
+                windDirectionString = transformWindDirection(windDirectionVal),
+                kiteRecommendationColor = calculateKiteRecommendation(alerts, windSpeedVal, windDirectionVal, optimalWindConditions, timeStamp)
+            )
+        }
 
+    }
+
+    private fun calculateKiteRecommendation(alerts: List<AlertInfo>, windSpeedVal: String, windDirectionVal: Double?, optimalWindConditions: Map<String, Double>, timeStamp: String): String {
+
+    }
+
+    private fun transformWindDirection(windDirectionVal: Double?): String {
+        TODO("Not yet implemented")
+    }
+
+    private fun transformTime(time: String): String {
+
+    }
+
+    private fun transformDate(date: String): String {
+        TODO("Not yet implemented")
     }
 
     private fun createAllAlertInfos(features: List<Feature>?): List<AlertInfo> {
