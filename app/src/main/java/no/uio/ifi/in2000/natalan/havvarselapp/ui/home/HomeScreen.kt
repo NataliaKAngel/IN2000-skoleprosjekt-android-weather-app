@@ -30,7 +30,6 @@ import com.mapbox.maps.plugin.annotation.annotations
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
 import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
 import no.uio.ifi.in2000.natalan.havvarselapp.R
-import no.uio.ifi.in2000.natalan.havvarselapp.model.predefinedSpots.PredefinedSpots
 import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.Spot
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.components.*
 

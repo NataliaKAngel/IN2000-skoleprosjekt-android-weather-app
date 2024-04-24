@@ -1,4 +1,4 @@
-package no.uio.ifi.in2000.natalan.havvarselapp.model.predefinedSpots
+package no.uio.ifi.in2000.natalan.havvarselapp.model.spot
 
 data class PredefinedSpots(
     val coordinates: String, //The coordinate of the spot

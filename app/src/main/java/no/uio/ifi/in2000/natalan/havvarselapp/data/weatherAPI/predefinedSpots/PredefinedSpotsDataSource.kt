@@ -1,6 +1,6 @@
 package no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.predefinedSpots
 
-import no.uio.ifi.in2000.natalan.havvarselapp.model.predefinedSpots.PredefinedSpots
+import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.PredefinedSpots
 
 class PredefinedSpotsDataSource {
     private val predefinedSpots: List<PredefinedSpots> = listOf(
