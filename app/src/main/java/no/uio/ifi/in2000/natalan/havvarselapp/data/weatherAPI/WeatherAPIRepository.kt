@@ -16,6 +16,7 @@ class WeatherAPIRepository (
     private val locationForecastDataSource: LocationForecastDataSource,
     private val metAlertsDataSource: MetAlertsDataSource
 ){
+    //METHODS TO CREATE OBJECTS OR TRANSFORM DATA: Helping methods
     //Creates: Map<PredefinedSpots, Spot?>
     private suspend fun createAllSpots(): List<Spot>{
         return predefinedSpotsDataSource.getPredefinedSpots().map { predefinedSpot ->
@@ -62,6 +63,20 @@ class WeatherAPIRepository (
         )
     }
 
+    private fun createAllAlertInfos(features: List<Feature>?): List<AlertInfo> {
+        return features?.map { createAlertInfo(it) } ?: emptyList()
+    }
+
+    private fun createAlertInfo(feature: Feature): AlertInfo {
+        return AlertInfo(
+            riskMatrixColor = feature.properties.riskMatrixColor,
+            description = feature.properties.description,
+            event = feature.properties.event,
+            startTime = feature.whenField.interval.get(0),
+            endTime = feature.whenField.interval.get(1)
+        )
+    }
+
     private fun createAllSpotInfos(alerts: List<AlertInfo>, windSpeed: Map<String, Double>, windDirection: Map<String, Double>, windSpeedUnit: String?, windDirectionUnit: String?, optimalWindConditions: Map<String, Double>): List<SpotInfo> {
         return windSpeed.keys.map { timeStamp ->
             val (date, time) = timeStamp.split("T")
@@ -78,7 +93,6 @@ class WeatherAPIRepository (
                 kiteRecommendationColor = calculateKiteRecommendation(alerts, windSpeedVal, windDirectionVal, optimalWindConditions, timeStamp)
             )
         }
-
     }
 
     private fun calculateKiteRecommendation(alerts: List<AlertInfo>, windSpeedVal: String, windDirectionVal: Double?, optimalWindConditions: Map<String, Double>, timeStamp: String): String {
@@ -97,22 +111,8 @@ class WeatherAPIRepository (
         TODO("Not yet implemented")
     }
 
-    private fun createAllAlertInfos(features: List<Feature>?): List<AlertInfo> {
-        return features?.map { createAlertInfo(it) } ?: emptyList()
-    }
-
-    private fun createAlertInfo(feature: Feature): AlertInfo {
-        return AlertInfo(
-            riskMatrixColor = feature.properties.riskMatrixColor,
-            description = feature.properties.description,
-            event = feature.properties.event,
-            startTime = feature.whenField.interval.get(0),
-            endTime = feature.whenField.interval.get(1)
-        )
-    }
-
-
-    //Creates a Map<PredefinedSpots, Spot?> and returns it. Offers the map of predefined kite spots to ViewModel
+    //OFFERS SPOT-OBJECTS TO: ViewModel
+    //Creates a list of Spot-objects and returns it.
     suspend fun getAllSpots(): List<Spot>{
         return createAllSpots()
     }
@@ -120,13 +120,14 @@ class WeatherAPIRepository (
     //Returns one Spot-object based on coordinates to ViewModel
     suspend fun getOneSpot(coordinates: String): Spot? {
         //Getting predefinedSpot, WeatherResponse and Feature to create Spot-object
-        val predefinedSpot = predefinedSpotsDataSource.getPredefinedSpots().find { it.coordinates == coordinates }
+        val predefinedSpot = getPredefinedSpots().find { it.coordinates == coordinates }
         val weatherResponse = getWeatherResponse(coordinates)
         val feature = getMetAlerts(coordinates)?.features
 
         return predefinedSpot?.let { createOneSpot(it, weatherResponse, feature) }
     }
 
+    //GETS AND TRANSFORM DATA FROM: LocationForecast
     //Gets one WeatherResponse object from locationForecastDataSource
     private suspend fun getWeatherResponse(coordinates: String): WeatherResponse? {
         return locationForecastDataSource.getWeatherResponse(coordinates)
@@ -155,8 +156,15 @@ class WeatherAPIRepository (
         return units?.get("wind_from_direction")
     }
 
+    //GETS AND TRANSFORM DATA FROM: MetAlerts
+    //Gets one MetAlertDataClass object from metAlertsDataSource
     private suspend fun getMetAlerts(coordinates: String) : MetAlertDataClass?{
         return metAlertsDataSource.getMetAlert(coordinates)
+    }
+
+    //GETS DATA FROM: PredefinedSpots
+    private fun getPredefinedSpots(): List<PredefinedSpots> {
+        return predefinedSpotsDataSource.getPredefinedSpots()
     }
 }
 
