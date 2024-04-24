@@ -19,7 +19,7 @@ class WeatherAPIRepository (
     //METHODS TO CREATE OBJECTS OR TRANSFORM DATA: Helping methods
     //Creates: Map<PredefinedSpots, Spot?>
     private suspend fun createAllSpots(): List<Spot>{
-        return predefinedSpotsDataSource.getPredefinedSpots().map { predefinedSpot ->
+        return getPredefinedSpots().map { predefinedSpot ->
             createOneSpot(
                 predefinedSpot,
                 getWeatherResponse(predefinedSpot.coordinates),
