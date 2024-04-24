@@ -50,7 +50,7 @@ class WeatherAPIRepository (
 
         //Creates and returns one Spot-object
         return Spot(
-            predefinedSpots = predefinedSpot,
+            predefinedSpot = predefinedSpot,
             alerts = alerts,
             spotDetails = createAllSpotInfos(alerts, windSpeed, windDirection, windSpeedUnit, windDirectionUnit, predefinedSpot.optimalWindConditions)
         )
