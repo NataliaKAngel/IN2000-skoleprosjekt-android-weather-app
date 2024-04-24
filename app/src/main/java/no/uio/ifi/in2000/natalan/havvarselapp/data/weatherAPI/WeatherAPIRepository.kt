@@ -72,42 +72,42 @@ class WeatherAPIRepository (
             riskMatrixColor = feature.properties.riskMatrixColor,
             description = feature.properties.description,
             event = feature.properties.event,
-            startTime = feature.whenField.interval.get(0),
-            endTime = feature.whenField.interval.get(1)
+            startTime = feature.whenField.interval[0],
+            endTime = feature.whenField.interval[1]
         )
     }
 
     private fun createAllSpotInfos(alerts: List<AlertInfo>, windSpeed: Map<String, Double>, windDirection: Map<String, Double>, windSpeedUnit: String?, windDirectionUnit: String?, optimalWindConditions: Map<String, Double>): List<SpotInfo> {
         return windSpeed.keys.map { timeStamp ->
             val (date, time) = timeStamp.split("T")
-            val windSpeedVal = windSpeed[timeStamp].toString()
-            val windDirectionVal = windDirection[timeStamp]
+            val windSpeedValue = windSpeed[timeStamp]
+            val windDirectionValue = windDirection[timeStamp]
             SpotInfo(
                 date = transformDate(date),
                 time = transformTime(time),
-                windSpeed = windSpeedVal,
+                windSpeedValue = windSpeedValue,
                 windSpeedUnit = windSpeedUnit,
-                windDirectionDegree = windDirectionVal,
+                windDirectionValue = windDirectionValue,
                 windDirectionUnit = windDirectionUnit,
-                windDirectionString = transformWindDirection(windDirectionVal),
-                kiteRecommendationColor = calculateKiteRecommendation(alerts, windSpeedVal, windDirectionVal, optimalWindConditions, timeStamp)
+                windDirectionString = transformWindDirection(windDirectionValue),
+                kiteRecommendationColor = calculateKiteRecommendation(alerts, windSpeedValue, windDirectionValue, optimalWindConditions, timeStamp)
             )
         }
     }
 
-    private fun calculateKiteRecommendation(alerts: List<AlertInfo>, windSpeedVal: String, windDirectionVal: Double?, optimalWindConditions: Map<String, Double>, timeStamp: String): String {
+    private fun transformDate(date: String): String {
+        TODO("Not yet implemented")
+    }
 
+    private fun transformTime(time: String): String {
+        TODO("Not yet implemented")
     }
 
     private fun transformWindDirection(windDirectionVal: Double?): String {
         TODO("Not yet implemented")
     }
 
-    private fun transformTime(time: String): String {
-
-    }
-
-    private fun transformDate(date: String): String {
+    private fun calculateKiteRecommendation(alerts: List<AlertInfo>, windSpeedVal: Double?, windDirectionVal: Double?, optimalWindConditions: Map<String, Double>, timeStamp: String): String {
         TODO("Not yet implemented")
     }
 
