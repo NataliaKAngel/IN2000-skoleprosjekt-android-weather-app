@@ -8,7 +8,7 @@ import no.uio.ifi.in2000.natalan.havvarselapp.model.metAlerts.Feature
 import no.uio.ifi.in2000.natalan.havvarselapp.model.metAlerts.MetAlertDataClass
 import no.uio.ifi.in2000.natalan.havvarselapp.model.predefinedSpots.PredefinedSpots
 import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.AlertInfo
-import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.KiteSpotInfo
+import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.SpotInfo
 import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.Spot
 
 class WeatherAPIRepository (
@@ -56,12 +56,12 @@ class WeatherAPIRepository (
         )
     }
 
-    private fun createAllSpotInfos(alerts: List<AlertInfo>, windSpeed: Map<String, Double>, windDirection: Map<String, Double>, windSpeedUnit: String?, windDirectionUnit: String?, optimalWindConditions: Map<String, Double>): List<KiteSpotInfo> {
+    private fun createAllSpotInfos(alerts: List<AlertInfo>, windSpeed: Map<String, Double>, windDirection: Map<String, Double>, windSpeedUnit: String?, windDirectionUnit: String?, optimalWindConditions: Map<String, Double>): List<SpotInfo> {
         return windSpeed.keys.map { timeStamp ->
             val (date, time) = timeStamp.split("T")
             val windSpeedVal = windSpeed[timeStamp].toString()
             val windDirectionVal = windDirection[timeStamp]
-            KiteSpotInfo(
+            SpotInfo(
                 date = transformDate(date),
                 time = transformTime(time),
                 windSpeed = windSpeedVal,
