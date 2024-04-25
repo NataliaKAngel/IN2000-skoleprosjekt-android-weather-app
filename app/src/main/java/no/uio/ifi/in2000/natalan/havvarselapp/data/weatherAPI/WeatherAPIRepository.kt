@@ -125,24 +125,31 @@ class WeatherAPIRepository (
         }
     }
 
-    private fun calculateKiteRecommendation(alerts: List<AlertInfo>, windSpeedValue: Double?, windDirectionValue: Double?, optimalWindConditions: Map<String, Double>, timeStamp: String): String {
-        //Returns red is the event-type in any of the AlertInfo-objects is rainFlood or lightning
+    private fun calculateKiteRecommendation(alerts: List<AlertInfo>, windSpeedValue: Double?, windDirectionValue: Double?, optimalWindConditions: Map<String, Double>, timeStamp: String): String? {
+        //If the event-type in any of the AlertInfo-objects is rainFlood or lightning and the alert is current: No kite conditions (red)
         val isRedAlert = alerts.any { it.event == "rainFlood" || it.event == "lightning" }
+        val alertIsCurrent = alerts.any { checkAlertValidity(it, timeStamp) }
 
-        if (isRedAlert) {
+        if (isRedAlert && alertIsCurrent) {
             return "red"
         }
 
-        //Continues the calculation:
-        val alertIsCurrent = alerts.any { checkAlertValidity(it, timeStamp) } //Boolean
+        //Calculating if the wind direction conditions and the wind speed conditions is good for kiting
         val windDirectionCalculation = calculateWindDirection(windDirectionValue, optimalWindConditions) //String: "high", "low", "correct" or "unknown"
         val windSpeedCalculation = windSpeedValue?.let { calculateWindSpeed(it) } //String: "grey", "blue", "green", "yellow", "orange", "red" or "unknown"
 
+        //If the wind direction is wrong or the wind speed is to slow: No kite conditions (grey)
+        val wrongWindDirection = (windDirectionCalculation == "low" || windDirectionCalculation == "high")
+        if (wrongWindDirection || windSpeedCalculation == "grey"){
+            return "grey"
+        }
 
-            //Returnere en farge basert på om faktorene er innenfor eller utenfor
+        //If the wind conditions is correct: Kiting conditions (blue, green, yellow or red)
+        if (windDirectionCalculation == "correct"){
+            return windSpeedCalculation
+        }
 
-        return ""
-
+        return "unknown"
     }
 
     //Checks the alert validity based on timestamp and start and end time for the alert
