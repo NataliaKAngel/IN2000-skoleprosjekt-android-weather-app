@@ -24,11 +24,8 @@ fun TestScreen(
     //Collecting the state flow from spotScreenViewModel
     val spotsUIState by testScreenViewModel.spotsUIState.collectAsState()
 
-    //Getting the map from the UI-state (Map<PredefinedSpots, Spot?>)
-    val spotMap = spotsUIState.spots
-
     //Getting the spots objects from the map (List<Spot?>)
-    val spots = spotMap.values.toList()
+    val spots = spotsUIState.spots
 
     //Test: Display info in the Spot-objects
     LazyColumn (
@@ -51,30 +48,36 @@ fun SpotCard(
     Card{
         Column {
             //Coordinates
-            Text("Koordinater: ${spot?.coordinates}")
+            Text("Koordinater: ${spot?.predefinedSpot?.coordinates}")
             Spacer(modifier = Modifier.height(5.dp))
             //SpotName
-            Text("Spotnavn: ${spot?.spotName}")
+            Text("Spotnavn: ${spot?.predefinedSpot?.spotName}")
             Spacer(modifier = Modifier.height(5.dp))
             //CityName
-            Text("By: ${spot?.cityName}")
+            Text("By: ${spot?.predefinedSpot?.cityName}")
             Spacer(modifier = Modifier.height(5.dp))
-            //RiskMatrixColor - MetAlerts
-            Text("Farevarselfarge: ${spot?.riskMatrixColor}")
-            Spacer(modifier = Modifier.height(5.dp))
-            //Description - MetAlerts
-            Text("Beskrivelse: ${spot?.description}")
-            Spacer(modifier = Modifier.height(5.dp))
-            //TriggerLevel - MetAlerts
-            Text("TriggerLevel: ${spot?.triggerLevel}")
-            Spacer(modifier = Modifier.height(5.dp))
+            if(spot?.alerts?.isNotEmpty() == true){
+                //RiskMatrixColor - MetAlerts
+                Text("Farevarselfarge: ${spot.alerts[0]?.riskMatrixColor}")
+                Spacer(modifier = Modifier.height(5.dp))
+                //Event
+                Text("Event: ${spot.alerts[0]?.event}")
+                Spacer(modifier = Modifier.height(5.dp))
+                //Description - MetAlerts
+                Text("Beskrivelse: ${spot.alerts[0]?.description}")
+                Spacer(modifier = Modifier.height(5.dp))
+            }
+
             //WindSpeed - LocationForecast
-            Text("Vindstyrke: ${spot?.windSpeed?.values?.toList()?.get(0)}, ${spot?.windSpeedUnit}")
+            Text("Vindstyrke: ${spot?.spotDetails?.get(0)?.windSpeedValue}, ${spot?.spotDetails?.get(0)?.windSpeedUnit}")
             Spacer(modifier = Modifier.height(5.dp))
             //WindDirection - LocationForecast
-            Text("Vindretning: ${spot?.windDirection?.values?.toList()?.get(0)}, ${spot?.windDirectionUnit}")
+            Text("Vindretning: ${spot?.spotDetails?.get(0)?.windDirectionString}, ${spot?.spotDetails?.get(0)?.windDirectionUnit}")
             Spacer(modifier = Modifier.height(5.dp))
-            Text("Beregning: ${spot?.recommendationColor}")
+            Text("Beregning: ${spot?.spotDetails?.get(0)?.kiteRecommendationColor}")
+            Spacer(modifier = Modifier.height(5.dp))
+            Text("Dato: ${spot?.spotDetails?.get(0)?.date}")
+
         }
     }
 }

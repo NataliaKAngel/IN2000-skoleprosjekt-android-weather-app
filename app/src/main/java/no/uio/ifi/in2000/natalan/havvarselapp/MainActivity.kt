@@ -15,7 +15,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import no.uio.ifi.in2000.natalan.havvarselapp.model.predefinedSpots.PredefinedSpots
 import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.WeatherAPIRepository
 import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.locationForecast.LocationForecastDataSource
 import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.metAlerts.MetAlertsDataSource
@@ -55,7 +54,7 @@ class MainActivity : ComponentActivity() {
 
                     // Creates navController and NavHost
                     val navController = rememberNavController()
-                    NavHost(navController = navController, startDestination = "HomeScreen") {
+                    NavHost(navController = navController, startDestination = "TestScreen") {
                         // Navigating routes
                         composable("TestScreen") { TestScreen(testScreenViewModel = testScreenViewModel)}
                         composable("HomeScreen") { HomeScreen(navController = navController, homeScreenViewModel = homeScreenViewModel)}
