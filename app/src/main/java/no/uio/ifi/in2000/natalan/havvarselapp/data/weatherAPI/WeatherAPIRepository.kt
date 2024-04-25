@@ -20,7 +20,7 @@ class WeatherAPIRepository (
     private val metAlertsDataSource: MetAlertsDataSource
 ){
     //METHODS TO CREATE OBJECTS OR TRANSFORM DATA: Helping methods
-    //Creates: Map<PredefinedSpots, Spot?>
+    //Creates: List<Spot>
     private suspend fun createAllSpots(): List<Spot>{
         return getPredefinedSpots().map { predefinedSpot ->
             createOneSpot(
@@ -58,13 +58,13 @@ class WeatherAPIRepository (
     }
 
     private fun createAlertInfo(feature: Feature?): AlertInfo? {
-        if (feature?.whenField?.interval != null){
+        if (feature != null){
             return AlertInfo(
                 riskMatrixColor = feature.properties.riskMatrixColor,
                 description = feature.properties.description,
                 event = feature.properties.event,
-                startTime = feature.whenField.interval[0],
-                endTime = feature.whenField.interval[1]
+                startTime = "",
+                endTime = feature.properties.eventEndingTime
             )
         }
         return null
@@ -158,16 +158,16 @@ class WeatherAPIRepository (
 
     //Checks the alert validity based on timestamp and start and end time for the alert
     private fun checkAlertValidity(alert: AlertInfo?, timeStamp: String): Boolean {
-        if (alert?.startTime == null){
+        if (alert?.endTime == null){
             return false
         }
         val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX", Locale.getDefault())
-        val startTime = alert.startTime.let { format.parse(it) }
+        //val startTime = alert.startTime.let { format.parse(it) }
         val endTime = alert.endTime.let { format.parse(it) }
         val timeToCheck = format.parse(timeStamp)
 
         if (timeToCheck != null) {
-            return timeToCheck.after(startTime) && timeToCheck.before(endTime)
+            return timeToCheck.before(endTime)
         }
         return false
     }

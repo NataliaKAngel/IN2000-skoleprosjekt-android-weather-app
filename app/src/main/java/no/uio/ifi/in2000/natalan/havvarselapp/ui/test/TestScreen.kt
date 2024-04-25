@@ -69,6 +69,9 @@ fun SpotCard(
             Text("Vindretning: ${spot?.spotDetails?.get(0)?.windDirectionString}, ${spot?.spotDetails?.get(0)?.windDirectionUnit}")
             Spacer(modifier = Modifier.height(5.dp))
             Text("Beregning: ${spot?.spotDetails?.get(0)?.kiteRecommendationColor}")
+            Spacer(modifier = Modifier.height(5.dp))
+            Text("Endtime: ${spot?.alerts?.get(0)?.endTime}")
+
         }
     }
 }
