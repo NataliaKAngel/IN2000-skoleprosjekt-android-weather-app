@@ -125,6 +125,18 @@ class WeatherAPIRepository (
 
     private fun calculateKiteRecommendation(alerts: List<AlertInfo>, windSpeedValue: Double?, windDirectionValue: Double?, optimalWindConditions: Map<String, Double>, timeStamp: String): String {
         TODO("Not yet implemented")
+        //Gå gjennom AlertInfo-objektene i alerts:
+            //Dersom det er farevarsel på lyn og styrtregn - rød farge returneres
+
+        //For alle andre skal følgende sjekkes videre:
+            //Sjekke om farevarsel gjelder basert på timestamp - boolean
+
+            //Sjekke om vindretning er innenfor min og max-verdi for spoten - String (low/correct/high)
+
+            //Sjekke om den målte vindstyrken er innafor grensene - String
+
+            //Returnere en farge basert på om faktorene er innenfor eller utenfor
+
     }
 
     //OFFERS SPOT-OBJECTS TO: ViewModel
