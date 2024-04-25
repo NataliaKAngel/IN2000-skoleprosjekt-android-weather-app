@@ -1,6 +1,5 @@
 package no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI
 
-import android.util.Log
 import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.locationForecast.LocationForecastDataSource
 import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.metAlerts.MetAlertsDataSource
 import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.predefinedSpots.PredefinedSpotsDataSource
@@ -57,17 +56,14 @@ class WeatherAPIRepository (
         return features?.map { createAlertInfo(it) } ?: emptyList()
     }
 
-    private fun createAlertInfo(feature: Feature?): AlertInfo? {
-        if (feature != null){
-            return AlertInfo(
-                riskMatrixColor = feature.properties.riskMatrixColor,
-                description = feature.properties.description,
-                event = feature.properties.event,
-                startTime = "",
-                endTime = feature.properties.eventEndingTime
-            )
-        }
-        return null
+    private fun createAlertInfo(feature: Feature?): AlertInfo {
+        return AlertInfo(
+            riskMatrixColor = feature?.properties?.riskMatrixColor,
+            description = feature?.properties?.description,
+            event = feature?.properties?.event,
+            startTime = "",
+            endTime = feature?.properties?.eventEndingTime
+        )
     }
 
     private fun createAllSpotInfos(alerts: List<AlertInfo?>, windSpeed: Map<String, Double>, windDirection: Map<String, Double>, windSpeedUnit: String?, windDirectionUnit: String?, optimalWindConditions: Map<String, Double>): List<SpotInfo> {

@@ -56,12 +56,18 @@ fun SpotCard(
             //CityName
             Text("By: ${spot?.predefinedSpot?.cityName}")
             Spacer(modifier = Modifier.height(5.dp))
-            //RiskMatrixColor - MetAlerts
-            Text("Farevarselfarge: ${spot?.alerts?.get(0)?.riskMatrixColor}")
-            Spacer(modifier = Modifier.height(5.dp))
-            //Description - MetAlerts
-            Text("Beskrivelse: ${spot?.alerts?.get(0)?.description}")
-            Spacer(modifier = Modifier.height(5.dp))
+            if(spot?.alerts?.isNotEmpty() == true){
+                //RiskMatrixColor - MetAlerts
+                Text("Farevarselfarge: ${spot.alerts[0]?.riskMatrixColor}")
+                Spacer(modifier = Modifier.height(5.dp))
+                //Event
+                Text("Event: ${spot.alerts[0]?.event}")
+                Spacer(modifier = Modifier.height(5.dp))
+                //Description - MetAlerts
+                Text("Beskrivelse: ${spot.alerts[0]?.description}")
+                Spacer(modifier = Modifier.height(5.dp))
+            }
+
             //WindSpeed - LocationForecast
             Text("Vindstyrke: ${spot?.spotDetails?.get(0)?.windSpeedValue}, ${spot?.spotDetails?.get(0)?.windSpeedUnit}")
             Spacer(modifier = Modifier.height(5.dp))
@@ -70,7 +76,7 @@ fun SpotCard(
             Spacer(modifier = Modifier.height(5.dp))
             Text("Beregning: ${spot?.spotDetails?.get(0)?.kiteRecommendationColor}")
             Spacer(modifier = Modifier.height(5.dp))
-            Text("Endtime: ${spot?.alerts?.get(0)?.endTime}")
+            Text("Dato: ${spot?.spotDetails?.get(0)?.date}")
 
         }
     }
