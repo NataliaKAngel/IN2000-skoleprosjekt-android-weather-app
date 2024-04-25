@@ -23,7 +23,7 @@ class WeatherAPIRepository (
     //Creates: Map<PredefinedSpots, Spot?>
     private suspend fun createAllSpots(): Map<PredefinedSpots, Spot>{
         val predefinedSpots = getPredefinedSpots()
-        Log.i("Debug", "IIIIIIIIIIIIIIIIIIIIIIIIII $predefinedSpots")
+        Log.i("Debug", "YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY $predefinedSpots")
 
         return predefinedSpots.associateWith { predefinedSpot ->
             createOneSpot(
@@ -61,7 +61,7 @@ class WeatherAPIRepository (
     }
 
     private fun createAlertInfo(feature: Feature?): AlertInfo? {
-        if (feature != null) {
+        if (feature?.whenField?.interval != null){
             return AlertInfo(
                 riskMatrixColor = feature.properties.riskMatrixColor,
                 description = feature.properties.description,
