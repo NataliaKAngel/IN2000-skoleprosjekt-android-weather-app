@@ -1,6 +1,8 @@
 package no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.locationForecast
 
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.engine.cio.CIO
@@ -39,6 +41,7 @@ class LocationForecastDataSource {
 
     //Gets one WeatherResponse-object from LocationForecast (API)
     suspend fun getWeatherResponse(coordinates: String): WeatherResponse? {
+
         //Creating correct URL based on the coordinates
         val details = coordinates.split(",")
         val latitude = details[0]
@@ -56,9 +59,9 @@ class LocationForecastDataSource {
         } catch (e: Exception) {
             // Logging: Failed to connect to the API
             Log.e("LocationForecastDataSource", "Error during HTTP request for locationforecast", e)
-
             // Returns null
             null
         }
     }
+
 }

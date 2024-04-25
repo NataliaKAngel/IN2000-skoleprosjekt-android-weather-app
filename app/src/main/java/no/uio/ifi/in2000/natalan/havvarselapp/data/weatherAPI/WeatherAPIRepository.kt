@@ -1,5 +1,7 @@
 package no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.locationForecast.LocationForecastDataSource
 import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.metAlerts.MetAlertsDataSource
 import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.predefinedSpots.PredefinedSpotsDataSource
