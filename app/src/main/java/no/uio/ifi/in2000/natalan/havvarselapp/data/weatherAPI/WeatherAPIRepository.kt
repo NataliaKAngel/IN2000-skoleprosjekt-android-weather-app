@@ -134,16 +134,10 @@ class WeatherAPIRepository (
         }
 
         //Continues the calculation:
-        val alertIsCurrent = alerts.any { checkAlertValidity(it, timeStamp) }
-        val windDirectionCalculation = calculateWindDirection(windDirectionValue, optimalWindConditions)
+        val alertIsCurrent = alerts.any { checkAlertValidity(it, timeStamp) } //Boolean
+        val windDirectionCalculation = calculateWindDirection(windDirectionValue, optimalWindConditions) //String: "high", "low", "correct" or "unknown"
+        val windSpeedCalculation = windSpeedValue?.let { calculateWindSpeed(it) } //String: "grey", "blue", "green", "yellow", "orange", "red" or "unknown"
 
-
-        //For alle andre skal følgende sjekkes videre:
-            //Sjekke om farevarsel gjelder basert på timestamp - boolean
-
-            //Sjekke om vindretning er innenfor min og max-verdi for spoten - String (low/correct/high)
-
-            //Sjekke om den målte vindstyrken er innafor grensene - String
 
             //Returnere en farge basert på om faktorene er innenfor eller utenfor
 
@@ -175,7 +169,19 @@ class WeatherAPIRepository (
                 else -> "correct"
             }
         }
-        return ""
+        return "unknown"
+    }
+
+    private fun calculateWindSpeed(windSpeedValue: Double): String {
+        return when {
+            windSpeedValue >= 0.0 && windSpeedValue < 5.0 -> "grey"
+            windSpeedValue >= 5.0 && windSpeedValue < 7.0 -> "blue"
+            windSpeedValue >= 7.0 && windSpeedValue < 11.0 -> "green"
+            windSpeedValue >= 11.0 && windSpeedValue < 15.0 -> "yellow"
+            windSpeedValue >= 15.0 && windSpeedValue < 19.0 -> "orange"
+            windSpeedValue >= 19.0 -> "red"
+            else -> "unknown"
+        }
     }
 
     //OFFERS SPOT-OBJECTS TO: ViewModel
