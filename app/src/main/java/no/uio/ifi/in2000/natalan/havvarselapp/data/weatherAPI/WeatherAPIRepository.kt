@@ -56,21 +56,24 @@ class WeatherAPIRepository (
         )
     }
 
-    private fun createAllAlertInfos(features: List<Feature>?): List<AlertInfo> {
+    private fun createAllAlertInfos(features: List<Feature>?): List<AlertInfo?> {
         return features?.map { createAlertInfo(it) } ?: emptyList()
     }
 
-    private fun createAlertInfo(feature: Feature): AlertInfo {
-        return AlertInfo(
-            riskMatrixColor = feature.properties.riskMatrixColor,
-            description = feature.properties.description,
-            event = feature.properties.event,
-            startTime = feature.whenField.interval[0],
-            endTime = feature.whenField.interval[1]
-        )
+    private fun createAlertInfo(feature: Feature?): AlertInfo? {
+        if (feature != null) {
+            return AlertInfo(
+                riskMatrixColor = feature.properties.riskMatrixColor,
+                description = feature.properties.description,
+                event = feature.properties.event,
+                startTime = feature.whenField.interval[0],
+                endTime = feature.whenField.interval[1]
+            )
+        }
+        return null
     }
 
-    private fun createAllSpotInfos(alerts: List<AlertInfo>, windSpeed: Map<String, Double>, windDirection: Map<String, Double>, windSpeedUnit: String?, windDirectionUnit: String?, optimalWindConditions: Map<String, Double>): List<SpotInfo> {
+    private fun createAllSpotInfos(alerts: List<AlertInfo?>, windSpeed: Map<String, Double>, windDirection: Map<String, Double>, windSpeedUnit: String?, windDirectionUnit: String?, optimalWindConditions: Map<String, Double>): List<SpotInfo> {
         return windSpeed.keys.map { timeStamp ->
             val (date, time) = timeStamp.split("T")
             val windSpeedValue = windSpeed[timeStamp]
@@ -129,9 +132,9 @@ class WeatherAPIRepository (
         }
     }
 
-    private fun calculateKiteRecommendation(alerts: List<AlertInfo>, windSpeedValue: Double?, windDirectionValue: Double?, optimalWindConditions: Map<String, Double>, timeStamp: String): String? {
+    private fun calculateKiteRecommendation(alerts: List<AlertInfo?>, windSpeedValue: Double?, windDirectionValue: Double?, optimalWindConditions: Map<String, Double>, timeStamp: String): String? {
         //If the event-type in any of the AlertInfo-objects is rainFlood or lightning and the alert is current: No kite conditions (red)
-        val isRedAlert = alerts.any { it.event == "rainFlood" || it.event == "lightning" }
+        val isRedAlert = alerts.any { it?.event == "rainFlood" || it?.event == "lightning" }
         val alertIsCurrent = alerts.any { checkAlertValidity(it, timeStamp) }
 
         if (isRedAlert && alertIsCurrent) {
@@ -157,10 +160,10 @@ class WeatherAPIRepository (
     }
 
     //Checks the alert validity based on timestamp and start and end time for the alert
-    private fun checkAlertValidity(alert: AlertInfo, timeStamp: String): Boolean {
+    private fun checkAlertValidity(alert: AlertInfo?, timeStamp: String): Boolean {
         val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX", Locale.getDefault())
-        val startTime = format.parse(alert.startTime)
-        val endTime = format.parse(alert.endTime)
+        val startTime = format.parse(alert?.startTime ?: "")
+        val endTime = format.parse(alert?.endTime ?: "")
         val timeToCheck = format.parse(timeStamp)
 
         if (timeToCheck != null) {
