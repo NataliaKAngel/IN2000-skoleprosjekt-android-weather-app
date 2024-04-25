@@ -22,10 +22,7 @@ class WeatherAPIRepository (
     //METHODS TO CREATE OBJECTS OR TRANSFORM DATA: Helping methods
     //Creates: Map<PredefinedSpots, Spot?>
     private suspend fun createAllSpots(): Map<PredefinedSpots, Spot>{
-        val predefinedSpots = getPredefinedSpots()
-        Log.i("Debug", "YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY $predefinedSpots")
-
-        return predefinedSpots.associateWith { predefinedSpot ->
+        return getPredefinedSpots().associateWith { predefinedSpot ->
             createOneSpot(
                 predefinedSpot,
                 getWeatherResponse(predefinedSpot.coordinates),
