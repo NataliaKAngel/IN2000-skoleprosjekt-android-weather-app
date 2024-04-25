@@ -47,7 +47,7 @@ class MainActivity : ComponentActivity() {
         // Creates instance of NetworkConnectivityObserver
         connectivityObserver = NetworkConnectivityObserver(applicationContext)
         connectivityObserver.observe().onEach {
-            println("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMStatus is: $it")
+            println("Status is: $it")
         }.launchIn(lifecycleScope)
         setContent {
 

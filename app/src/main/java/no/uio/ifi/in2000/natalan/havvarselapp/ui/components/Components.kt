@@ -375,16 +375,18 @@ fun SpotBox() {
                         verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.Top),
                         horizontalAlignment = Alignment.Start,
                     ) {
+                        // Denne er riktig, denne kan vi kalle "header1" i type, denne skal gjenbrukes og puttes i type
                         Text(
                             text = "Hamresanden",
                             style = TextStyle(
                                 fontSize = 24.sp,
                                 fontFamily = FontFamily(Font(R.font.inter_font)),
-                                fontWeight = FontWeight(700),
+                                fontWeight = FontWeight(700), // kan prøve med bold i steden for 400
                                 color = TextColor,
                                 letterSpacing = (-0.05).sp
                             )
                         )
+                        // denne er også riktig, lage en i type
                         Text(
                             text = "Kristiansand",
                             style = TextStyle(
@@ -540,6 +542,8 @@ fun SpotBox() {
 
 
 @Composable
+// sjekke om denne er unødvendig, kan man gjøre en if check med spotbox over i stedet?
+// bruker ikke bildet
 fun SpotBoxForSpotScreen() {
     Box(
         modifier = Modifier
@@ -761,6 +765,7 @@ fun WarningBox (
 }
 
 @Composable
+// lage ny til dag for dag? eller endre denne for å justere seg?
 fun TimeBox(){
     Box (
         modifier = Modifier
@@ -832,7 +837,7 @@ fun DaysBoxRow(){
                 color = TextColor
             )
         )
-
+        // gjøre til en løkke
         LazyRow {
             item {
                 TimeBox()
