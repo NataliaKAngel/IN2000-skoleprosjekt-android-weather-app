@@ -40,8 +40,7 @@ fun HomeScreen(
 ) {
     //UI-state: List<Spot?>
     val spotsUIState by homeScreenViewModel.spotsUIState.collectAsState()
-    val spotMap = spotsUIState.spots
-    val spots = spotMap.values.toList()
+    val spots = spotsUIState.spots
 
     //UI-state: Spot?
     val spotUIState by homeScreenViewModel.spotUIState.collectAsState()

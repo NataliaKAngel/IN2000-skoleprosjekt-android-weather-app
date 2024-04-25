@@ -21,8 +21,8 @@ class WeatherAPIRepository (
 ){
     //METHODS TO CREATE OBJECTS OR TRANSFORM DATA: Helping methods
     //Creates: Map<PredefinedSpots, Spot?>
-    private suspend fun createAllSpots(): Map<PredefinedSpots, Spot>{
-        return getPredefinedSpots().associateWith { predefinedSpot ->
+    private suspend fun createAllSpots(): List<Spot>{
+        return getPredefinedSpots().map { predefinedSpot ->
             createOneSpot(
                 predefinedSpot,
                 getWeatherResponse(predefinedSpot.coordinates),
@@ -200,7 +200,7 @@ class WeatherAPIRepository (
 
     //OFFERS SPOT-OBJECTS TO: ViewModel
     //Creates a list of Spot-objects and returns it.
-    suspend fun getAllSpots(): Map<PredefinedSpots,Spot>{
+    suspend fun getAllSpots(): List<Spot>{
         return createAllSpots()
     }
 

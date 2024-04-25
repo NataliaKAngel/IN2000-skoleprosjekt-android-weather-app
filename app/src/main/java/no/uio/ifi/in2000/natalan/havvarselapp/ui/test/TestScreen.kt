@@ -25,8 +25,7 @@ fun TestScreen(
     val spotsUIState by testScreenViewModel.spotsUIState.collectAsState()
 
     //Getting the spots objects from the map (List<Spot?>)
-    val spotmap = spotsUIState.spots
-    val spots = spotmap.values.toList()
+    val spots = spotsUIState.spots
 
     //Test: Display info in the Spot-objects
     LazyColumn (

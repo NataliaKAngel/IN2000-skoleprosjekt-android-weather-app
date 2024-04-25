@@ -4,5 +4,5 @@ import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.PredefinedSpots
 import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.Spot
 
 data class SpotsUIState(
-    val spots: Map<PredefinedSpots, Spot> = emptyMap()
+    val spots: List<Spot> = emptyList()
 )
