@@ -10,6 +10,8 @@ import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.PredefinedSpots
 import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.AlertInfo
 import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.SpotInfo
 import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.Spot
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class WeatherAPIRepository (
     private val predefinedSpotsDataSource: PredefinedSpotsDataSource,
@@ -124,9 +126,16 @@ class WeatherAPIRepository (
     }
 
     private fun calculateKiteRecommendation(alerts: List<AlertInfo>, windSpeedValue: Double?, windDirectionValue: Double?, optimalWindConditions: Map<String, Double>, timeStamp: String): String {
-        TODO("Not yet implemented")
-        //Gå gjennom AlertInfo-objektene i alerts:
-            //Dersom det er farevarsel på lyn og styrtregn - rød farge returneres
+        //Returns red is the event-type in any of the AlertInfo-objects is rainFlood or lightning
+        val isRedAlert = alerts.any { it.event == "rainFlood" || it.event == "lightning" }
+
+        if (isRedAlert) {
+            return "red"
+        }
+
+        //Continues the calculation:
+        val alertIsCurrent = alerts.any { checkAlertValidity(it, timeStamp) }
+
 
         //For alle andre skal følgende sjekkes videre:
             //Sjekke om farevarsel gjelder basert på timestamp - boolean
@@ -137,6 +146,20 @@ class WeatherAPIRepository (
 
             //Returnere en farge basert på om faktorene er innenfor eller utenfor
 
+        return ""
+
+    }
+
+    private fun checkAlertValidity(alert: AlertInfo, timeStamp: String): Boolean {
+        val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX", Locale.getDefault())
+        val startTime = format.parse(alert.startTime)
+        val endTime = format.parse(alert.endTime)
+        val timeToCheck = format.parse(timeStamp)
+
+        if (timeToCheck != null) {
+            return timeToCheck.after(startTime) && timeToCheck.before(endTime)
+        }
+        return false
     }
 
     //OFFERS SPOT-OBJECTS TO: ViewModel
