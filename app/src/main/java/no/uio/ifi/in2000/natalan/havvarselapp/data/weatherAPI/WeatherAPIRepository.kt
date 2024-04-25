@@ -135,6 +135,7 @@ class WeatherAPIRepository (
 
         //Continues the calculation:
         val alertIsCurrent = alerts.any { checkAlertValidity(it, timeStamp) }
+        val windDirectionCalculation = calculateWindDirection(windDirectionValue, optimalWindConditions)
 
 
         //For alle andre skal følgende sjekkes videre:
@@ -150,6 +151,7 @@ class WeatherAPIRepository (
 
     }
 
+    //Checks the alert validity based on timestamp and start and end time for the alert
     private fun checkAlertValidity(alert: AlertInfo, timeStamp: String): Boolean {
         val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX", Locale.getDefault())
         val startTime = format.parse(alert.startTime)
@@ -160,6 +162,20 @@ class WeatherAPIRepository (
             return timeToCheck.after(startTime) && timeToCheck.before(endTime)
         }
         return false
+    }
+
+    private fun calculateWindDirection(windDirectionValue: Double?, optimalWindConditions: Map<String, Double>): String{
+        val minWind = optimalWindConditions["min"] ?: 0.0
+        val maxWind = optimalWindConditions["max"] ?: 360.0
+
+        if (windDirectionValue != null) {
+            return when {
+                windDirectionValue < minWind -> "low"
+                windDirectionValue > maxWind -> "high"
+                else -> "correct"
+            }
+        }
+        return ""
     }
 
     //OFFERS SPOT-OBJECTS TO: ViewModel
