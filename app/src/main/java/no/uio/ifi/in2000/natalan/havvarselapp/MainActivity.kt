@@ -129,6 +129,7 @@ class MainActivity : ComponentActivity() {
                         ) {
                             /*
                         //Manual check of internet connection
+                        // TODO ta vekk dette når vi er ferdig med å teste snackbaren
                             Button(onClick = {
                                 scope.launch {
                                     snackbarHostState.showSnackbar(
