@@ -1,5 +1,6 @@
 package no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI
 
+import android.util.Log
 import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.locationForecast.LocationForecastDataSource
 import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.metAlerts.MetAlertsDataSource
 import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.predefinedSpots.PredefinedSpotsDataSource
@@ -21,7 +22,10 @@ class WeatherAPIRepository (
     //METHODS TO CREATE OBJECTS OR TRANSFORM DATA: Helping methods
     //Creates: Map<PredefinedSpots, Spot?>
     private suspend fun createAllSpots(): Map<PredefinedSpots, Spot>{
-        return getPredefinedSpots().associateWith { predefinedSpot ->
+        val predefinedSpots = getPredefinedSpots()
+        Log.i("Debug", "IIIIIIIIIIIIIIIIIIIIIIIIII $predefinedSpots")
+
+        return predefinedSpots.associateWith { predefinedSpot ->
             createOneSpot(
                 predefinedSpot,
                 getWeatherResponse(predefinedSpot.coordinates),
