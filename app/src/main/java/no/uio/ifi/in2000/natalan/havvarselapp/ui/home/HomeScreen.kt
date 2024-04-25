@@ -30,7 +30,6 @@ import com.mapbox.maps.plugin.annotation.annotations
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
 import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
 import no.uio.ifi.in2000.natalan.havvarselapp.R
-import no.uio.ifi.in2000.natalan.havvarselapp.model.predefinedSpots.PredefinedSpots
 import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.Spot
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.components.*
 
@@ -39,14 +38,12 @@ fun HomeScreen(
     navController: NavController,
     homeScreenViewModel: HomeScreenViewModel
 ) {
-    //Collecting the state flow from spotScreenViewModel
+    //UI-state: List<Spot?>
     val spotsUIState by homeScreenViewModel.spotsUIState.collectAsState()
+    val spots = spotsUIState.spots
 
-    //Getting the map from the UI-state (Map<PredefinedSpots, Spot?>)
-    val spotMap = spotsUIState.spots
-
-    //Getting the spots objects from the map (List<Spot?>)
-    val spots = spotMap.values.toList()
+    //UI-state: Spot?
+    val spotUIState by homeScreenViewModel.spotUIState.collectAsState()
 
     //Variables for map
     val context = LocalContext.current.applicationContext
@@ -121,7 +118,7 @@ fun AddAnnotationsToMap(
                 if (bitmap != null) {
                     // Add the bitmap as a custom icon in the Mapbox style.
                     style.addImage(iconId, bitmap)
-                    val coordinates = spot?.coordinates?.split(",")?.map { it.toDouble() }
+                    val coordinates = spot?.predefinedSpot?.coordinates?.split(",")?.map { it.toDouble() }
                     val point = Point.fromLngLat(coordinates?.get(1) ?: 0.0, coordinates?.get(0) ?: 0.0)
                     val annotationOptions = PointAnnotationOptions()
                         .withPoint(point)

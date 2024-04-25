@@ -9,23 +9,37 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.WeatherAPIRepository
+import no.uio.ifi.in2000.natalan.havvarselapp.ui.state.SpotUIState
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.state.SpotsUIState
 
 class HomeScreenViewModel(
     private val weatherAPIRepository: WeatherAPIRepository
 ) : ViewModel(){
-    //Private UI-state (Map<PredefinedSpots, Spot?>)
+    //UI-state: Map<PredefinedSpots, Spot?>
     private val _spotsUIState = MutableStateFlow(SpotsUIState())
-
-    //UI-state offered to the SpotScreen
     var spotsUIState: StateFlow<SpotsUIState> = _spotsUIState.asStateFlow()
+
+    //UI-state: Spot?
+    private val _spotUIState = MutableStateFlow(SpotUIState())
+    var spotUIState: StateFlow<SpotUIState> = _spotUIState.asStateFlow()
 
     //Getting data asynchronous from weatherAPIRepository and updates private UI-state
     init {
         viewModelScope.launch {
             _spotsUIState.update {
                 it.copy(
-                    spots = weatherAPIRepository.getPredefinedSpots()
+                    spots = weatherAPIRepository.getAllSpots()
+                )
+            }
+        }
+    }
+
+    //HomeScreen can use this method to update spotUIState to hold the correct Spot-object
+    fun updateSpotUIState(coordinates: String){
+        viewModelScope.launch {
+            _spotUIState.update {
+                it.copy(
+                    spot = weatherAPIRepository.getOneSpot(coordinates)
                 )
             }
         }
