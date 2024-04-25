@@ -161,9 +161,12 @@ class WeatherAPIRepository (
 
     //Checks the alert validity based on timestamp and start and end time for the alert
     private fun checkAlertValidity(alert: AlertInfo?, timeStamp: String): Boolean {
+        if (alert?.startTime == null){
+            return false
+        }
         val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX", Locale.getDefault())
-        val startTime = format.parse(alert?.startTime ?: "")
-        val endTime = format.parse(alert?.endTime ?: "")
+        val startTime = alert.startTime.let { format.parse(it) }
+        val endTime = alert.endTime.let { format.parse(it) }
         val timeToCheck = format.parse(timeStamp)
 
         if (timeToCheck != null) {
