@@ -76,6 +76,7 @@ class WeatherAPIRepository (
             SpotInfo(
                 date = transformDate(date),
                 time = transformTime(time),
+                timestamp = timeStamp,
                 windSpeedValue = windSpeedValue,
                 windSpeedUnit = windSpeedUnit,
                 windDirectionValue = windDirectionValue,

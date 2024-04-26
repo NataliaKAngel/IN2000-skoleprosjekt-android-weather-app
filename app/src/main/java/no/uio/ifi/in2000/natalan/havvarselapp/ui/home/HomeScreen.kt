@@ -49,7 +49,6 @@ fun HomeScreen(
     val context = LocalContext.current.applicationContext
     val mapView = createMapScreen(context)
 
-
     AddAnnotationsToMap(spots, context, mapView, "sgreenthumb")
 
     Column(
