@@ -11,11 +11,12 @@ import kotlinx.coroutines.launch
 import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.WeatherAPIRepository
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.state.SpotUIState
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.state.SpotsUIState
+import no.uio.ifi.in2000.natalan.havvarselapp.ui.state.timestampUIState
 
 class HomeScreenViewModel(
     private val weatherAPIRepository: WeatherAPIRepository
 ) : ViewModel(){
-    //UI-state: Map<PredefinedSpots, Spot?>
+    //UI-state: List<Spot>
     private val _spotsUIState = MutableStateFlow(SpotsUIState())
     var spotsUIState: StateFlow<SpotsUIState> = _spotsUIState.asStateFlow()
 
@@ -23,12 +24,21 @@ class HomeScreenViewModel(
     private val _spotUIState = MutableStateFlow(SpotUIState())
     var spotUIState: StateFlow<SpotUIState> = _spotUIState.asStateFlow()
 
+    //UI-state: Timestamp rigth now
+    private val _timestampUIState = MutableStateFlow(timestampUIState())
+    var timestampUIState: StateFlow<timestampUIState> = _timestampUIState.asStateFlow()
+
     //Getting data asynchronous from weatherAPIRepository and updates private UI-state
     init {
         viewModelScope.launch {
             _spotsUIState.update {
                 it.copy(
                     spots = weatherAPIRepository.getAllSpots()
+                )
+            }
+            _timestampUIState.update {
+                it.copy(
+                    timestamp = System.currentTimeMillis().toString()
                 )
             }
         }
@@ -43,6 +53,10 @@ class HomeScreenViewModel(
                 )
             }
         }
+    }
+
+    fun checkColorToTimestampToCordinate() {
+
     }
 
 }
