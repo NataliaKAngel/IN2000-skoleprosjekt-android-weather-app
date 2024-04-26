@@ -2,6 +2,7 @@ package no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
+import no.uio.ifi.in2000.natalan.havvarselapp.R
 import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.locationForecast.LocationForecastDataSource
 import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.metAlerts.MetAlertsDataSource
 import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.predefinedSpots.PredefinedSpotsDataSource
@@ -76,21 +77,15 @@ class WeatherAPIRepository (
             SpotInfo(
                 date = transformDate(date),
                 time = transformTime(time),
-                timestamp = transformTimestamp(timeStamp),
                 windSpeedValue = windSpeedValue,
                 windSpeedUnit = windSpeedUnit,
                 windDirectionValue = windDirectionValue,
                 windDirectionUnit = windDirectionUnit,
                 windDirectionString = windDirectionValue?.let { transformWindDirection(it) },
-                kiteRecommendationColor = calculateKiteRecommendation(alerts, windSpeedValue, windDirectionValue, optimalWindConditions, timeStamp)
+                kiteRecommendationSmallThumb = getSmallThumb(calculateKiteRecommendation(alerts, windSpeedValue, windDirectionValue, optimalWindConditions, timeStamp)),
+                kiteRecommendationBigThumb = getBigThumb(calculateKiteRecommendation(alerts, windSpeedValue, windDirectionValue, optimalWindConditions, timeStamp))
             )
         }
-    }
-
-    private fun transformTimestamp(timestamp : String) : String{
-        val (date, time) = timestamp.split("T", "Z")
-        return "{$date} {$time}"
-
     }
 
     private fun transformDate(date: String): String {
@@ -131,6 +126,30 @@ class WeatherAPIRepository (
             in 247.5..292.5 -> "vest"
             in 292.5..337.5 -> "nordvest"
             else -> "Ugyldige grader"
+        }
+    }
+
+    private fun getSmallThumb(color: String?): Int {
+        return when(color) {
+            "grey" -> R.drawable.sgreythumb
+            "blue" -> R.drawable.sbluethumb
+            "green" -> R.drawable.sgreenthumb
+            "yellow" -> R.drawable.syellowthumb
+            "orange" -> R.drawable.sorangethumb
+            "red" -> R.drawable.sredthumb
+            else -> R.drawable.sgreythumb
+        }
+    }
+
+    private fun getBigThumb(color: String?): Int {
+        return when(color) {
+            "grey" -> R.drawable.bgreythumb
+            "blue" -> R.drawable.bbluethumb
+            "green" -> R.drawable.bgreenthumb
+            "yellow" -> R.drawable.byellowthumb
+            "orange" -> R.drawable.borangethumb
+            "red" -> R.drawable.bredthumb
+            else -> R.drawable.bgreythumb
         }
     }
 
