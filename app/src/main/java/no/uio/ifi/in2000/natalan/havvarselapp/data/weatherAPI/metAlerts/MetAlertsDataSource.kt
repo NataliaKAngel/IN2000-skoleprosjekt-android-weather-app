@@ -9,8 +9,11 @@ import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.request.get
+import io.ktor.client.request.header
 import io.ktor.serialization.gson.gson
+import io.ktor.serialization.kotlinx.json.json
 import io.ktor.util.appendIfNameAbsent
+import kotlinx.serialization.json.Json
 import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.Endpoint.METALERT_EXAMPLE
 import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.Endpoint.METALERT_TEST
 import no.uio.ifi.in2000.natalan.havvarselapp.model.metAlerts.MetAlertDataClass
@@ -20,20 +23,20 @@ class MetAlertsDataSource {
     private val proxyKey = "ab4e9a8e7-469d-499e-822a-7df85483df8c"
     private val apiKey = "X-Gravitee-API-Key"
 
-    // Keep track of connection to locationforcast
-    private val _noInternetError = MutableLiveData<Unit>()
-    val noInternetError: LiveData<Unit> = _noInternetError
-
     // Creating a client and using the apiKey and proxyKey to connect
     private val client = HttpClient(CIO) {
         defaultRequest {
             url(METALERT_TEST)
-            headers.appendIfNameAbsent(apiKey, proxyKey)
+            header(apiKey, proxyKey)
         }
 
-        //Installing gson to deserialize the data from the API
+        //Installing json to deserialize the data from the API
         install(ContentNegotiation) {
-            gson()
+            json(Json {
+                ignoreUnknownKeys = true
+                prettyPrint = true
+                isLenient = true
+            })
         }
     }
 
@@ -44,7 +47,6 @@ class MetAlertsDataSource {
         val latitude = details[0]
         val longitude = details[1]
         val coordinatesURL = "lat=$latitude&lon=$longitude"
-        Log.i("Debug", "OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO $METALERT_EXAMPLE + $coordinatesURL")
 
         return try {
             // Connects to the API with correct URL

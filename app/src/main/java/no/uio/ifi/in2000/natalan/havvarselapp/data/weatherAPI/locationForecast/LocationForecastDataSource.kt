@@ -47,7 +47,6 @@ class LocationForecastDataSource {
         val latitude = details[0]
         val longitude = details[1]
         val coordinatesURL = "lat=$latitude&lon=$longitude"
-        Log.i("Debug", "IIIIIIIIIIIIIIIIIIIIIIIIII $LF_WEATHERRESPONSE + $coordinatesURL")
 
         // Logging: coordinates
         Log.d("LocationForecastDataSource", "Requesting weather data for coordinates: $coordinates")
