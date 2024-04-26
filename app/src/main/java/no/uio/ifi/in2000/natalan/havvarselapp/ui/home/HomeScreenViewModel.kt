@@ -1,6 +1,5 @@
 package no.uio.ifi.in2000.natalan.havvarselapp.ui.home
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,7 +13,6 @@ import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.Spot
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.state.SpotUIState
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.state.SpotsUIState
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.state.ThumbUIState
-import no.uio.ifi.in2000.natalan.havvarselapp.ui.state.timestampUIState
 
 class HomeScreenViewModel(
     private val weatherAPIRepository: WeatherAPIRepository
@@ -27,9 +25,6 @@ class HomeScreenViewModel(
     private val _spotUIState = MutableStateFlow(SpotUIState())
     var spotUIState: StateFlow<SpotUIState> = _spotUIState.asStateFlow()
 
-    //UI-state: Timestamp rigth now
-    private val _timestampUIState = MutableStateFlow(timestampUIState())
-    var timestampUIState: StateFlow<timestampUIState> = _timestampUIState.asStateFlow()
 
     // UI-state: Thumbs
     private val _thumbsUIState = MutableStateFlow(ThumbUIState())
@@ -43,11 +38,7 @@ class HomeScreenViewModel(
                     spots = weatherAPIRepository.getAllSpots()
                 )
             }
-            _timestampUIState.update {
-                it.copy(
-                    timestamp = System.currentTimeMillis().toString()
-                )
-            }
+
         }
     }
 
