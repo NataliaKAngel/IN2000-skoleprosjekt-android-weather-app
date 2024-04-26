@@ -1,7 +1,5 @@
 package no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
 import no.uio.ifi.in2000.natalan.havvarselapp.R
 import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.locationForecast.LocationForecastDataSource
 import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.metAlerts.MetAlertsDataSource
@@ -239,19 +237,20 @@ class WeatherAPIRepository (
         return predefinedSpot?.let { createOneSpot(it, weatherResponse, feature) }
     }
 
-    //Returns: Map<String, Int>. Offers a small thumb icon per spot.
+    //Returns: Map<String, Int>. Offers a map with a small thumb icon per spot.
     fun getThumbs(spots: List<Spot>) : Map<String, Int>{
         return spots.associate { spot ->
             spot.predefinedSpot.coordinates to getCorrectThumbIcon(spot)
         }
     }
+
     private fun getCorrectThumbIcon(spot: Spot) : Int{
         val currentTime = LocalTime.now()
         val hour = currentTime.hour.toString()
 
         spot.spotDetails.forEach { spotInfo ->
-            val (spotHour, spotMinute) = spotInfo.time.split(".")
-            if (spotHour == hour){
+            val spotTime = spotInfo.time.split(".")
+            if (spotTime[0] == hour){
                 return spotInfo.kiteRecommendationSmallThumb
             }
         }

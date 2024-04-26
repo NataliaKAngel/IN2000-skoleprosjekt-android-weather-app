@@ -7,16 +7,11 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import no.uio.ifi.in2000.natalan.havvarselapp.R
 import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.WeatherAPIRepository
 import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.Spot
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.state.SpotUIState
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.state.SpotsUIState
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.state.ThumbUIState
-import java.time.LocalTime
-import java.time.format.DateTimeFormatter
-import java.util.Date
-import kotlin.time.Duration.Companion.hours
 
 class HomeScreenViewModel(
     private val weatherAPIRepository: WeatherAPIRepository
