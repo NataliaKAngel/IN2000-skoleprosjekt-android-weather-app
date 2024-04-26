@@ -73,6 +73,7 @@ class WeatherAPIRepository (
             val (date, time) = timeStamp.split("T")
             val windSpeedValue = windSpeed[timeStamp]
             val windDirectionValue = windDirection[timeStamp]
+            val color = calculateKiteRecommendation(alerts, windSpeedValue, windDirectionValue, optimalWindConditions, timeStamp)
             SpotInfo(
                 date = transformDate(date),
                 time = transformTime(time),
@@ -81,8 +82,8 @@ class WeatherAPIRepository (
                 windDirectionValue = windDirectionValue,
                 windDirectionUnit = windDirectionUnit,
                 windDirectionString = windDirectionValue?.let { transformWindDirection(it) },
-                kiteRecommendationSmallThumb = getSmallThumb(calculateKiteRecommendation(alerts, windSpeedValue, windDirectionValue, optimalWindConditions, timeStamp)),
-                kiteRecommendationBigThumb = getBigThumb(calculateKiteRecommendation(alerts, windSpeedValue, windDirectionValue, optimalWindConditions, timeStamp))
+                kiteRecommendationSmallThumb = getSmallThumb(color),
+                kiteRecommendationBigThumb = getBigThumb(color)
             )
         }
     }
