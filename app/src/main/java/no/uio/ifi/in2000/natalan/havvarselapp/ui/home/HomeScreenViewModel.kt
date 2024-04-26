@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import no.uio.ifi.in2000.natalan.havvarselapp.R
 import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.WeatherAPIRepository
 import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.Spot
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.state.SpotUIState
@@ -61,9 +62,28 @@ class HomeScreenViewModel(
         }
     }
 
+    private fun getThumb(color : String?) : Int{
+        when(color){
+            "grey" -> R.drawable.sgreythumb
+            "blue" -> R.drawable.sbluethumb
+            "green" -> R.drawable.sgreenthumb
+            "yellow" -> R.drawable.syellowthumb
+            "orange" -> R.drawable.sorangethumb
+            "red" -> R.drawable.sredthumb
+        }
+        return 0
+    }
+
     fun updateThumbsUIState(spot : Spot){
         val timestamp = System.currentTimeMillis().toString()
         val spotInfo = spot.spotDetails.find{it.timestamp == timestamp}
+        if (spotInfo != null) {
+            _thumbsUIState.update {
+                it.copy(
+                    thumb = getThumb(spotInfo.kiteRecommendationColor)
+                )
+            }
+        }
 
     }
 
