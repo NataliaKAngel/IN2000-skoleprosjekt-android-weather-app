@@ -27,7 +27,7 @@ class MetAlertsDataSource {
     // Creating a client and using the apiKey and proxyKey to connect
     private val client = HttpClient(CIO) {
         defaultRequest {
-            url(METALERT_TEST)
+            url(METALERT_EXAMPLE)
             headers.appendIfNameAbsent(apiKey, proxyKey)
         }
 
@@ -47,7 +47,7 @@ class MetAlertsDataSource {
 
         return try {
             // Connects to the API with correct URL
-            val response = client.get(METALERT_TEST + coordinatesURL)
+            val response = client.get(METALERT_EXAMPLE + coordinatesURL)
             response.body()
 
         } catch (e: Exception) {

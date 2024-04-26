@@ -53,29 +53,39 @@ class HomeScreenViewModel(
         }
     }
 
-    private fun getThumb(color : String?) : Int{
-        when(color){
+    private fun getCorrectTimeStamp(spot: Spot) : Int{
+        val timestamp = System.currentTimeMillis().toString()
+        val spotInfo = spot.spotDetails[0]//spot.spotDetails.find{it.timestamp == timestamp}
+        println(spotInfo.kiteRecommendationColor).toString()
+        return when(spotInfo.kiteRecommendationColor){
             "grey" -> R.drawable.sgreythumb
             "blue" -> R.drawable.sbluethumb
             "green" -> R.drawable.sgreenthumb
             "yellow" -> R.drawable.syellowthumb
             "orange" -> R.drawable.sorangethumb
             "red" -> R.drawable.sredthumb
+            else -> R.drawable.sgreythumb
         }
-        return 0
     }
 
-    fun updateThumbsUIState(spot : Spot){
-        val timestamp = System.currentTimeMillis().toString()
-        val spotInfo = spot.spotDetails.find{it.timestamp == timestamp}
-        if (spotInfo != null) {
+    private fun getThumbs(spots: List<Spot>) : Map<String, Int>{
+        return spots.associate { spot ->
+            spot.predefinedSpot.coordinates to getCorrectTimeStamp(spot)
+        }
+
+
+    }
+
+    fun updateThumbsUIState(spots: List<Spot>){
+
             _thumbsUIState.update {
                 it.copy(
-                    thumb = getThumb(spotInfo.kiteRecommendationColor)
+                    thumbs = getThumbs(spots)
                 )
-            }
+
         }
 
     }
+
 
 }

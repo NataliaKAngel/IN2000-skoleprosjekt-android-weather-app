@@ -4,5 +4,6 @@ import android.graphics.drawable.Drawable
 import no.uio.ifi.in2000.natalan.havvarselapp.R
 
 data class ThumbUIState(
-    val thumb : Int = R.drawable.sgreythumb
+    val thumbs: Map<String, Int> = emptyMap()
+
 )

@@ -48,15 +48,15 @@ fun HomeScreen(
     val spotUIState by homeScreenViewModel.spotUIState.collectAsState()
 
     val thumbUIState by homeScreenViewModel.thumbUIState.collectAsState()
-    val thumb = thumbUIState.thumb
+    val thumbs = thumbUIState.thumbs
 
     //Variables for map
     val context = LocalContext.current.applicationContext
     val mapView = createMapScreen(context)
 
 
-
-    AddAnnotationsToMap(spots, context, mapView,thumb, homeScreenViewModel)
+    homeScreenViewModel.updateThumbsUIState(spots)
+    AddAnnotationsToMap(spots, context, mapView, thumbs)
 
 
     Column(
@@ -113,25 +113,27 @@ fun AddAnnotationsToMap(
     spots: List<Spot>,
     context: Context,
     mapView: MapView,
-    iconId: Int, // Name to icon
-    homeScreenViewModel : HomeScreenViewModel
+    iconId: Map<String, Int>, // Name to icon
 ) {
     LaunchedEffect(mapView) {
         mapView.mapboxMap.loadStyle(Style.MAPBOX_STREETS) {style ->
             val annotationManager = mapView.annotations.createPointAnnotationManager()
             spots.forEach { spot ->
                 // Load your custom icon as a Bitmap
-                homeScreenViewModel.updateThumbsUIState(spot)
-                val drawable = AppCompatResources.getDrawable(context, R.drawable.sgreenthumb)
+                val drawable = iconId[spot.predefinedSpot.coordinates]?.let {
+                    AppCompatResources.getDrawable(context,
+                        it
+                    )
+                }
                 val bitmap = convertDrawableToBitmap(drawable)
                 if (bitmap != null) {
                     // Add the bitmap as a custom icon in the Mapbox style.
-                    style.addImage(iconId.toString(), bitmap)
+                    style.addImage(iconId[spot.predefinedSpot.coordinates].toString(), bitmap)
                     val coordinates = spot.predefinedSpot.coordinates.split(",").map { it.toDouble() }
                     val point = Point.fromLngLat(coordinates[1], coordinates[0])
                     val annotationOptions = PointAnnotationOptions()
                         .withPoint(point)
-                        .withIconImage(iconId.toString()) // Bruk det definerte ikonnavnet
+                        .withIconImage(iconId[spot.predefinedSpot.coordinates].toString()) // Bruk det definerte ikonnavnet
                     annotationManager.create(annotationOptions)
                 }
             }

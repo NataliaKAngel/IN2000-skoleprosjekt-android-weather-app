@@ -15,6 +15,16 @@ class PredefinedSpotsDataSource {
         ),
 
         PredefinedSpots(
+            coordinates = "59.558207, 4.60363",
+            spotName = "TEST",
+            cityName = "Vestland",
+            optimalWindConditions = mapOf(
+                "min" to 157.5,
+                "max" to 247.5
+            )
+        )
+        /*
+        PredefinedSpots(
             coordinates = "58.18857641754766, 8.086584207780076",
             spotName = "Hamresanden",
             cityName = "Kristiansand",
@@ -35,7 +45,7 @@ class PredefinedSpotsDataSource {
                 "max" to 247.5
             )
         ),
-        /*
+
         PredefinedSpots(
             coordinates = "58.135371306063874, 7.034859484463499",
             spotName = "Kvaviksanden",
