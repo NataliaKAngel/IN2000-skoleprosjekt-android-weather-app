@@ -56,6 +56,9 @@ fun SpotCard(
             //CityName
             Text("By: ${spot?.predefinedSpot?.cityName}")
             Spacer(modifier = Modifier.height(5.dp))
+            //Info
+            Text("alerts: ${spot?.alerts}")
+            Spacer(modifier = Modifier.height(5.dp))
             if(spot?.alerts?.isNotEmpty() == true){
                 //RiskMatrixColor - MetAlerts
                 Text("Farevarselfarge: ${spot.alerts[0]?.riskMatrixColor}")
@@ -65,6 +68,12 @@ fun SpotCard(
                 Spacer(modifier = Modifier.height(5.dp))
                 //Description - MetAlerts
                 Text("Beskrivelse: ${spot.alerts[0]?.description}")
+                Spacer(modifier = Modifier.height(5.dp))
+                //Start time - MetAlerts
+                Text("Start Time: ${spot.alerts[0]?.startTime}")
+                Spacer(modifier = Modifier.height(5.dp))
+                //End time - MetAlerts
+                Text("End Time: ${spot.alerts[0]?.endTime}")
                 Spacer(modifier = Modifier.height(5.dp))
             }
 

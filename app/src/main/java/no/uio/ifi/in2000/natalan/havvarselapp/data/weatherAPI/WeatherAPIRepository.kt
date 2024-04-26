@@ -63,8 +63,8 @@ class WeatherAPIRepository (
             riskMatrixColor = feature?.properties?.riskMatrixColor,
             description = feature?.properties?.description,
             event = feature?.properties?.event,
-            startTime = "",
-            endTime = feature?.properties?.eventEndingTime
+            startTime = feature?.whenField?.interval?.get(0),
+            endTime = feature?.whenField?.interval?.get(1)
         )
     }
 
@@ -160,12 +160,15 @@ class WeatherAPIRepository (
             return false
         }
         val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX", Locale.getDefault())
-        //val startTime = alert.startTime.let { format.parse(it) }
-        val endTime = alert.endTime.let { format.parse(it) }
+        val startTime = alert.startTime.let { format.parse(it.toString()) }
+        val endTime = alert.endTime.let { format.parse(it.toString()) }
         val timeToCheck = format.parse(timeStamp)
 
+        if (startTime == null || endTime == null) {
+            return false
+        }
         if (timeToCheck != null) {
-            return timeToCheck.before(endTime)
+            return timeToCheck.after(startTime) && timeToCheck.before(endTime)
         }
         return false
     }

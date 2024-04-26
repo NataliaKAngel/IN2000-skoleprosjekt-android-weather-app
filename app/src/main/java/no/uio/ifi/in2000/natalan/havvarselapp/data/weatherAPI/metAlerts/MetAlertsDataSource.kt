@@ -9,11 +9,8 @@ import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.request.get
-import io.ktor.client.request.header
 import io.ktor.serialization.gson.gson
-import io.ktor.serialization.kotlinx.json.json
 import io.ktor.util.appendIfNameAbsent
-import kotlinx.serialization.json.Json
 import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.Endpoint.METALERT_EXAMPLE
 import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.Endpoint.METALERT_TEST
 import no.uio.ifi.in2000.natalan.havvarselapp.model.metAlerts.MetAlertDataClass
@@ -27,16 +24,12 @@ class MetAlertsDataSource {
     private val client = HttpClient(CIO) {
         defaultRequest {
             url(METALERT_TEST)
-            header(apiKey, proxyKey)
+            headers.appendIfNameAbsent(apiKey, proxyKey)
         }
 
-        //Installing json to deserialize the data from the API
+        //Installing gson to deserialize the data from the API
         install(ContentNegotiation) {
-            json(Json {
-                ignoreUnknownKeys = true
-                prettyPrint = true
-                isLenient = true
-            })
+            gson()
         }
     }
 
@@ -47,6 +40,7 @@ class MetAlertsDataSource {
         val latitude = details[0]
         val longitude = details[1]
         val coordinatesURL = "lat=$latitude&lon=$longitude"
+        //Log.i("Debug", "OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO $METALERT_EXAMPLE + $coordinatesURL")
 
         return try {
             // Connects to the API with correct URL
