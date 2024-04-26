@@ -44,11 +44,10 @@ class MetAlertsDataSource {
         val latitude = details[0]
         val longitude = details[1]
         val coordinatesURL = "lat=$latitude&lon=$longitude"
-        Log.i("Debug", "OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO $METALERT_EXAMPLE + $coordinatesURL")
 
         return try {
             // Connects to the API with correct URL
-            val response = client.get(METALERT_EXAMPLE + coordinatesURL)
+            val response = client.get(METALERT_TEST + coordinatesURL)
             response.body()
 
         } catch (e: Exception) {
