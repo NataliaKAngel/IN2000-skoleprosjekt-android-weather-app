@@ -14,6 +14,7 @@ import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.AlertInfo
 import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.SpotInfo
 import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.Spot
 import java.text.SimpleDateFormat
+import java.time.LocalTime
 import java.util.Locale
 
 class WeatherAPIRepository (
@@ -222,7 +223,7 @@ class WeatherAPIRepository (
         }
     }
 
-    //OFFERS SPOT-OBJECTS TO: ViewModel
+    //OFFERS UI-STATE DATA TO: ViewModel
     //Creates a list of Spot-objects and returns it.
     suspend fun getAllSpots(): List<Spot>{
         return createAllSpots()
@@ -236,6 +237,25 @@ class WeatherAPIRepository (
         val feature = getMetAlerts(coordinates)?.features
 
         return predefinedSpot?.let { createOneSpot(it, weatherResponse, feature) }
+    }
+
+    //Returns: Map<String, Int>. Offers a small thumb icon per spot.
+    fun getThumbs(spots: List<Spot>) : Map<String, Int>{
+        return spots.associate { spot ->
+            spot.predefinedSpot.coordinates to getCorrectThumbIcon(spot)
+        }
+    }
+    private fun getCorrectThumbIcon(spot: Spot) : Int{
+        val currentTime = LocalTime.now()
+        val hour = currentTime.hour.toString()
+
+        spot.spotDetails.forEach { spotInfo ->
+            val (spotHour, spotMinute) = spotInfo.time.split(".")
+            if (spotHour == hour){
+                return spotInfo.kiteRecommendationSmallThumb
+            }
+        }
+        return R.drawable.sgreythumb
     }
 
     //GETS AND TRANSFORM DATA FROM: LocationForecast

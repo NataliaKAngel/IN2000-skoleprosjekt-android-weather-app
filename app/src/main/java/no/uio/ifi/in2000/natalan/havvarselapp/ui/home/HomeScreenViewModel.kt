@@ -57,30 +57,10 @@ class HomeScreenViewModel(
         }
     }
 
-
-    private fun getCorrectThumbIcon(spot: Spot) : Int{
-        val currentTime = LocalTime.now()
-        val hour = currentTime.hour.toString()
-
-        spot.spotDetails.forEach { spotInfo ->
-            val (spotHour, spotMinute) = spotInfo.time.split(".")
-            if (spotHour == hour){
-                return spotInfo.kiteRecommendationSmallThumb
-            }
-        }
-        return R.drawable.sgreythumb
-    }
-
-    private fun getThumbs(spots: List<Spot>) : Map<String, Int>{
-        return spots.associate { spot ->
-            spot.predefinedSpot.coordinates to getCorrectThumbIcon(spot)
-        }
-    }
-
     fun updateThumbsUIState(spots: List<Spot>){
         _thumbsUIState.update {
             it.copy(
-                thumbs = getThumbs(spots)
+                thumbs = weatherAPIRepository.getThumbs(spots)
             )
         }
     }
