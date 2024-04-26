@@ -9,8 +9,10 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.WeatherAPIRepository
+import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.Spot
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.state.SpotUIState
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.state.SpotsUIState
+import no.uio.ifi.in2000.natalan.havvarselapp.ui.state.ThumbUIState
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.state.timestampUIState
 
 class HomeScreenViewModel(
@@ -27,6 +29,10 @@ class HomeScreenViewModel(
     //UI-state: Timestamp rigth now
     private val _timestampUIState = MutableStateFlow(timestampUIState())
     var timestampUIState: StateFlow<timestampUIState> = _timestampUIState.asStateFlow()
+
+    // UI-state: Thumbs
+    private val _thumbsUIState = MutableStateFlow(ThumbUIState())
+    var thumbUIState : StateFlow<ThumbUIState> = _thumbsUIState.asStateFlow()
 
     //Getting data asynchronous from weatherAPIRepository and updates private UI-state
     init {
@@ -55,7 +61,9 @@ class HomeScreenViewModel(
         }
     }
 
-    fun checkColorToTimestampToCordinate() {
+    fun updateThumbsUIState(spot : Spot){
+        val timestamp = System.currentTimeMillis().toString()
+        val spotInfo = spot.spotDetails.find{it.timestamp == timestamp}
 
     }
 

@@ -76,7 +76,7 @@ class WeatherAPIRepository (
             SpotInfo(
                 date = transformDate(date),
                 time = transformTime(time),
-                timestamp = timeStamp,
+                timestamp = transformTimestamp(timeStamp),
                 windSpeedValue = windSpeedValue,
                 windSpeedUnit = windSpeedUnit,
                 windDirectionValue = windDirectionValue,
@@ -85,6 +85,12 @@ class WeatherAPIRepository (
                 kiteRecommendationColor = calculateKiteRecommendation(alerts, windSpeedValue, windDirectionValue, optimalWindConditions, timeStamp)
             )
         }
+    }
+
+    private fun transformTimestamp(timestamp : String) : String{
+        val (date, time) = timestamp.split("T", "Z")
+        return "{$date} {$time}"
+
     }
 
     private fun transformDate(date: String): String {
