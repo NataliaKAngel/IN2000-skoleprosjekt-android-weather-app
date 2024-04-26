@@ -45,11 +45,19 @@ fun HomeScreen(
     //UI-state: Spot?
     val spotUIState by homeScreenViewModel.spotUIState.collectAsState()
 
+    val thumbUIState by homeScreenViewModel.thumbUIState.collectAsState()
+    val thumb = thumbUIState.thumb
+
     //Variables for map
     val context = LocalContext.current.applicationContext
     val mapView = createMapScreen(context)
 
-    AddAnnotationsToMap(spots, context, mapView, "sgreenthumb")
+    for( spot in spots){
+        homeScreenViewModel.updateThumbsUIState(spot)
+        AddAnnotationsToMap(spot, context, mapView,thumb )
+    }
+
+
 
     Column(
         verticalArrangement = Arrangement.SpaceBetween,
@@ -102,29 +110,29 @@ fun createMapScreen(context: Context): MapView {
 
 @Composable
 fun AddAnnotationsToMap(
-    spots: List<Spot?>,
+    spot: Spot,
     context: Context,
     mapView: MapView,
-    iconId: String // Name to icon
+    iconId: Int // Name to icon
 ) {
     LaunchedEffect(mapView) {
         mapView.mapboxMap.loadStyle(Style.MAPBOX_STREETS) {style ->
             val annotationManager = mapView.annotations.createPointAnnotationManager()
-            spots.forEach { spot ->
-                // Load your custom icon as a Bitmap
-                val drawable = AppCompatResources.getDrawable(context, R.drawable.sgreenthumb)
-                val bitmap = convertDrawableToBitmap(drawable)
-                if (bitmap != null) {
-                    // Add the bitmap as a custom icon in the Mapbox style.
-                    style.addImage(iconId, bitmap)
-                    val coordinates = spot?.predefinedSpot?.coordinates?.split(",")?.map { it.toDouble() }
-                    val point = Point.fromLngLat(coordinates?.get(1) ?: 0.0, coordinates?.get(0) ?: 0.0)
-                    val annotationOptions = PointAnnotationOptions()
-                        .withPoint(point)
-                        .withIconImage(iconId) // Bruk det definerte ikonnavnet
-                    annotationManager.create(annotationOptions)
-                }
+
+            // Load your custom icon as a Bitmap
+            val drawable = AppCompatResources.getDrawable(context, R.drawable.sgreenthumb)
+            val bitmap = convertDrawableToBitmap(drawable)
+            if (bitmap != null) {
+                // Add the bitmap as a custom icon in the Mapbox style.
+                style.addImage(iconId.toString(), bitmap)
+                val coordinates = spot.predefinedSpot.coordinates.split(",").map { it.toDouble() }
+                val point = Point.fromLngLat(coordinates[1], coordinates[0])
+                val annotationOptions = PointAnnotationOptions()
+                    .withPoint(point)
+                    .withIconImage(iconId.toString()) // Bruk det definerte ikonnavnet
+                annotationManager.create(annotationOptions)
             }
+
         }
     }
 }
