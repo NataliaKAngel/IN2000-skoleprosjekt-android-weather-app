@@ -13,6 +13,10 @@ import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.Spot
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.state.SpotUIState
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.state.SpotsUIState
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.state.ThumbUIState
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
+import java.util.Date
+import kotlin.time.Duration.Companion.hours
 
 class HomeScreenViewModel(
     private val weatherAPIRepository: WeatherAPIRepository
@@ -53,39 +57,31 @@ class HomeScreenViewModel(
         }
     }
 
-    private fun getCorrectTimeStamp(spot: Spot) : Int{
-        val timestamp = System.currentTimeMillis().toString()
-        val spotInfo = spot.spotDetails[0]//spot.spotDetails.find{it.timestamp == timestamp}
-        println(spotInfo.kiteRecommendationColor).toString()
-        return when(spotInfo.kiteRecommendationColor){
-            "grey" -> R.drawable.sgreythumb
-            "blue" -> R.drawable.sbluethumb
-            "green" -> R.drawable.sgreenthumb
-            "yellow" -> R.drawable.syellowthumb
-            "orange" -> R.drawable.sorangethumb
-            "red" -> R.drawable.sredthumb
-            else -> R.drawable.sgreythumb
+
+    private fun getCorrectThumbIcon(spot: Spot) : Int{
+        val currentTime = LocalTime.now()
+        val hour = currentTime.hour.toString()
+
+        spot.spotDetails.forEach { spotInfo ->
+            val (spotHour, spotMinute) = spotInfo.time.split(".")
+            if (spotHour == hour){
+                return spotInfo.kiteRecommendationSmallThumb
+            }
         }
+        return R.drawable.sgreythumb
     }
 
     private fun getThumbs(spots: List<Spot>) : Map<String, Int>{
         return spots.associate { spot ->
-            spot.predefinedSpot.coordinates to getCorrectTimeStamp(spot)
+            spot.predefinedSpot.coordinates to getCorrectThumbIcon(spot)
         }
-
-
     }
 
     fun updateThumbsUIState(spots: List<Spot>){
-
-            _thumbsUIState.update {
-                it.copy(
-                    thumbs = getThumbs(spots)
-                )
-
+        _thumbsUIState.update {
+            it.copy(
+                thumbs = getThumbs(spots)
+            )
         }
-
     }
-
-
 }
