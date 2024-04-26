@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -52,11 +54,9 @@ fun HomeScreen(
     val context = LocalContext.current.applicationContext
     val mapView = createMapScreen(context)
 
-    for( spot in spots){
-        homeScreenViewModel.updateThumbsUIState(spot)
-        AddAnnotationsToMap(spot, context, mapView,thumb )
-    }
 
+
+    AddAnnotationsToMap(spots, context, mapView,thumb, homeScreenViewModel)
 
 
     Column(
@@ -110,28 +110,32 @@ fun createMapScreen(context: Context): MapView {
 
 @Composable
 fun AddAnnotationsToMap(
-    spot: Spot,
+    spots: List<Spot>,
     context: Context,
     mapView: MapView,
-    iconId: Int // Name to icon
+    iconId: Int, // Name to icon
+    homeScreenViewModel : HomeScreenViewModel
 ) {
     LaunchedEffect(mapView) {
         mapView.mapboxMap.loadStyle(Style.MAPBOX_STREETS) {style ->
             val annotationManager = mapView.annotations.createPointAnnotationManager()
-
-            // Load your custom icon as a Bitmap
-            val drawable = AppCompatResources.getDrawable(context, R.drawable.sgreenthumb)
-            val bitmap = convertDrawableToBitmap(drawable)
-            if (bitmap != null) {
-                // Add the bitmap as a custom icon in the Mapbox style.
-                style.addImage(iconId.toString(), bitmap)
-                val coordinates = spot.predefinedSpot.coordinates.split(",").map { it.toDouble() }
-                val point = Point.fromLngLat(coordinates[1], coordinates[0])
-                val annotationOptions = PointAnnotationOptions()
-                    .withPoint(point)
-                    .withIconImage(iconId.toString()) // Bruk det definerte ikonnavnet
-                annotationManager.create(annotationOptions)
+            spots.forEach { spot ->
+                // Load your custom icon as a Bitmap
+                homeScreenViewModel.updateThumbsUIState(spot)
+                val drawable = AppCompatResources.getDrawable(context, R.drawable.sgreenthumb)
+                val bitmap = convertDrawableToBitmap(drawable)
+                if (bitmap != null) {
+                    // Add the bitmap as a custom icon in the Mapbox style.
+                    style.addImage(iconId.toString(), bitmap)
+                    val coordinates = spot.predefinedSpot.coordinates.split(",").map { it.toDouble() }
+                    val point = Point.fromLngLat(coordinates[1], coordinates[0])
+                    val annotationOptions = PointAnnotationOptions()
+                        .withPoint(point)
+                        .withIconImage(iconId.toString()) // Bruk det definerte ikonnavnet
+                    annotationManager.create(annotationOptions)
+                }
             }
+
 
         }
     }
