@@ -6,6 +6,7 @@ import android.graphics.Canvas
 import androidx.appcompat.content.res.AppCompatResources
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,6 +28,7 @@ import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.MapView
 import com.mapbox.maps.Style
 import com.mapbox.maps.plugin.annotation.annotations
+import com.mapbox.maps.plugin.annotation.generated.PointAnnotation
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
 import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
 import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.Spot
@@ -35,7 +37,7 @@ import no.uio.ifi.in2000.natalan.havvarselapp.ui.components.*
 @Composable
 fun HomeScreen(
     navController: NavController,
-    homeScreenViewModel: HomeScreenViewModel
+    homeScreenViewModel: HomeScreenViewModel,
 ) {
     //UI-state: List<Spot?>
     val spotsUIState by homeScreenViewModel.spotsUIState.collectAsState()
@@ -53,7 +55,7 @@ fun HomeScreen(
 
 
     homeScreenViewModel.updateThumbsUIState(spots)
-    AddAnnotationsToMap(spots, context, mapView, thumbs)
+    AddAnnotationsToMap(spots, context, mapView, thumbs, navController)
 
 
     Column(
@@ -111,16 +113,22 @@ fun AddAnnotationsToMap(
     context: Context,
     mapView: MapView,
     iconId: Map<String, Int>, // Name to icon
+    navController: NavController
 ) {
     LaunchedEffect(mapView) {
-        mapView.mapboxMap.loadStyle(Style.MAPBOX_STREETS) {style ->
+        mapView.mapboxMap.loadStyle(Style.MAPBOX_STREETS) { style ->
             val annotationManager = mapView.annotations.createPointAnnotationManager()
+            annotationManager.addClickListener(com.mapbox.maps.plugin.annotation.generated.OnPointAnnotationClickListener {
+                // Handle click event here
+                    navController.navigate("FavouriteScreen")
+                // For example, you can show a toast message
+                Toast.makeText(context, "Marker clicked", Toast.LENGTH_SHORT).show()
+                true // Return true if the click event is consumed
+            })
             spots.forEach { spot ->
                 // Load your custom icon as a Bitmap
                 val drawable = iconId[spot.predefinedSpot.coordinates]?.let {
-                    AppCompatResources.getDrawable(context,
-                        it
-                    )
+                    AppCompatResources.getDrawable(context, it)
                 }
                 val bitmap = convertDrawableToBitmap(drawable)
                 if (bitmap != null) {
@@ -130,15 +138,14 @@ fun AddAnnotationsToMap(
                     val point = Point.fromLngLat(coordinates[1], coordinates[0])
                     val annotationOptions = PointAnnotationOptions()
                         .withPoint(point)
-                        .withIconImage(iconId[spot.predefinedSpot.coordinates].toString()) // Bruk det definerte ikonnavnet
+                        .withIconImage(iconId[spot.predefinedSpot.coordinates].toString())
                     annotationManager.create(annotationOptions)
                 }
             }
-
-
         }
     }
 }
+
 
 // Convert Drawable to Bitmap using this method
 private fun convertDrawableToBitmap(sourceDrawable: Drawable?): Bitmap? {
