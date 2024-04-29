@@ -32,7 +32,7 @@ class WeatherAPIRepository (
         }
     }
 
-    private fun createOneSpot(predefinedSpot: PredefinedSpots, weatherResponse: WeatherResponse?, features: List<Feature>?): Spot{
+    private fun createOneSpot(predefinedSpot: PredefinedSpots, weatherResponse: WeatherResponse?, features: List<Feature>?): Spot {
         //Gets data from LocationForecast-API
         val windSpeed = getWindSpeedMap(weatherResponse)
         val windDirection = getWindDirectionMap(weatherResponse)
@@ -229,13 +229,13 @@ class WeatherAPIRepository (
     }
 
     //Returns one Spot-object based on coordinates to ViewModel
-    suspend fun getOneSpot(coordinates: String): Spot? {
+    suspend fun getOneSpot(coordinates: String): Spot {
         //Getting predefinedSpot, WeatherResponse and Feature to create Spot-object
         val predefinedSpot = getPredefinedSpots().find { it.coordinates == coordinates }
         val weatherResponse = getWeatherResponse(coordinates)
         val feature = getMetAlerts(coordinates)?.features
 
-        return predefinedSpot?.let { createOneSpot(it, weatherResponse, feature) }
+        return createOneSpot(predefinedSpot!!, weatherResponse, feature)
     }
 
     //Returns: Map<String, Int>. Offers a map with a small thumb icon per spot.

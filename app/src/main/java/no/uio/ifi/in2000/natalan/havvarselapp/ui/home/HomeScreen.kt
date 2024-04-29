@@ -38,23 +38,28 @@ fun HomeScreen(
     navController: NavController,
     homeScreenViewModel: HomeScreenViewModel,
 ) {
-    //UI-state: List<Spot?>
+    //UI-state: List<Spot>
     val spotsUIState by homeScreenViewModel.spotsUIState.collectAsState()
     val spots = spotsUIState.spots
 
-    //UI-state: Spot?
+    //UI-state: Spot
     val spotUIState by homeScreenViewModel.spotUIState.collectAsState()
+    val spot = spotUIState.spot
 
+    //UI-state: Map<String, Int>
     val thumbUIState by homeScreenViewModel.thumbUIState.collectAsState()
     val thumbs = thumbUIState.thumbs
+
+    //UI-state: Boolean
+    val clickedUIState by homeScreenViewModel.clickedUIState.collectAsState()
+    val clicked = clickedUIState.clicked
 
     //Variables for map
     val context = LocalContext.current.applicationContext
     val mapView = createMapScreen(context)
 
-
     homeScreenViewModel.updateThumbsUIState(spots)
-    AddAnnotationsToMap(spots, context, mapView, thumbs, navController)
+    AddAnnotationsToMap(spots, context, mapView, thumbs, navController, homeScreenViewModel, clicked, spot)
 
 
     Column(
@@ -112,14 +117,20 @@ fun AddAnnotationsToMap(
     context: Context,
     mapView: MapView,
     iconId: Map<String, Int>, // Name to icon
-    navController: NavController
+    navController: NavController,
+    homeScreenViewModel: HomeScreenViewModel,
+    clicked : Boolean,
+    spot: Spot?
 ) {
     LaunchedEffect(mapView) {
         mapView.mapboxMap.loadStyle(Style.MAPBOX_STREETS) { style ->
             val annotationManager = mapView.annotations.createPointAnnotationManager()
             annotationManager.addClickListener(com.mapbox.maps.plugin.annotation.generated.OnPointAnnotationClickListener {
                 // Handle click event here
-                    navController.navigate("FavouriteScreen")
+                homeScreenViewModel.updateClickedUIState(!clicked)
+                if (spot != null) {
+                    homeScreenViewModel.updateSpotUIState(spot.predefinedSpot.coordinates)
+                }
                 // For example, you can show a toast message
                 Toast.makeText(context, "Marker clicked", Toast.LENGTH_SHORT).show()
                 true // Return true if the click event is consumed

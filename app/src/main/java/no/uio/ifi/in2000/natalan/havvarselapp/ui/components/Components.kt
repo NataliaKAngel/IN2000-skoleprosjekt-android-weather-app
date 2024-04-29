@@ -715,11 +715,6 @@ fun SpotBoxForSpotScreen() {
     }
 }
 
-
-
-
-
-
 //Takes a warning message from Spot, and changes background color accordingly
 @Composable
 fun WarningBox (
