@@ -32,6 +32,7 @@ import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
 import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
 import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.Spot
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.components.*
+import no.uio.ifi.in2000.natalan.havvarselapp.ui.state.SpotUIState
 
 @Composable
 fun HomeScreen(
@@ -59,7 +60,7 @@ fun HomeScreen(
     val mapView = createMapScreen(context)
 
     homeScreenViewModel.updateThumbsUIState(spots)
-    AddAnnotationsToMap(spots, context, mapView, thumbs, navController, homeScreenViewModel, clicked, spot)
+    AddAnnotationsToMap(spots, context, mapView, thumbs, navController, homeScreenViewModel, clicked)
 
 
     Column(
@@ -82,6 +83,15 @@ fun HomeScreen(
                     .align(Alignment.TopCenter)
             ) {
                 TopBar(infoButtonClick = { navController.navigate("InfoScreen") })
+            }
+
+            //Spotbox
+            Box {
+                if (clicked) {
+                    if (spot != null) {
+                        SpotBoxWithFrame(spot)
+                    }
+                }
             }
 
             // NavBar
@@ -120,22 +130,20 @@ fun AddAnnotationsToMap(
     navController: NavController,
     homeScreenViewModel: HomeScreenViewModel,
     clicked : Boolean,
-    spot: Spot?
 ) {
     LaunchedEffect(mapView) {
         mapView.mapboxMap.loadStyle(Style.MAPBOX_STREETS) { style ->
             val annotationManager = mapView.annotations.createPointAnnotationManager()
-            annotationManager.addClickListener(com.mapbox.maps.plugin.annotation.generated.OnPointAnnotationClickListener {
-                // Handle click event here
-                homeScreenViewModel.updateClickedUIState(!clicked)
-                if (spot != null) {
-                    homeScreenViewModel.updateSpotUIState(spot.predefinedSpot.coordinates)
-                }
-                // For example, you can show a toast message
-                Toast.makeText(context, "Marker clicked", Toast.LENGTH_SHORT).show()
-                true // Return true if the click event is consumed
-            })
             spots.forEach { spot ->
+                annotationManager.addClickListener(com.mapbox.maps.plugin.annotation.generated.OnPointAnnotationClickListener {
+                    // Handle click event here
+                    homeScreenViewModel.updateSpotUIState(spot.predefinedSpot.coordinates)
+                    homeScreenViewModel.updateClickedUIState(!clicked)
+                    println("$spot")
+                    // For example, you can show a toast message
+                    Toast.makeText(context, "Marker clicked", Toast.LENGTH_SHORT).show()
+                    true // Return true if the click event is consumed
+                })
                 // Load your custom icon as a Bitmap
                 val drawable = iconId[spot.predefinedSpot.coordinates]?.let {
                     AppCompatResources.getDrawable(context, it)

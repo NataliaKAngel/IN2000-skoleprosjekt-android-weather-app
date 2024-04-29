@@ -49,6 +49,7 @@ import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import no.uio.ifi.in2000.natalan.havvarselapp.R
+import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.Spot
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.theme.*
 
 //Standard radius for box corners and often padding
@@ -354,7 +355,7 @@ fun KiteConditionColorBox(icon: Int, title: String, info: String) {
 //SpotBox that pops up on HomeScreen when a marker with spot is clicked
 //Shows relevant information from that spot
 @Composable
-fun SpotBox() {
+fun SpotBox(spot: Spot) {
     Box(
         modifier = Modifier
             .widthIn(max = 296.dp)
@@ -718,6 +719,7 @@ fun SpotBoxForSpotScreen() {
 //Takes a warning message from Spot, and changes background color accordingly
 @Composable
 fun WarningBox (
+    spot: Spot
     //Shows text from warning
     //spot.description
 ){
@@ -1062,12 +1064,12 @@ fun FavouriteScreenText() {
 // and SpotBox when a spot is clicked
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SpotBottomSheet()
+fun SpotBottomSheet(spot: Spot)
 {
     Surface {
         ModalBottomSheet(onDismissRequest = { /*TODO*/ }
         ) {
-            SpotBox()
+            SpotBox(spot)
         }
     }
 }
@@ -1117,34 +1119,32 @@ fun SpotBoxPreview(){
 
 //Shows how pull-up box on HomeScreen will show relevant information.
 //implement an "if-check" to see it there is a WarningBox to display
-@Preview
 @Composable
-fun SpotBoxWithFrame(){
+fun SpotBoxWithFrame(spot: Spot){
     Column(modifier = Modifier
         .width(296.dp)
         .background(White, shape = RoundedCornerShape(size = StandardRadius))
         .padding(StandardRadius))
 
     {
-        WarningBox()
+        WarningBox(spot)
         Spacer(modifier = Modifier.height(12.dp))
-        SpotBox()
+        SpotBox(spot)
     }
 }
 
 //Option if we want the Warning box to add on top of the SpotBox
-@Preview
 @Composable
-fun SpotBoxWithFrameOption(){
+fun SpotBoxWithFrameOption(spot: Spot){
 
     Box(Modifier.width(296.dp)){
         Column {
-            WarningBox()
+            WarningBox(spot)
             Box(
                 modifier = Modifier
                     .background(White, shape = RoundedCornerShape(size = StandardRadius))
                     .padding(StandardRadius)){
-                SpotBox()
+                SpotBox(spot)
             }
         }
     }
@@ -1159,11 +1159,11 @@ fun SettingsScreenTextPreview (){
     SettingsScreenText()
 }*/
 
-@Preview
+/*@Preview
 @Composable
 fun WarningBoxWithFramePreview () {
     WarningBox()
-}
+}*/
 
 @Preview
 @Composable
