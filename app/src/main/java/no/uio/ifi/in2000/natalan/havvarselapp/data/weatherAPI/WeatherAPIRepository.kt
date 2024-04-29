@@ -82,6 +82,7 @@ class WeatherAPIRepository (
                 windDirectionValue = windDirectionValue,
                 windDirectionUnit = windDirectionUnit,
                 windDirectionString = windDirectionValue?.let { transformWindDirection(it) },
+                kiteRecommendationColor = color,
                 kiteRecommendationSmallThumb = getSmallThumb(color),
                 kiteRecommendationBigThumb = getBigThumb(color)
             )
