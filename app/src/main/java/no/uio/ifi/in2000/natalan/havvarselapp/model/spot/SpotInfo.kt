@@ -8,6 +8,7 @@ data class SpotInfo(
     val windDirectionValue: Double?, // wind direction as double, e.g. "180.0"
     val windDirectionUnit : String?, //Unit: degrees
     val windDirectionString : String?, // The wind direction as a string e.g. "vest"
+    val kiteRecommendationColor: String?, // our kite recommendation represented as a color
     val kiteRecommendationSmallThumb : Int, // our kite recommendation represented as a small colored thumb
     val kiteRecommendationBigThumb : Int // out kite recommendation represented as a big colored thumb
 )
