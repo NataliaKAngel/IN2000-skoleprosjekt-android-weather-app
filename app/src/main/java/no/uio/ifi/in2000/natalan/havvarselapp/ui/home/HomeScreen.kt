@@ -89,7 +89,7 @@ fun HomeScreen(
             Box {
                 if (clicked) {
                     if (spot != null) {
-                        SpotBoxWithFrame(spot)
+                        SpotBoxWithFrame(spot, navController)
                     }
                 }
             }

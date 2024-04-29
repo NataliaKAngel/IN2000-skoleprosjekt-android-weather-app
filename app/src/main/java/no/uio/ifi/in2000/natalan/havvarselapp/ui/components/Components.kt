@@ -355,7 +355,7 @@ fun KiteConditionColorBox(icon: Int, title: String, info: String) {
 //SpotBox that pops up on HomeScreen when a marker with spot is clicked
 //Shows relevant information from that spot
 @Composable
-fun SpotBox(spot: Spot) {
+fun SpotBox(spot: Spot, navController: NavController) {
     Box(
         modifier = Modifier
             .widthIn(max = 296.dp)
@@ -403,8 +403,13 @@ fun SpotBox(spot: Spot) {
                 Spacer(modifier = Modifier.width(8.dp))
 
                 Box (
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable {
+                            navController.navigate("SpotScreen/${spot.predefinedSpot.coordinates}")
+                        },
                     contentAlignment = Alignment.CenterEnd
+
                 ){
                     Image(
                         painter = painterResource(id = R.drawable.gotospot),
@@ -1064,12 +1069,12 @@ fun FavouriteScreenText() {
 // and SpotBox when a spot is clicked
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SpotBottomSheet(spot: Spot)
+fun SpotBottomSheet(spot: Spot, navController: NavController)
 {
     Surface {
         ModalBottomSheet(onDismissRequest = { /*TODO*/ }
         ) {
-            SpotBox(spot)
+            SpotBox(spot, navController)
         }
     }
 }
@@ -1120,7 +1125,7 @@ fun SpotBoxPreview(){
 //Shows how pull-up box on HomeScreen will show relevant information.
 //implement an "if-check" to see it there is a WarningBox to display
 @Composable
-fun SpotBoxWithFrame(spot: Spot){
+fun SpotBoxWithFrame(spot: Spot, navController: NavController){
     Column(modifier = Modifier
         .width(296.dp)
         .background(White, shape = RoundedCornerShape(size = StandardRadius))
@@ -1129,13 +1134,13 @@ fun SpotBoxWithFrame(spot: Spot){
     {
         WarningBox(spot)
         Spacer(modifier = Modifier.height(12.dp))
-        SpotBox(spot)
+        SpotBox(spot, navController)
     }
 }
 
 //Option if we want the Warning box to add on top of the SpotBox
 @Composable
-fun SpotBoxWithFrameOption(spot: Spot){
+fun SpotBoxWithFrameOption(spot: Spot, navController: NavController){
 
     Box(Modifier.width(296.dp)){
         Column {
@@ -1144,7 +1149,7 @@ fun SpotBoxWithFrameOption(spot: Spot){
                 modifier = Modifier
                     .background(White, shape = RoundedCornerShape(size = StandardRadius))
                     .padding(StandardRadius)){
-                SpotBox(spot)
+                SpotBox(spot, navController)
             }
         }
     }
