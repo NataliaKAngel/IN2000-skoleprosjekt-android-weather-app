@@ -67,17 +67,15 @@ fun SpotCard(
                 Text("Beskrivelse: ${spot.alerts[0]?.description}")
                 Spacer(modifier = Modifier.height(5.dp))
             }
-
             //WindSpeed - LocationForecast
             Text("Vindstyrke: ${spot?.spotDetails?.get(0)?.windSpeedValue}, ${spot?.spotDetails?.get(0)?.windSpeedUnit}")
             Spacer(modifier = Modifier.height(5.dp))
             //WindDirection - LocationForecast
             Text("Vindretning: ${spot?.spotDetails?.get(0)?.windDirectionString}, ${spot?.spotDetails?.get(0)?.windDirectionUnit}")
             Spacer(modifier = Modifier.height(5.dp))
-            Text("Beregning: ${spot?.spotDetails?.get(0)?.kiteRecommendationColor}")
+            //Text("Beregning: ${spot?.spotDetails?.get(0)?.kiteRecommendationColor}")
             Spacer(modifier = Modifier.height(5.dp))
             Text("Dato: ${spot?.spotDetails?.get(0)?.date}")
-
         }
     }
 }

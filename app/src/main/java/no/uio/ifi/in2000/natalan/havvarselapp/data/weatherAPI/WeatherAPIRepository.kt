@@ -1,7 +1,6 @@
 package no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
+import no.uio.ifi.in2000.natalan.havvarselapp.R
 import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.locationForecast.LocationForecastDataSource
 import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.metAlerts.MetAlertsDataSource
 import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.predefinedSpots.PredefinedSpotsDataSource
@@ -13,6 +12,7 @@ import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.AlertInfo
 import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.SpotInfo
 import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.Spot
 import java.text.SimpleDateFormat
+import java.time.LocalTime
 import java.util.Locale
 
 class WeatherAPIRepository (
@@ -32,7 +32,7 @@ class WeatherAPIRepository (
         }
     }
 
-    private fun createOneSpot(predefinedSpot: PredefinedSpots, weatherResponse: WeatherResponse?, features: List<Feature>?): Spot{
+    private fun createOneSpot(predefinedSpot: PredefinedSpots, weatherResponse: WeatherResponse?, features: List<Feature>?): Spot {
         //Gets data from LocationForecast-API
         val windSpeed = getWindSpeedMap(weatherResponse)
         val windDirection = getWindDirectionMap(weatherResponse)
@@ -73,6 +73,7 @@ class WeatherAPIRepository (
             val (date, time) = timeStamp.split("T")
             val windSpeedValue = windSpeed[timeStamp]
             val windDirectionValue = windDirection[timeStamp]
+            val color = calculateKiteRecommendation(alerts, windSpeedValue, windDirectionValue, optimalWindConditions, timeStamp)
             SpotInfo(
                 date = transformDate(date),
                 time = transformTime(time),
@@ -81,7 +82,8 @@ class WeatherAPIRepository (
                 windDirectionValue = windDirectionValue,
                 windDirectionUnit = windDirectionUnit,
                 windDirectionString = windDirectionValue?.let { transformWindDirection(it) },
-                kiteRecommendationColor = calculateKiteRecommendation(alerts, windSpeedValue, windDirectionValue, optimalWindConditions, timeStamp)
+                kiteRecommendationSmallThumb = getSmallThumb(color),
+                kiteRecommendationBigThumb = getBigThumb(color)
             )
         }
     }
@@ -124,6 +126,30 @@ class WeatherAPIRepository (
             in 247.5..292.5 -> "vest"
             in 292.5..337.5 -> "nordvest"
             else -> "Ugyldige grader"
+        }
+    }
+
+    private fun getSmallThumb(color: String?): Int {
+        return when(color) {
+            "grey" -> R.drawable.sgreythumb
+            "blue" -> R.drawable.sbluethumb
+            "green" -> R.drawable.sgreenthumb
+            "yellow" -> R.drawable.syellowthumb
+            "orange" -> R.drawable.sorangethumb
+            "red" -> R.drawable.sredthumb
+            else -> R.drawable.sgreythumb
+        }
+    }
+
+    private fun getBigThumb(color: String?): Int {
+        return when(color) {
+            "grey" -> R.drawable.bgreythumb
+            "blue" -> R.drawable.bbluethumb
+            "green" -> R.drawable.bgreenthumb
+            "yellow" -> R.drawable.byellowthumb
+            "orange" -> R.drawable.borangethumb
+            "red" -> R.drawable.bredthumb
+            else -> R.drawable.bgreythumb
         }
     }
 
@@ -196,20 +222,40 @@ class WeatherAPIRepository (
         }
     }
 
-    //OFFERS SPOT-OBJECTS TO: ViewModel
+    //OFFERS UI-STATE DATA TO: ViewModel
     //Creates a list of Spot-objects and returns it.
     suspend fun getAllSpots(): List<Spot>{
         return createAllSpots()
     }
 
     //Returns one Spot-object based on coordinates to ViewModel
-    suspend fun getOneSpot(coordinates: String): Spot? {
+    suspend fun getOneSpot(coordinates: String): Spot {
         //Getting predefinedSpot, WeatherResponse and Feature to create Spot-object
         val predefinedSpot = getPredefinedSpots().find { it.coordinates == coordinates }
         val weatherResponse = getWeatherResponse(coordinates)
         val feature = getMetAlerts(coordinates)?.features
 
-        return predefinedSpot?.let { createOneSpot(it, weatherResponse, feature) }
+        return createOneSpot(predefinedSpot!!, weatherResponse, feature)
+    }
+
+    //Returns: Map<String, Int>. Offers a map with a small thumb icon per spot.
+    fun getThumbs(spots: List<Spot>) : Map<String, Int>{
+        return spots.associate { spot ->
+            spot.predefinedSpot.coordinates to getCorrectThumbIcon(spot)
+        }
+    }
+
+    private fun getCorrectThumbIcon(spot: Spot) : Int{
+        val currentTime = LocalTime.now()
+        val hour = currentTime.hour.toString()
+
+        spot.spotDetails.forEach { spotInfo ->
+            val spotTime = spotInfo.time.split(".")
+            if (spotTime[0] == hour){
+                return spotInfo.kiteRecommendationSmallThumb
+            }
+        }
+        return R.drawable.sgreythumb
     }
 
     //GETS AND TRANSFORM DATA FROM: LocationForecast

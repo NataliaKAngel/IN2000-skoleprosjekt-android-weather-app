@@ -13,6 +13,7 @@ class PredefinedSpotsDataSource {
                 "max" to 270.0
             )
         ),
+
         PredefinedSpots(
             coordinates = "59.558207, 4.60363",
             spotName = "TEST",
@@ -33,8 +34,8 @@ class PredefinedSpotsDataSource {
             )
         ),
 
-         */
-        /*
+
+
         PredefinedSpots(
             coordinates = "58.07625203318467, 7.811114127684619",
             spotName = "Høllesanden",
@@ -44,6 +45,7 @@ class PredefinedSpotsDataSource {
                 "max" to 247.5
             )
         ),
+
         PredefinedSpots(
             coordinates = "58.135371306063874, 7.034859484463499",
             spotName = "Kvaviksanden",

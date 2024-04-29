@@ -15,7 +15,6 @@ import androidx.constraintlayout.compose.ConstraintSet
 import androidx.navigation.NavController
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.components.FavouriteScreenText
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.components.NavBar
-import no.uio.ifi.in2000.natalan.havvarselapp.ui.components.SettingsScreenText
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.theme.DefaultBlue
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.theme.White
 

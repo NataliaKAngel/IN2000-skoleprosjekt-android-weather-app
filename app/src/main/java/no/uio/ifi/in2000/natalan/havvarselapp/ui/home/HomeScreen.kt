@@ -6,6 +6,7 @@ import android.graphics.Canvas
 import androidx.appcompat.content.res.AppCompatResources
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,28 +30,38 @@ import com.mapbox.maps.Style
 import com.mapbox.maps.plugin.annotation.annotations
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
 import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
-import no.uio.ifi.in2000.natalan.havvarselapp.R
 import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.Spot
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.components.*
+import no.uio.ifi.in2000.natalan.havvarselapp.ui.state.SpotUIState
 
 @Composable
 fun HomeScreen(
     navController: NavController,
-    homeScreenViewModel: HomeScreenViewModel
+    homeScreenViewModel: HomeScreenViewModel,
 ) {
-    //UI-state: List<Spot?>
+    //UI-state: List<Spot>
     val spotsUIState by homeScreenViewModel.spotsUIState.collectAsState()
     val spots = spotsUIState.spots
 
-    //UI-state: Spot?
+    //UI-state: Spot
     val spotUIState by homeScreenViewModel.spotUIState.collectAsState()
+    val spot = spotUIState.spot
+
+    //UI-state: Map<String, Int>
+    val thumbUIState by homeScreenViewModel.thumbUIState.collectAsState()
+    val thumbs = thumbUIState.thumbs
+
+    //UI-state: Boolean
+    val clickedUIState by homeScreenViewModel.clickedUIState.collectAsState()
+    val clicked = clickedUIState.clicked
 
     //Variables for map
     val context = LocalContext.current.applicationContext
     val mapView = createMapScreen(context)
 
+    homeScreenViewModel.updateThumbsUIState(spots)
+    AddAnnotationsToMap(spots, context, mapView, thumbs, navController, homeScreenViewModel, clicked)
 
-    AddAnnotationsToMap(spots, context, mapView, "sgreenthumb")
 
     Column(
         verticalArrangement = Arrangement.SpaceBetween,
@@ -72,6 +83,15 @@ fun HomeScreen(
                     .align(Alignment.TopCenter)
             ) {
                 TopBar(infoButtonClick = { navController.navigate("InfoScreen") })
+            }
+
+            //Spotbox
+            Box {
+                if (clicked) {
+                    if (spot != null) {
+                        SpotBoxWithFrame(spot, navController)
+                    }
+                }
             }
 
             // NavBar
@@ -103,32 +123,47 @@ fun createMapScreen(context: Context): MapView {
 
 @Composable
 fun AddAnnotationsToMap(
-    spots: List<Spot?>,
+    spots: List<Spot>,
     context: Context,
     mapView: MapView,
-    iconId: String // Name to icon
+    iconId: Map<String, Int>, // Name to icon
+    navController: NavController,
+    homeScreenViewModel: HomeScreenViewModel,
+    clicked : Boolean,
 ) {
     LaunchedEffect(mapView) {
-        mapView.mapboxMap.loadStyle(Style.MAPBOX_STREETS) {style ->
+        mapView.mapboxMap.loadStyle(Style.MAPBOX_STREETS) { style ->
             val annotationManager = mapView.annotations.createPointAnnotationManager()
             spots.forEach { spot ->
+                annotationManager.addClickListener(com.mapbox.maps.plugin.annotation.generated.OnPointAnnotationClickListener {
+                    // Handle click event here
+                    homeScreenViewModel.updateSpotUIState(spot.predefinedSpot.coordinates)
+                    homeScreenViewModel.updateClickedUIState(!clicked)
+                    println("$spot")
+                    // For example, you can show a toast message
+                    Toast.makeText(context, "Marker clicked", Toast.LENGTH_SHORT).show()
+                    true // Return true if the click event is consumed
+                })
                 // Load your custom icon as a Bitmap
-                val drawable = AppCompatResources.getDrawable(context, R.drawable.sgreenthumb)
+                val drawable = iconId[spot.predefinedSpot.coordinates]?.let {
+                    AppCompatResources.getDrawable(context, it)
+                }
                 val bitmap = convertDrawableToBitmap(drawable)
                 if (bitmap != null) {
                     // Add the bitmap as a custom icon in the Mapbox style.
-                    style.addImage(iconId, bitmap)
-                    val coordinates = spot?.predefinedSpot?.coordinates?.split(",")?.map { it.toDouble() }
-                    val point = Point.fromLngLat(coordinates?.get(1) ?: 0.0, coordinates?.get(0) ?: 0.0)
+                    style.addImage(iconId[spot.predefinedSpot.coordinates].toString(), bitmap)
+                    val coordinates = spot.predefinedSpot.coordinates.split(",").map { it.toDouble() }
+                    val point = Point.fromLngLat(coordinates[1], coordinates[0])
                     val annotationOptions = PointAnnotationOptions()
                         .withPoint(point)
-                        .withIconImage(iconId) // Bruk det definerte ikonnavnet
+                        .withIconImage(iconId[spot.predefinedSpot.coordinates].toString())
                     annotationManager.create(annotationOptions)
                 }
             }
         }
     }
 }
+
 
 // Convert Drawable to Bitmap using this method
 private fun convertDrawableToBitmap(sourceDrawable: Drawable?): Bitmap? {

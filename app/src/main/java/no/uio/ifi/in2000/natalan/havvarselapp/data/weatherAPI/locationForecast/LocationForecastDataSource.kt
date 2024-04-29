@@ -1,8 +1,6 @@
 package no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.locationForecast
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.engine.cio.CIO
@@ -12,7 +10,6 @@ import io.ktor.client.request.get
 import io.ktor.client.request.header
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
-import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.Endpoint
 import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.Endpoint.LOCATIONFORECAST
 import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.Endpoint.LF_WEATHERRESPONSE
 import no.uio.ifi.in2000.natalan.havvarselapp.model.locationForecast.WeatherResponse
