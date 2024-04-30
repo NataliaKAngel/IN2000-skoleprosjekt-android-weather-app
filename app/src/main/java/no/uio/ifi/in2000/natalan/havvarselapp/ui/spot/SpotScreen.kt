@@ -114,7 +114,7 @@ fun SpotScreen (
                             .background(White, shape = RoundedCornerShape(size = 16.dp))
 
                     ) {
-                        SpotBoxForSpotScreen()
+                        //SpotBoxForSpotScreen()
                     }
 
                     Spacer(modifier = Modifier.height(16.dp))

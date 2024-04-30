@@ -175,6 +175,9 @@ fun AddAnnotationsToMap(
                     onPinClicked(spot) // Invoke the callback with the clicked spot
                     homeScreenViewModel.updateSpotUIState(spot.predefinedSpot.coordinates)
                     homeScreenViewModel.updateClickedUIState(!clicked)
+                    println("$spot")
+                    // For example, you can show a toast message
+                    Toast.makeText(context, "Marker clicked", Toast.LENGTH_SHORT).show()
                     true // Return true if the click event is consumed
                 })
                 // Load your custom icon as a Bitmap

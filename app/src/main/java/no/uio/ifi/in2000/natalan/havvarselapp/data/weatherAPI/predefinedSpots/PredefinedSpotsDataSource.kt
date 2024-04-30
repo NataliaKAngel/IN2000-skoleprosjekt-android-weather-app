@@ -5,6 +5,15 @@ import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.PredefinedSpots
 class PredefinedSpotsDataSource {
     private val predefinedSpots: List<PredefinedSpots> = listOf(
         PredefinedSpots(
+            coordinates = "58.18857641754766, 8.086584207780076",
+            spotName = "Hamresanden",
+            cityName = "Kristiansand",
+            optimalWindConditions = mapOf(
+                "min" to 157.5,
+                "max" to 247.5
+            )
+        ),
+        PredefinedSpots(
             coordinates = "58.07037852078236, 6.778011069088529",
             spotName = "Husebysanden",
             cityName = "Lista",
