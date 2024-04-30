@@ -86,5 +86,6 @@ dependencies {
     implementation("com.mapbox.maps:android:11.2.1")
     implementation ("androidx.constraintlayout:constraintlayout-compose:1.0.1")
     implementation ("androidx.appcompat:appcompat:1.3.0")
+    
 
 }

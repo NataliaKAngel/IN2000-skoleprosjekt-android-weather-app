@@ -11,12 +11,17 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.BottomSheetScaffoldState
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -30,44 +35,64 @@ import com.mapbox.maps.Style
 import com.mapbox.maps.plugin.annotation.annotations
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
 import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.Spot
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.components.*
-import no.uio.ifi.in2000.natalan.havvarselapp.ui.state.SpotUIState
-
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     navController: NavController,
     homeScreenViewModel: HomeScreenViewModel,
+    scope: CoroutineScope,
+    scaffoldState: BottomSheetScaffoldState
 ) {
-    //UI-state: List<Spot>
+    // UI-state: List<Spot>
     val spotsUIState by homeScreenViewModel.spotsUIState.collectAsState()
     val spots = spotsUIState.spots
 
-    //UI-state: Spot
+    // UI-state: Spot
     val spotUIState by homeScreenViewModel.spotUIState.collectAsState()
     val spot = spotUIState.spot
 
-    //UI-state: Map<String, Int>
+    // UI-state: Map<String, Int>
     val thumbUIState by homeScreenViewModel.thumbUIState.collectAsState()
     val thumbs = thumbUIState.thumbs
 
-    //UI-state: Boolean
+    // UI-state: Boolean
     val clickedUIState by homeScreenViewModel.clickedUIState.collectAsState()
     val clicked = clickedUIState.clicked
 
-    //Variables for map
+    // State to track if the swipeable box is visible
+    var swipeableBoxVisible by remember { mutableStateOf(false) }
+
+    // Variables for map
     val context = LocalContext.current.applicationContext
-    val mapView = createMapScreen(context)
+    val mapView = createMapScreen(LocalContext.current.applicationContext)
+
+    val onPinClicked: (Spot) -> Unit = { spot ->
+        scope.launch {
+            scaffoldState.bottomSheetState.expand()
+            // Update spot UI state here if needed
+        }
+    }
 
     homeScreenViewModel.updateThumbsUIState(spots)
-    AddAnnotationsToMap(spots, context, mapView, thumbs, navController, homeScreenViewModel, clicked)
-
+    AddAnnotationsToMap(
+        spots,
+        context,
+        mapView,
+        thumbs,
+        navController,
+        homeScreenViewModel,
+        clicked,
+        onPinClicked
+    )
 
     Column(
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-
         Box(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.TopCenter
@@ -89,22 +114,34 @@ fun HomeScreen(
             Box {
                 if (clicked) {
                     if (spot != null) {
-                        SpotBoxWithFrame(spot, navController)
+                        // Render SpotBoxWithFrame over navigation bar
+                        SpotBoxWithFrame(
+                            spot = spot,
+                            navController = navController,
+                            onDismiss = {
+                                // Handle dismiss action here
+                            },
+                            modifier = Modifier
+                                .align(Alignment.TopCenter)
+                                .padding(top = 16.dp) // Add padding to position it below NavBar
+                        )
                     }
                 }
             }
 
-            // NavBar
+            // Navigation bar at the bottom of the screen
             Box(
                 modifier = Modifier
-                    .padding(bottom = 16.dp, start = 16.dp, end = 16.dp)
+                    .fillMaxWidth()
+                    .padding(top = 16.dp, start = 16.dp, end = 16.dp)
                     .align(Alignment.BottomCenter)
             ) {
-                NavBar(navController)
+                NavBar(navController = navController)
             }
         }
     }
 }
+
 
 @Composable
 fun createMapScreen(context: Context): MapView {
@@ -130,6 +167,7 @@ fun AddAnnotationsToMap(
     navController: NavController,
     homeScreenViewModel: HomeScreenViewModel,
     clicked : Boolean,
+    onPinClicked: (Spot) -> Unit // Callback to handle pin clicks
 ) {
     LaunchedEffect(mapView) {
         mapView.mapboxMap.loadStyle(Style.MAPBOX_STREETS) { style ->
@@ -137,6 +175,7 @@ fun AddAnnotationsToMap(
             spots.forEach { spot ->
                 annotationManager.addClickListener(com.mapbox.maps.plugin.annotation.generated.OnPointAnnotationClickListener {
                     // Handle click event here
+                    onPinClicked(spot) // Invoke the callback with the clicked spot
                     homeScreenViewModel.updateSpotUIState(spot.predefinedSpot.coordinates)
                     homeScreenViewModel.updateClickedUIState(!clicked)
                     println("$spot")
@@ -186,3 +225,4 @@ private fun convertDrawableToBitmap(sourceDrawable: Drawable?): Bitmap? {
         bitmap
     }
 }
+
