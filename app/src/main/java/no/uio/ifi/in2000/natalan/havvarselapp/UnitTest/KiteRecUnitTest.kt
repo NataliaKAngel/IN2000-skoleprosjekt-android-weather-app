@@ -100,7 +100,58 @@ class KiteRecommendationUnitTest {
         Assert.assertEquals(expectedOutput, actualOutput)
     }
 
-}
+    @Test
+    fun testTransformWindDirection() {
+        // Test cases with input wind direction values
+        val testCases = mapOf(
+            0.0 to "nord",
+            45.0 to "nordøst",
+            90.0 to "øst",
+            135.0 to "sørøst",
+            180.0 to "sør",
+            225.0 to "sørvest",
+            270.0 to "vest",
+            315.0 to "nordvest",
+            360.0 to "nord"
+        )
+
+        // Iterate through test cases
+        testCases.forEach { (inputValue, expectedOutput) ->
+            // Call the function for each test case
+            val actualOutput = transformWindDirection(inputValue)
+
+            // Assert
+            Assert.assertEquals(expectedOutput, actualOutput)
+        }
+    }
+
+    @Test
+    fun testCalculateWindDirection() {
+        // Test cases with input parameters
+        val testCases = listOf(
+            // Test case 1: Wind direction value is lower than min
+            Triple(150.0, mapOf("min" to 180.0, "max" to 270.0), "low"),
+            // Test case 2: Wind direction value is higher than max
+            Triple(300.0, mapOf("min" to 180.0, "max" to 270.0), "high"),
+            // Test case 3: Wind direction value is within min and max
+            Triple(220.0, mapOf("min" to 180.0, "max" to 270.0), "correct"),
+            // Test case 4: Wind direction value is null
+            Triple(null, mapOf("min" to 180.0, "max" to 270.0), "unknown")
+        )
+
+        // Iterate through test cases
+        testCases.forEachIndexed { index, (windDirectionValue, optimalWindConditions, expectedOutput) ->
+            // Call the function for each test case
+            val actualOutput = calculateWindDirection(windDirectionValue, optimalWindConditions)
+
+            // Assert
+            Assert.assertEquals("Test case ${index + 1} failed", expectedOutput, actualOutput)
+        }
+    }
+    }
+
+
+
 
 
     private fun createAllAlertInfos(features: List<KiteRecommendationUnitTest.Feature>?): List<KiteRecommendationUnitTest.AlertInfo> {
@@ -141,3 +192,29 @@ class KiteRecommendationUnitTest {
 
         return "$hour.$minutes"
     }
+    private fun transformWindDirection(windDirectionValue: Double): String {
+        return when (windDirectionValue) {
+            in 337.5..360.0, in 0.0..22.5 -> "nord"
+            in 22.5..67.5 -> "nordøst"
+            in 67.5..112.5 -> "øst"
+            in 112.5..157.5 -> "sørøst"
+            in 157.5..202.5 -> "sør"
+            in 202.5..247.5 -> "sørvest"
+            in 247.5..292.5 -> "vest"
+            in 292.5..337.5 -> "nordvest"
+            else -> "Ugyldige grader"
+        }
+    }
+private fun calculateWindDirection(windDirectionValue: Double?, optimalWindConditions: Map<String, Double>): String{
+    val minWind = optimalWindConditions["min"] ?: 0.0
+    val maxWind = optimalWindConditions["max"] ?: 360.0
+
+    if (windDirectionValue != null) {
+        return when {
+            windDirectionValue < minWind -> "low"
+            windDirectionValue > maxWind -> "high"
+            else -> "correct"
+        }
+    }
+    return "unknown"
+}
