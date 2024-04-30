@@ -2,6 +2,7 @@ package no.uio.ifi.in2000.natalan.havvarselapp.UnitTest
 
 import org.junit.Assert
 import org.junit.Test
+import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.WeatherAPIRepository
 
 class KiteRecommendationUnitTest {
     data class Feature(
@@ -36,6 +37,7 @@ class KiteRecommendationUnitTest {
 
     @Test
     fun testCreateAllAlertsInfos() {
+
         val features = listOf(
             Feature(
                 geometry = Geometry(listOf(listOf(listOf(1.0, 2.0)))),
@@ -68,12 +70,45 @@ class KiteRecommendationUnitTest {
         Assert.assertEquals(expected, createAllAlertInfos(features))
     }
 
-    fun createAllAlertInfos(features: List<Feature>?): List<AlertInfo> {
+    @Test
+    fun testTransformDate() {
+        // Input date
+        val inputDate = "2024-04-30"
+
+        // Expected output
+        val expectedOutput = "30. April"
+
+        // Call the function
+        val actualOutput = transformDate(inputDate)
+
+        // Assert
+        Assert.assertEquals(expectedOutput, actualOutput)
+    }
+
+    @Test
+    fun testTransformTime(){
+        // Input time
+        val inputTime = "08:30:45"
+
+        // Expected output
+        val expectedOutput = "08.30"
+
+        // Call the function
+        val actualOutput = transformTime(inputTime)
+
+        // Assert
+        Assert.assertEquals(expectedOutput, actualOutput)
+    }
+
+}
+
+
+    private fun createAllAlertInfos(features: List<KiteRecommendationUnitTest.Feature>?): List<KiteRecommendationUnitTest.AlertInfo> {
         return features?.map { createAlertInfo(it) } ?: emptyList()
     }
 
-    fun createAlertInfo(feature: Feature): AlertInfo {
-        return AlertInfo(
+    private fun createAlertInfo(feature: KiteRecommendationUnitTest.Feature): KiteRecommendationUnitTest.AlertInfo {
+        return KiteRecommendationUnitTest.AlertInfo(
             riskMatrixColor = feature.properties.riskMatrixColor,
             description = feature.properties.description,
             event = feature.properties.event,
@@ -81,4 +116,28 @@ class KiteRecommendationUnitTest {
             endTime = feature.whenField.interval[1]
         )
     }
-}
+    private fun transformDate(date: String): String {
+        val (year, month, day) = date.split("-")
+
+        val dateString = day + (when (month){
+            "01" -> ". Januar"
+            "02" -> ". Februar"
+            "03" -> ". Mars"
+            "04" -> ". April"
+            "05" -> ". Mai"
+            "06" -> ". Juni"
+            "07" -> ". Juli"
+            "08" -> ". August"
+            "09" -> ". September"
+            "10" -> ". Oktober"
+            "11" -> ". November"
+            "12" -> ". Desember"
+            else -> ""
+        })
+        return dateString
+    }
+    private fun transformTime(time: String): String {
+        val (hour, minutes, seconds) = time.split(":")
+
+        return "$hour.$minutes"
+    }
