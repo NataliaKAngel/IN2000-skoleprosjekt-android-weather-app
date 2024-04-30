@@ -19,14 +19,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import com.mapbox.geojson.Point
 import com.mapbox.maps.CameraOptions
@@ -62,9 +61,6 @@ fun HomeScreen(
     // UI-state: Boolean
     val clickedUIState by homeScreenViewModel.clickedUIState.collectAsState()
     val clicked = clickedUIState.clicked
-
-    // State to track if the swipeable box is visible
-    var swipeableBoxVisible by remember { mutableStateOf(false) }
 
     // Variables for map
     val context = LocalContext.current.applicationContext
@@ -110,38 +106,39 @@ fun HomeScreen(
                 TopBar(infoButtonClick = { navController.navigate("InfoScreen") })
             }
 
-            //Spotbox
-            Box {
-                if (clicked) {
-                    if (spot != null) {
-                        // Render SpotBoxWithFrame over navigation bar
-                        SpotBoxWithFrame(
-                            spot = spot,
-                            navController = navController,
-                            onDismiss = {
-                                // Handle dismiss action here
-                            },
-                            modifier = Modifier
-                                .align(Alignment.TopCenter)
-                                .padding(top = 16.dp) // Add padding to position it below NavBar
-                        )
-                    }
-                }
-            }
-
-            // Navigation bar at the bottom of the screen
+            // Navigasjonslinje nederst på skjermen
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 16.dp, start = 16.dp, end = 16.dp)
+                    .padding(bottom = 16.dp, start = 16.dp, end = 16.dp)
                     .align(Alignment.BottomCenter)
+                    .zIndex(0f) // Setter Z-indeksen til 0 for å plassere den under swipe-up boksen
             ) {
                 NavBar(navController = navController)
             }
+            // Swipe-up boksen
+            if (clicked) {
+                if (spot != null) {
+                    // Render SpotBoxWithFrame over navigation bar
+                    SpotBoxSheet(
+                        spot = spot,
+                        navController = navController,
+                        onDismiss = {
+                            // Fjern boksen ved å oppdatere clickedUIState til false eller utfør annen passende handling
+                            homeScreenViewModel.updateClickedUIState(false)
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .align(Alignment.TopCenter)
+                            .padding(top = 16.dp) // Legg til padding for å plassere den under NavBar
+                            .zIndex(1f) // Setter Z-indeksen til en verdi større enn 0 for å plassere den over navigasjonslinjen
+                    )
+                }
+            }
+
         }
     }
 }
-
 
 @Composable
 fun createMapScreen(context: Context): MapView {
@@ -178,9 +175,6 @@ fun AddAnnotationsToMap(
                     onPinClicked(spot) // Invoke the callback with the clicked spot
                     homeScreenViewModel.updateSpotUIState(spot.predefinedSpot.coordinates)
                     homeScreenViewModel.updateClickedUIState(!clicked)
-                    println("$spot")
-                    // For example, you can show a toast message
-                    Toast.makeText(context, "Marker clicked", Toast.LENGTH_SHORT).show()
                     true // Return true if the click event is consumed
                 })
                 // Load your custom icon as a Bitmap

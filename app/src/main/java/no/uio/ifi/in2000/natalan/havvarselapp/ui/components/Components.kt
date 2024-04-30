@@ -26,6 +26,7 @@ import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
@@ -51,11 +52,11 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import no.uio.ifi.in2000.natalan.havvarselapp.R
 import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.Spot
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.theme.*
+
 
 //Standard radius for box corners and often padding
 private val StandardRadius: Dp = 16.dp
@@ -1066,13 +1067,40 @@ fun FavouriteScreenText() {
 // and SpotBox when a spot is clicked
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SpotBottomSheet(spot: Spot, navController: NavController)
-{
-    Surface {
-        ModalBottomSheet(onDismissRequest = { /*TODO*/ }
-        ) {
-            SpotBox(spot, navController)
-        }
+fun SpotBoxSheet(
+    spot: Spot,
+    navController: NavController,
+    onDismiss: () -> Unit,
+    modifier: Modifier
+) {
+    BottomSheetScaffold(
+        scaffoldState = rememberBottomSheetScaffoldState(),
+        sheetPeekHeight = 128.dp,
+        sheetContent = {
+            Column(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(64.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                WarningBox(spot)
+                Spacer(modifier = Modifier.height(12.dp))
+                SpotBox(spot, navController)
+                Box(
+                    modifier = Modifier
+                        .clickable {
+                            onDismiss()
+                        },
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.gotomap),
+                        contentDescription = "image description",
+                        contentScale = ContentScale.None
+                    )
+                }
+
+            }
+        }) {
     }
 }
 
@@ -1135,59 +1163,6 @@ fun SpotBoxWithFrame(spot: Spot, navController: NavController){
     }
 }
 */
-
-/*@Composable
-fun SpotBoxWithFrame(
-    spot: Spot,
-    navController: NavController,
-    modifier: Modifier = Modifier
-) {
-    Box(
-        modifier = modifier,
-        contentAlignment = Alignment.BottomCenter
-    ) {
-        Column(
-            modifier = Modifier
-                .width(296.dp)
-                .background(White, shape = RoundedCornerShape(size = StandardRadius))
-                .padding(StandardRadius)
-        ) {
-            WarningBox(spot)
-            Spacer(modifier = Modifier.height(12.dp))
-            SpotBox(spot, navController)
-        }
-    }
-}*/
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun SpotBoxWithFrame(
-    spot: Spot,
-    navController: NavController,
-    onDismiss: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    val scope = rememberCoroutineScope()
-    val scaffoldState = rememberBottomSheetScaffoldState()
-
-    BottomSheetScaffold(
-        scaffoldState = scaffoldState,
-        sheetPeekHeight = 128.dp,
-        sheetContent = {
-            Column(
-                Modifier
-                    .fillMaxWidth()
-                    .padding(64.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                WarningBox(spot)
-                Spacer(modifier = Modifier.height(12.dp))
-                SpotBox(spot, navController)
-            }
-        }) {
-    }
-}
-
-
 
 //Option if we want the Warning box to add on top of the SpotBox
 @Composable
