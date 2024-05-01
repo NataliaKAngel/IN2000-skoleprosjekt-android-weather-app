@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -50,6 +51,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import no.uio.ifi.in2000.natalan.havvarselapp.R
 import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.Spot
+import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.SpotInfo
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.theme.*
 
 //Standard radius for box corners and often padding
@@ -768,7 +770,8 @@ fun WarningBox (
 
 @Composable
 // lage ny til dag for dag? eller endre denne for å justere seg?
-fun TimeBox(){
+fun TimeBox(detail: SpotInfo) {
+
     Box (
         modifier = Modifier
             .border(
@@ -790,7 +793,7 @@ fun TimeBox(){
             ) {
                 Text(
                     //text = text from spot time...
-                    text = "12:00",
+                    text = detail.time,
                     style = TextStyle(
                         fontSize = 9.sp,
                         fontFamily = FontFamily(Font(R.font.inter_font)),
@@ -800,7 +803,7 @@ fun TimeBox(){
                 )
                 Text(
                     //text from spot time
-                    text = "8 m/s",
+                    text = "${detail.windSpeedValue} m/s",
                     style = TextStyle(
                         fontSize = 9.sp,
                         fontFamily = FontFamily(Font(R.font.inter_font)),
@@ -810,7 +813,7 @@ fun TimeBox(){
                 )
                 Text(
                     //text wind direction from spot
-                    text = "sørvest",
+                    text = "${detail.windDirectionString}",
                     style = TextStyle(
                         fontSize = 9.sp,
                         fontFamily = FontFamily(Font(R.font.inter_font)),
@@ -825,125 +828,30 @@ fun TimeBox(){
 
 
 @Composable
-fun DaysBoxRow(){
+fun DaysBoxRow(details: List<SpotInfo>){
     Column(
         verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Top),
-        horizontalAlignment = Alignment.Start,)
-    {
-        Text(
-            text = "De neste dagene:",
-            style = TextStyle(
-                fontSize = 9.sp,
-                fontFamily = FontFamily(Font(R.font.inter_font)),
-                fontWeight = FontWeight(400),
-                color = TextColor
+        horizontalAlignment = Alignment.Start,
+    ) {
+
+            Text(
+                text = details[0].date,
+                style = TextStyle(
+                    fontSize = 9.sp,
+                    fontFamily = FontFamily(Font(R.font.inter_font)),
+                    fontWeight = FontWeight(400),
+                    color = TextColor
+                )
             )
-        )
-        // gjøre til en løkke
         LazyRow {
-            item {
-                TimeBox()
-            }
-            item {
-                Spacer(modifier = Modifier.width(8.dp))
-            }
-            item {
-                TimeBox()
-            }
-            item {
-                Spacer(modifier = Modifier.width(8.dp))
-            }
-            item {
-                TimeBox()
-            }
-            item {
-                Spacer(modifier = Modifier.width(8.dp))
-            }
-            item {
-                TimeBox()
-            }
-            item {
-                Spacer(modifier = Modifier.width(8.dp))
-            }
-            item {
-                TimeBox()
-            }
-            item {
-                Spacer(modifier = Modifier.width(8.dp))
-            }
-            item {
-                TimeBox()
-            }
-            item {
-                Spacer(modifier = Modifier.width(8.dp))
-            }
-            item {
-                TimeBox()
+            items(details) { detail ->
+                TimeBox(detail)
             }
         }
+
+
     }
 }
-
-
-@Composable
-fun NextHoursRow() {
-    Column(
-        verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Top),
-        horizontalAlignment = Alignment.Start
-    ){
-        Text(
-            text = "I dag:",
-            style = TextStyle(
-                fontSize = 9.sp,
-                fontFamily = FontFamily(Font(R.font.inter_font)),
-                fontWeight = FontWeight(400),
-                color = TextColor
-            )
-        )
-        LazyRow {
-            item {
-                TimeBox()
-            }
-            item {
-                Spacer(modifier = Modifier.width(8.dp))
-            }
-            item {
-                TimeBox()
-            }
-            item {
-                Spacer(modifier = Modifier.width(8.dp))
-            }
-            item {
-                TimeBox()
-            }
-            item {
-                Spacer(modifier = Modifier.width(8.dp))
-            }
-            item {
-                TimeBox()
-            }
-            item {
-                Spacer(modifier = Modifier.width(8.dp))
-            }
-            item {
-                TimeBox()
-            }
-            item {
-                Spacer(modifier = Modifier.width(8.dp))
-            }
-            item {
-                TimeBox()
-            }
-            item {
-                Spacer(modifier = Modifier.width(8.dp))
-            }
-            item {
-                TimeBox()
-            }
-        }
-    }
-}
-
 
 @Composable
 fun ButtonRow(navController : NavController){
@@ -1168,20 +1076,20 @@ fun SettingsScreenTextPreview (){
 @Composable
 fun WarningBoxWithFramePreview () {
     WarningBox()
-}*/
+}
 
 @Preview
 @Composable
 fun TimeBoxPreview(){
-    TimeBox()
+    TimeBox(spot)
 }
 
 @Preview
 @Composable
 fun DaysBoxRowPreview(){
-    DaysBoxRow()
+    DaysBoxRow(spot)
 }
-
+*/
 @Preview
 @Composable
 fun SpotBoxForSpotScreenPreview() {
