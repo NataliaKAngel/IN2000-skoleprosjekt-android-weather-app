@@ -6,7 +6,6 @@ import android.graphics.Canvas
 import androidx.appcompat.content.res.AppCompatResources
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
-import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -35,7 +34,6 @@ import com.mapbox.maps.plugin.annotation.annotations
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
 import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.Spot
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.components.*
 @OptIn(ExperimentalMaterial3Api::class)
@@ -65,15 +63,8 @@ fun HomeScreen(
     // Variables for map
     val context = LocalContext.current.applicationContext
     val mapView = createMapScreen(LocalContext.current.applicationContext)
-
-    val onPinClicked: (Spot) -> Unit = { spot ->
-        scope.launch {
-            scaffoldState.bottomSheetState.expand()
-            // Update spot UI state here if needed
-        }
-    }
-
     homeScreenViewModel.updateThumbsUIState(spots)
+
     AddAnnotationsToMap(
         spots,
         context,
@@ -81,8 +72,7 @@ fun HomeScreen(
         thumbs,
         navController,
         homeScreenViewModel,
-        clicked,
-        onPinClicked
+        clicked
     )
 
     Column(
@@ -135,7 +125,6 @@ fun HomeScreen(
                     )
                 }
             }
-
         }
     }
 }
@@ -164,7 +153,6 @@ fun AddAnnotationsToMap(
     navController: NavController,
     homeScreenViewModel: HomeScreenViewModel,
     clicked : Boolean,
-    onPinClicked: (Spot) -> Unit // Callback to handle pin clicks
 ) {
     LaunchedEffect(mapView) {
         mapView.mapboxMap.loadStyle(Style.MAPBOX_STREETS) { style ->
@@ -172,12 +160,8 @@ fun AddAnnotationsToMap(
             spots.forEach { spot ->
                 annotationManager.addClickListener(com.mapbox.maps.plugin.annotation.generated.OnPointAnnotationClickListener {
                     // Handle click event here
-                    onPinClicked(spot) // Invoke the callback with the clicked spot
                     homeScreenViewModel.updateSpotUIState(spot.predefinedSpot.coordinates)
                     homeScreenViewModel.updateClickedUIState(!clicked)
-                    println("$spot")
-                    // For example, you can show a toast message
-                    Toast.makeText(context, "Marker clicked", Toast.LENGTH_SHORT).show()
                     true // Return true if the click event is consumed
                 })
                 // Load your custom icon as a Bitmap

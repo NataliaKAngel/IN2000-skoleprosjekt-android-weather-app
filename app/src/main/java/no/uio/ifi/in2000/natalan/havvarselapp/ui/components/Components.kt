@@ -360,7 +360,7 @@ fun KiteConditionColorBox(icon: Int, title: String, info: String) {
 @Composable
 fun SpotBox(
     spot: Spot,
-    navController: NavController,
+    navController: NavController
 ) {
     val context = LocalContext.current
     Box(
