@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -136,6 +137,14 @@ fun SpotScreen (
                                     .background(White, shape = RoundedCornerShape(size = 16.dp))
                             ) {
                                 DaysBoxRow(detailsForDate)
+                            }
+
+                        }
+                        // To make sure all the days are shown, simple solution, should be changed
+                        repeat(2) {
+                            Spacer(modifier = Modifier.height(48.dp))
+                            Box(modifier = Modifier) {
+                                Text(text = "ikke mer tilgjenglig data")
                             }
                         }
 

@@ -22,8 +22,8 @@ class PredefinedSpotsDataSource {
                 "min" to 157.5,
                 "max" to 247.5
             )
-        )
-        /*
+        ),
+
         PredefinedSpots(
             coordinates = "58.18857641754766, 8.086584207780076",
             spotName = "Hamresanden",
@@ -73,8 +73,6 @@ class PredefinedSpotsDataSource {
                 "max" to 247.5
             )
         )
-
-         */
     )
     fun getPredefinedSpots(): List<PredefinedSpots>{
         return predefinedSpots

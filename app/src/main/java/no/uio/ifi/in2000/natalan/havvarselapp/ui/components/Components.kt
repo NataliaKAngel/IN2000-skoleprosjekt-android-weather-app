@@ -866,8 +866,6 @@ fun DaysBoxRow(details: List<SpotInfo>){
                 Spacer(modifier = Modifier.width(8.dp))
             }
         }
-
-
     }
 }
 
