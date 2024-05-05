@@ -380,7 +380,7 @@ fun SpotBox(spot: Spot, navController: NavController) {
                     ) {
                         // Denne er riktig, denne kan vi kalle "header1" i type, denne skal gjenbrukes og puttes i type
                         Text(
-                            text = "Hamresanden",
+                            text = spot.predefinedSpot.spotName,
                             style = TextStyle(
                                 fontSize = 24.sp,
                                 fontFamily = FontFamily(Font(R.font.inter_font)),
@@ -391,7 +391,7 @@ fun SpotBox(spot: Spot, navController: NavController) {
                         )
                         // denne er også riktig, lage en i type
                         Text(
-                            text = "Kristiansand",
+                            text = spot.predefinedSpot.cityName,
                             style = TextStyle(
                                 fontSize = 12.sp,
                                 fontFamily = FontFamily(Font(R.font.inter_font)),
@@ -460,7 +460,7 @@ fun SpotBox(spot: Spot, navController: NavController) {
                         //ConditonCircle with thumb
                         Box {
                             Image(
-                                painter = painterResource(id = R.drawable.bgreenthumb),
+                                painter = painterResource(id = spot.spotDetails[0].kiteRecommendationBigThumb),
                                 contentDescription = "color thumb",
                                 contentScale = ContentScale.None
                             )
@@ -476,7 +476,7 @@ fun SpotBox(spot: Spot, navController: NavController) {
                                 verticalAlignment = Alignment.Bottom,
                             ) {
                                 Text(
-                                    text = "8",
+                                    text = "${spot.spotDetails[0].windSpeedValue}",
                                     style = TextStyle(
                                         fontSize = 24.sp,
                                         fontFamily = FontFamily(Font(R.font.inter_font)),
@@ -519,7 +519,7 @@ fun SpotBox(spot: Spot, navController: NavController) {
                                     modifier = Modifier.size(32.dp)
                                 )
                                 Text(
-                                    text = "sørvest",
+                                    text = "${spot.spotDetails[0].windDirectionString}",
                                     style = TextStyle(
                                         fontSize = 24.sp,
                                         fontFamily = FontFamily(Font(R.font.inter_font)),
@@ -552,7 +552,7 @@ fun SpotBox(spot: Spot, navController: NavController) {
 @Composable
 // sjekke om denne er unødvendig, kan man gjøre en if check med spotbox over i stedet?
 // bruker ikke bildet
-fun SpotBoxForSpotScreen() {
+fun SpotBoxForSpotScreen(spot: Spot?) {
     Box(
         modifier = Modifier
 //            .widthIn(max = 296.dp)
@@ -575,25 +575,29 @@ fun SpotBoxForSpotScreen() {
                         verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.Top),
                         horizontalAlignment = Alignment.Start,
                     ) {
-                        Text(
-                            text = "Hamresanden",
-                            style = TextStyle(
-                                fontSize = 24.sp,
-                                fontFamily = FontFamily(Font(R.font.inter_font)),
-                                fontWeight = FontWeight(700),
-                                color = TextColor,
-                                letterSpacing = (-0.05).sp
+                        if (spot != null) {
+                            Text(
+                                text = spot.predefinedSpot.spotName,
+                                style = TextStyle(
+                                    fontSize = 24.sp,
+                                    fontFamily = FontFamily(Font(R.font.inter_font)),
+                                    fontWeight = FontWeight(700),
+                                    color = TextColor,
+                                    letterSpacing = (-0.05).sp
+                                )
                             )
-                        )
-                        Text(
-                            text = "Kristiansand",
-                            style = TextStyle(
-                                fontSize = 12.sp,
-                                fontFamily = FontFamily(Font(R.font.inter_font)),
-                                fontWeight = FontWeight(400),
-                                color = TextColor
+                        }
+                        if (spot != null) {
+                            Text(
+                                text = spot.predefinedSpot.cityName,
+                                style = TextStyle(
+                                    fontSize = 12.sp,
+                                    fontFamily = FontFamily(Font(R.font.inter_font)),
+                                    fontWeight = FontWeight(400),
+                                    color = TextColor
+                                )
                             )
-                        )
+                        }
                     }
                 }
 
@@ -634,11 +638,13 @@ fun SpotBoxForSpotScreen() {
                     ) {
                         //ConditonCircle with thumb
                         Box {
-                            Image(
-                                painter = painterResource(id = R.drawable.bgreenthumb),
-                                contentDescription = "color thumb",
-                                contentScale = ContentScale.None
-                            )
+                            if (spot != null) {
+                                Image(
+                                    painter = painterResource(id = spot.spotDetails[0].kiteRecommendationBigThumb),
+                                    contentDescription = "color thumb",
+                                    contentScale = ContentScale.None
+                                )
+                            }
                         }
 
 
@@ -650,15 +656,17 @@ fun SpotBoxForSpotScreen() {
                                 horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.Start),
                                 verticalAlignment = Alignment.Bottom,
                             ) {
-                                Text(
-                                    text = "8",
-                                    style = TextStyle(
-                                        fontSize = 24.sp,
-                                        fontFamily = FontFamily(Font(R.font.inter_font)),
-                                        fontWeight = FontWeight(300),
-                                        color = TextColor
+                                if (spot != null) {
+                                    Text(
+                                        text = "${spot.spotDetails[0].windSpeedValue}",
+                                        style = TextStyle(
+                                            fontSize = 24.sp,
+                                            fontFamily = FontFamily(Font(R.font.inter_font)),
+                                            fontWeight = FontWeight(300),
+                                            color = TextColor
+                                        )
                                     )
-                                )
+                                }
                                 Text(
                                     text = "m/s",
                                     style = TextStyle(
@@ -693,15 +701,17 @@ fun SpotBoxForSpotScreen() {
                                     contentScale = ContentScale.None,
                                     modifier = Modifier.size(32.dp)
                                 )
-                                Text(
-                                    text = "sørvest",
-                                    style = TextStyle(
-                                        fontSize = 24.sp,
-                                        fontFamily = FontFamily(Font(R.font.inter_font)),
-                                        fontWeight = FontWeight(400),
-                                        color = TextColor
+                                if (spot != null) {
+                                    Text(
+                                        text = "${spot.spotDetails[0].windDirectionString}",
+                                        style = TextStyle(
+                                            fontSize = 24.sp,
+                                            fontFamily = FontFamily(Font(R.font.inter_font)),
+                                            fontWeight = FontWeight(400),
+                                            color = TextColor
+                                        )
                                     )
-                                )
+                                }
 
                             }
 
@@ -771,7 +781,7 @@ fun WarningBox (
 @Composable
 // lage ny til dag for dag? eller endre denne for å justere seg?
 fun TimeBox(detail: SpotInfo) {
-
+    val color = detail.kiteRecommendationColor
     Box (
         modifier = Modifier
             .border(
@@ -846,6 +856,7 @@ fun DaysBoxRow(details: List<SpotInfo>){
         LazyRow {
             items(details) { detail ->
                 TimeBox(detail)
+                Spacer(modifier = Modifier.width(8.dp))
             }
         }
 
@@ -1089,13 +1100,13 @@ fun TimeBoxPreview(){
 fun DaysBoxRowPreview(){
     DaysBoxRow(spot)
 }
-*/
+
 @Preview
 @Composable
 fun SpotBoxForSpotScreenPreview() {
     SpotBoxForSpotScreen()
 }
-
+*/
 //@Preview
 //@Composable
 //fun ButtonRowPreview(){

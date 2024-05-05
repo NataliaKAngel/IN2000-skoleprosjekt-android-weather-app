@@ -139,7 +139,7 @@ fun AddAnnotationsToMap(
                     // Handle click event here
                     homeScreenViewModel.updateSpotUIState(spot.predefinedSpot.coordinates)
                     homeScreenViewModel.updateClickedUIState(!clicked)
-                    println("$spot")
+                    println("OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO:$spot")
                     // For example, you can show a toast message
                     Toast.makeText(context, "Marker clicked", Toast.LENGTH_SHORT).show()
                     true // Return true if the click event is consumed
