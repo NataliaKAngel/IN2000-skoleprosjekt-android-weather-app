@@ -6,7 +6,6 @@ import android.graphics.Canvas
 import androidx.appcompat.content.res.AppCompatResources
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
-import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,6 +22,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
+import com.google.gson.Gson
+import com.google.gson.JsonParser
 import com.mapbox.geojson.Point
 import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.MapView
@@ -32,7 +33,6 @@ import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
 import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
 import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.Spot
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.components.*
-import no.uio.ifi.in2000.natalan.havvarselapp.ui.state.SpotUIState
 
 @Composable
 fun HomeScreen(
@@ -126,43 +126,44 @@ fun AddAnnotationsToMap(
     spots: List<Spot>,
     context: Context,
     mapView: MapView,
-    iconId: Map<String, Int>, // Name to icon
+    thumbs: Map<String, Int>,
     navController: NavController,
     homeScreenViewModel: HomeScreenViewModel,
-    clicked : Boolean,
+    clicked: Boolean,
 ) {
+    val annotationDataMap = remember { mutableMapOf<String, String>() } // Map to store annotation data
     LaunchedEffect(mapView) {
         mapView.mapboxMap.loadStyle(Style.MAPBOX_STREETS) { style ->
             val annotationManager = mapView.annotations.createPointAnnotationManager()
             spots.forEach { spot ->
-                annotationManager.addClickListener(com.mapbox.maps.plugin.annotation.generated.OnPointAnnotationClickListener {
-                    // Handle click event here
-                    homeScreenViewModel.updateSpotUIState(spot.predefinedSpot.coordinates)
-                    homeScreenViewModel.updateClickedUIState(!clicked)
-                    println("OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO:$spot")
-                    // For example, you can show a toast message
-                    Toast.makeText(context, "Marker clicked", Toast.LENGTH_SHORT).show()
-                    true // Return true if the click event is consumed
-                })
-                // Load your custom icon as a Bitmap
-                val drawable = iconId[spot.predefinedSpot.coordinates]?.let {
-                    AppCompatResources.getDrawable(context, it)
-                }
+                val kiteRecommendationSmallThumb = spot.spotDetails[0].kiteRecommendationSmallThumb
+                val drawable = AppCompatResources.getDrawable(context, kiteRecommendationSmallThumb)
                 val bitmap = convertDrawableToBitmap(drawable)
                 if (bitmap != null) {
-                    // Add the bitmap as a custom icon in the Mapbox style.
-                    style.addImage(iconId[spot.predefinedSpot.coordinates].toString(), bitmap)
+                    style.addImage(kiteRecommendationSmallThumb.toString(), bitmap)
                     val coordinates = spot.predefinedSpot.coordinates.split(",").map { it.toDouble() }
                     val point = Point.fromLngLat(coordinates[1], coordinates[0])
                     val annotationOptions = PointAnnotationOptions()
                         .withPoint(point)
-                        .withIconImage(iconId[spot.predefinedSpot.coordinates].toString())
-                    annotationManager.create(annotationOptions)
+                        .withIconImage(kiteRecommendationSmallThumb.toString())
+                    val spotJsonString = Gson().toJson(spot)
+                    val spotJson = JsonParser.parseString(spotJsonString)
+                    annotationOptions.withData(spotJson)
+                    val annotation = annotationManager.create(annotationOptions)
+                    annotationDataMap[annotation.id] = spotJsonString
+                    annotationManager.addClickListener(com.mapbox.maps.plugin.annotation.generated.OnPointAnnotationClickListener { annotation ->
+                        val spotJson = annotationDataMap[annotation.id]
+                        val clickedSpot = Gson().fromJson(spotJson, Spot::class.java)
+                        homeScreenViewModel.updateSpotUIState(clickedSpot.predefinedSpot.coordinates)
+                        homeScreenViewModel.updateClickedUIState(!clicked)
+                        true
+                    })
                 }
             }
         }
     }
 }
+
 
 
 // Convert Drawable to Bitmap using this method
