@@ -30,6 +30,8 @@ import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -318,49 +320,320 @@ fun InfoColorsColumn(){
 
 @Composable
 fun KiteConditionColorBox(icon: Int, title: String, info: String) {
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.Start),
-            verticalAlignment = Alignment.CenterVertically,
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.Start),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Image(
+            painter = painterResource(id = icon),
+            contentDescription = "image description",
+            contentScale = ContentScale.None
+        )
+            Column(
+                verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.Top),
+                horizontalAlignment = Alignment.Start,
+            ) {
+                Text(
+                    text = title,
+                    style = TextStyle(
+                        fontSize = 12.sp,
+                        fontFamily = FontFamily(Font(R.font.inter_font)),
+                        fontWeight = FontWeight(400),
+                        color = TextColor,
+                    )
+                )
+                Text(
+                    text = info,
+                    style = TextStyle(
+                        fontSize = 9.sp,
+                        fontFamily = FontFamily(Font(R.font.inter_font)),
+                        fontWeight = FontWeight(400),
+                        color = TextColor,
+                    )
+                )
+            }
+
+    }
+}
+
+// Ny metode med coordinat i stedet for
+@SuppressLint("DiscouragedApi")
+@Composable
+fun SpotBox(
+    spot: Spot,
+    navController: NavController,
+) {
+    val context = LocalContext.current
+    Box(
+        modifier = Modifier
+            .widthIn(max = 296.dp)
+    ) {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.Top),
+            horizontalAlignment = Alignment.Start,
         ) {
-            Image(
-                painter = painterResource(id = icon),
-                contentDescription = "image description",
-                contentScale = ContentScale.None
-            )
+            //Row with title of spot and "goToSpot" button
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Box(modifier = Modifier
+                ) {
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.Top),
+                        horizontalAlignment = Alignment.Start,
+                    ) {
+                        Text(
+                            text = spot.predefinedSpot.spotName,
+                            style = TextStyle(
+                                fontSize = 24.sp,
+                                fontFamily = FontFamily(Font(R.font.inter_font)),
+                                fontWeight = FontWeight(700), // kan prøve med bold i steden for 400
+                                color = TextColor,
+                                letterSpacing = (-0.05).sp
+                            )
+                        )
+                        Text(
+                            text = spot.predefinedSpot.cityName,
+                            style = TextStyle(
+                                fontSize = 12.sp,
+                                fontFamily = FontFamily(Font(R.font.inter_font)),
+                                fontWeight = FontWeight(400),
+                                color = TextColor
+                            )
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.width(8.dp))
+
+                Box (
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable {
+                            navController.navigate("SpotScreen/${spot.predefinedSpot.coordinates}")
+                        },
+                    contentAlignment = Alignment.CenterEnd
+
+                ){
+                    Image(
+                        painter = painterResource(id = R.drawable.gotospot),
+                        contentDescription = "go to spot",
+                        contentScale = ContentScale.Fit
+                    )
+                }
+            }
+
+            val spotName = spot.predefinedSpot.spotName
+            val normalizedSpotName = spotName
+                .lowercase()
+                .replace(" ", "_")
+                .replace("æ", "ae")
+                .replace("ø", "o")
+                .replace("å", "aa")
+
+            // Get right id for normalized spot name
+            val imageResourceId = context.resources.getIdentifier(normalizedSpotName, "drawable", context.packageName)
+            Box(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Image(
+                    painter = painterResource(id = imageResourceId),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(96.dp)
+                        .clip(shape = RoundedCornerShape(8.dp)),
+                    contentScale = ContentScale.Crop
+                )
+            }
+
+            //Box with condition for kiting (including thumb, color, wind info)
+            Box {
                 Column(
-                    verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.Top),
+                    verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.Top),
                     horizontalAlignment = Alignment.Start,
                 ) {
                     Text(
-                        text = title,
-                        style = TextStyle(
-                            fontSize = 12.sp,
-                            fontFamily = FontFamily(Font(R.font.inter_font)),
-                            fontWeight = FontWeight(400),
-                            color = TextColor,
-                        )
-                    )
-                    Text(
-                        text = info,
+                        text = "Akkurat nå:",
                         style = TextStyle(
                             fontSize = 9.sp,
                             fontFamily = FontFamily(Font(R.font.inter_font)),
-                            fontWeight = FontWeight(400),
-                            color = TextColor,
+                            fontWeight = FontWeight(500),
+                            color = TextColor
                         )
                     )
-                }
 
+                    Row(
+                        Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+
+                        //ConditonCircle with thumb
+                        Box {
+                            val bigThumbResource = spot.spotDetails[0].kiteRecommendationBigThumb
+                            Image(
+                                painter = painterResource(id = bigThumbResource),
+                                contentDescription = "Kite Recommendation Big Thumb",
+                                contentScale = ContentScale.None
+                            )
+
+                        }
+
+                        Column(
+                            verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.Top),
+                            horizontalAlignment = Alignment.End,
+                        ) {
+                            Row(
+                                horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.Start),
+                                verticalAlignment = Alignment.Bottom,
+                            ) {
+                                val windSpeedValue = spot.spotDetails[0].windSpeedValue
+
+                                Text(
+                                    text = windSpeedValue.toString(),
+                                    style = TextStyle(
+                                        fontSize = 24.sp,
+                                        fontFamily = FontFamily(Font(R.font.inter_font)),
+                                        fontWeight = FontWeight(300),
+                                        color = TextColor
+                                    )
+                                )
+
+                                Text(
+                                    text = "m/s",
+                                    style = TextStyle(
+                                        fontSize = 24.sp,
+                                        fontFamily = FontFamily(Font(R.font.inter_font)),
+                                        fontWeight = FontWeight(400),
+                                        color = TextColor
+                                    )
+                                )
+                            }
+                            Text(
+                                text = "vindstyrke",
+                                style = TextStyle(
+                                    fontSize = 9.sp,
+                                    fontFamily = FontFamily(Font(R.font.inter_font)),
+                                    fontWeight = FontWeight(400),
+                                    color = TextColor
+                                )
+                            )
+                        }
+
+                        //Column with wind direction
+                        Column(
+                            verticalArrangement = Arrangement.SpaceBetween,
+                            horizontalAlignment = Alignment.End,
+                        ) {
+
+                            Row (horizontalArrangement = Arrangement.spacedBy(0.dp, Alignment.Start)){
+                                val windDirection = spot.spotDetails[0].windDirectionString // Antar at vindretningen er tilgjengelig på denne måten
+                                val imageResourceId = when (windDirection?.lowercase()) {
+                                    "nord" -> R.drawable.arrow_north
+                                    "nordøst" -> R.drawable.arrow_northeast
+                                    "øst" -> R.drawable.arrow_east
+                                    "sørøst" -> R.drawable.arrow_southeast
+                                    "sør" -> R.drawable.arrow_south
+                                    "sørvest" -> R.drawable.arrow_southwest
+                                    "vest" -> R.drawable.arrow_west
+                                    "nordvest" -> R.drawable.arrow_northwest
+                                    else -> null
+                                }
+
+                                imageResourceId?.let { painterResource(id = it) }?.let {
+                                    Image(
+                                        painter = it,
+                                        contentDescription = "Arrow showing wind direction",
+                                        modifier = Modifier.size(32.dp),
+                                        contentScale = ContentScale.None
+                                    )
+                                }
+
+                                val windDirectionString = spot.spotDetails[0].windDirectionString
+                                Text(
+                                    text = windDirectionString.toString(),
+                                    style = TextStyle(
+                                        fontSize = 24.sp,
+                                        fontFamily = FontFamily(Font(R.font.inter_font)),
+                                        fontWeight = FontWeight(400),
+                                        color = TextColor
+                                    )
+                                )
+                            }
+                            Text(
+                                text = "vindretning",
+                                style = TextStyle(
+                                    fontSize = 9.sp,
+                                    fontFamily = FontFamily(Font(R.font.inter_font)),
+                                    fontWeight = FontWeight(400),
+                                    color = TextColor
+                                )
+                            )
+                        }
+                    }
+                }
+            }
         }
     }
-//Currently working on:
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SpotBoxSheet(
+    coordinates: String,
+    spot: Spot,
+    navController: NavController,
+    homeScreenViewModel: HomeScreenViewModel,
+    onDismiss: () -> Unit,
+    modifier: Modifier,
+) {
+    // Observerer og henter spot-objektet basert på koordinatene
+    LaunchedEffect(coordinates) {
+        homeScreenViewModel.updateSpotUIState(coordinates)
+    }
+
+    BottomSheetScaffold(
+        scaffoldState = rememberBottomSheetScaffoldState(),
+        sheetPeekHeight = 128.dp,
+        sheetContent = {
+            Column(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(64.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Box(
+                    modifier = Modifier
+                        .clickable {
+                            onDismiss()
+                        },
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.gotomap),
+                        contentDescription = "image description",
+                        contentScale = ContentScale.None
+                    )
+                }
+                WarningBox(spot)
+                Spacer(modifier = Modifier.height(12.dp))
+                SpotBox(spot, navController)
+            }
+        }) {
+    }
+}
+
+
+/*//Currently working on:
 //SpotBox that pops up on HomeScreen when a marker with spot is clicked
 //Shows relevant information from that spot
 @SuppressLint("DiscouragedApi")
 @Composable
 fun SpotBox(
     spot: Spot,
-    navController: NavController
+    navController: NavController,
 ) {
     val context = LocalContext.current
     Box(
@@ -466,14 +739,13 @@ fun SpotBox(
 
                         //ConditonCircle with thumb
                         Box {
-                            val bigThumbResource = spot.spotDetails.firstOrNull()?.kiteRecommendationBigThumb
-                            if (bigThumbResource != null) {
-                                Image(
-                                    painter = painterResource(id = bigThumbResource),
-                                    contentDescription = "Kite Recommendation Big Thumb",
-                                    contentScale = ContentScale.None
-                                )
-                            }
+                            val bigThumbResource = spot.spotDetails[0].kiteRecommendationBigThumb
+                            Image(
+                                painter = painterResource(id = bigThumbResource),
+                                contentDescription = "Kite Recommendation Big Thumb",
+                                contentScale = ContentScale.None
+                            )
+
                         }
 
                         Column(
@@ -484,10 +756,10 @@ fun SpotBox(
                                 horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.Start),
                                 verticalAlignment = Alignment.Bottom,
                             ) {
-                                val windSpeedValue = spot.spotDetails.firstOrNull()?.windSpeedValue ?: 0.0 // Hent windSpeedValue fra det første SpotInfo-objektet eller sett til 0.0 hvis det ikke finnes
+                                val windSpeedValue = spot.spotDetails[0].windSpeedValue
 
                                 Text(
-                                    text = windSpeedValue.toString(), // Konverter windSpeedValue til en streng før du setter den som tekst i Text-komponenten
+                                    text = windSpeedValue.toString(),
                                     style = TextStyle(
                                         fontSize = 24.sp,
                                         fontFamily = FontFamily(Font(R.font.inter_font)),
@@ -530,10 +802,9 @@ fun SpotBox(
                                     contentScale = ContentScale.None,
                                     modifier = Modifier.size(32.dp)
                                 )
-                                val windDirectionString = spot.spotDetails.firstOrNull()?.windDirectionString ?: 0.0 // Hent windSpeedValue fra det første SpotInfo-objektet eller sett til 0.0 hvis det ikke finnes
-
+                                val windDirectionString = spot.spotDetails[0].windDirectionString
                                 Text(
-                                    text = windDirectionString.toString(), // Konverter windSpeedValue til en streng før du setter den som tekst i Text-komponenten
+                                    text = windDirectionString.toString(),
                                     style = TextStyle(
                                         fontSize = 24.sp,
                                         fontFamily = FontFamily(Font(R.font.inter_font)),
@@ -557,7 +828,50 @@ fun SpotBox(
             }
         }
     }
+}*/
+
+/*
+//Bottom Sheet to HomeScreen
+//Includes NavBar
+// and SpotBox when a spot is clicked
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SpotBoxSheet(
+    spot: Spot,
+    navController: NavController,
+    onDismiss: () -> Unit,
+    modifier: Modifier,
+) {
+    BottomSheetScaffold(
+        scaffoldState = rememberBottomSheetScaffoldState(),
+        sheetPeekHeight = 128.dp,
+        sheetContent = {
+            Column(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(64.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Box(
+                    modifier = Modifier
+                        .clickable {
+                            onDismiss()
+                        },
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.gotomap),
+                        contentDescription = "image description",
+                        contentScale = ContentScale.None
+                    )
+                }
+                WarningBox(spot)
+                Spacer(modifier = Modifier.height(12.dp))
+                SpotBox(spot ,navController)
+            }
+        }) {
+    }
 }
+*/
 
 
 @Composable
@@ -729,6 +1043,7 @@ fun SpotBoxForSpotScreen(spot: Spot) {
         }
     }
 }
+
 
 //Takes a warning message from Spot, and changes background color accordingly
 @Composable
@@ -1065,47 +1380,6 @@ fun FavouriteScreenText() {
     }
 }
 
-//Bottom Sheet to HomeScreen
-//Includes NavBar
-// and SpotBox when a spot is clicked
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun SpotBoxSheet(
-    spot: Spot,
-    navController: NavController,
-    onDismiss: () -> Unit,
-    modifier: Modifier,
-) {
-    BottomSheetScaffold(
-        scaffoldState = rememberBottomSheetScaffoldState(),
-        sheetPeekHeight = 128.dp,
-        sheetContent = {
-            Column(
-                Modifier
-                    .fillMaxWidth()
-                    .padding(64.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Box(
-                    modifier = Modifier
-                        .clickable {
-                            onDismiss()
-                        },
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.gotomap),
-                        contentDescription = "image description",
-                        contentScale = ContentScale.None
-                    )
-                }
-                WarningBox(spot)
-                Spacer(modifier = Modifier.height(12.dp))
-                SpotBox(spot, navController)
-            }
-        }) {
-    }
-}
-
 //Switch to turn on or of push notifications
 @Composable
 fun SwitchSettings() {
@@ -1168,7 +1442,10 @@ fun SpotBoxWithFrame(spot: Spot, navController: NavController){
 
 //Option if we want the Warning box to add on top of the SpotBox
 @Composable
-fun SpotBoxWithFrameOption(spot: Spot, navController: NavController){
+fun SpotBoxWithFrameOption(
+    spot: Spot,
+    navController: NavController,
+    ){
 
     Box(Modifier.width(296.dp)){
         Column {
