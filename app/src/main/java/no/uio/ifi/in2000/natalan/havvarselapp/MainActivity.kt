@@ -7,11 +7,13 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
+import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -47,6 +49,7 @@ class MainActivity : ComponentActivity() {
 
     //Creates instance of ConnectivityObserver
     private lateinit var connectivityObserver: ConnectivityObserver
+    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //Creates instance of NetworkConnectivityObserver
@@ -88,6 +91,9 @@ class MainActivity : ComponentActivity() {
                         }
                     }
 
+                    val scope1 = rememberCoroutineScope()
+                    val scaffoldState = rememberBottomSheetScaffoldState()
+
                     //Creates instances of datasources and repositories
                     val predefinedSpotsDataSource = PredefinedSpotsDataSource()
                     val locationForecastDataSource = LocationForecastDataSource()
@@ -108,7 +114,7 @@ class MainActivity : ComponentActivity() {
                         NavHost(navController = navController, startDestination = "HomeScreen") {
                             // Navigating routes
                             composable("TestScreen") { TestScreen(testScreenViewModel = testScreenViewModel)}
-                            composable("HomeScreen") { HomeScreen(navController = navController, homeScreenViewModel = homeScreenViewModel)}
+                            composable("HomeScreen") { HomeScreen(navController = navController, homeScreenViewModel = homeScreenViewModel, scope = scope1, scaffoldState = scaffoldState )}
                             composable("InfoScreen") { InfoScreen(navController = navController)}
                             composable("SpotScreen/{coordinates}",
                                 arguments = listOf(navArgument("coordinates") { type = NavType.StringType })

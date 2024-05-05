@@ -6,12 +6,14 @@ import android.graphics.Canvas
 import androidx.appcompat.content.res.AppCompatResources
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
-import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.BottomSheetScaffoldState
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -22,7 +24,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
+import com.google.gson.Gson
+import com.google.gson.JsonParser
 import com.mapbox.geojson.Point
 import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.MapView
@@ -30,44 +35,53 @@ import com.mapbox.maps.Style
 import com.mapbox.maps.plugin.annotation.annotations
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
 import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
+import kotlinx.coroutines.CoroutineScope
 import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.Spot
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.components.*
-import no.uio.ifi.in2000.natalan.havvarselapp.ui.state.SpotUIState
-
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     navController: NavController,
     homeScreenViewModel: HomeScreenViewModel,
+    scope: CoroutineScope,
+    scaffoldState: BottomSheetScaffoldState
 ) {
-    //UI-state: List<Spot>
+    // UI-state: List<Spot>
     val spotsUIState by homeScreenViewModel.spotsUIState.collectAsState()
     val spots = spotsUIState.spots
 
-    //UI-state: Spot
+    // UI-state: Spot
     val spotUIState by homeScreenViewModel.spotUIState.collectAsState()
     val spot = spotUIState.spot
 
-    //UI-state: Map<String, Int>
+    // UI-state: Map<String, Int>
     val thumbUIState by homeScreenViewModel.thumbUIState.collectAsState()
     val thumbs = thumbUIState.thumbs
 
-    //UI-state: Boolean
+    // UI-state: Boolean
     val clickedUIState by homeScreenViewModel.clickedUIState.collectAsState()
     val clicked = clickedUIState.clicked
 
-    //Variables for map
+    // Variables for map
     val context = LocalContext.current.applicationContext
-    val mapView = createMapScreen(context)
+    val mapView = createMapScreen(LocalContext.current.applicationContext)
 
     homeScreenViewModel.updateThumbsUIState(spots)
-    AddAnnotationsToMap(spots, context, mapView, thumbs, navController, homeScreenViewModel, clicked)
 
+    AddAnnotationsToMap(
+        spots,
+        context,
+        mapView,
+        thumbs,
+        navController,
+        homeScreenViewModel,
+        clicked
+    )
 
     Column(
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-
         Box(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.TopCenter
@@ -85,22 +99,38 @@ fun HomeScreen(
                 TopBar(infoButtonClick = { navController.navigate("InfoScreen") })
             }
 
-            //Spotbox
-            Box {
-                if (clicked) {
-                    if (spot != null) {
-                        SpotBoxWithFrame(spot, navController)
-                    }
-                }
-            }
-
-            // NavBar
+            // Navigasjonslinje nederst på skjermen
             Box(
                 modifier = Modifier
+                    .fillMaxWidth()
                     .padding(bottom = 16.dp, start = 16.dp, end = 16.dp)
                     .align(Alignment.BottomCenter)
+                    .zIndex(0f) // Setter Z-indeksen til 0 for å plassere den under swipe-up boksen
             ) {
-                NavBar(navController)
+                NavBar(navController = navController)
+            }
+            // Swipe-up boksen
+            if (clicked) {
+                if (spot != null) {
+                    // Render SpotBoxWithFrame over navigation bar
+                    SpotBoxSheet(
+                        coordinates = spot.predefinedSpot.coordinates,
+                        spot = spot,
+                        navController = navController,
+                        homeScreenViewModel = homeScreenViewModel,
+                        onDismiss = {
+                            // Fjern boksen ved å oppdatere clickedUIState til false eller utfør annen passende handling
+                            homeScreenViewModel.updateClickedUIState(false)
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .align(Alignment.TopCenter)
+                            .padding(top = 16.dp) // Legg til padding for å plassere den under NavBar
+                            .zIndex(1f), // Setter Z-indeksen til en verdi større enn 0 for å plassere den over navigasjonslinjen
+                    )
+                    homeScreenViewModel.updateSpotUIState(spot.predefinedSpot.coordinates)
+                    println("Spot: $spot")
+                }
             }
         }
     }
@@ -129,21 +159,13 @@ fun AddAnnotationsToMap(
     iconId: Map<String, Int>, // Name to icon
     navController: NavController,
     homeScreenViewModel: HomeScreenViewModel,
-    clicked : Boolean,
+    clicked: Boolean,
 ) {
+    val annotationDataMap = remember { mutableMapOf<String, String>() } // Map to store annotation data
     LaunchedEffect(mapView) {
         mapView.mapboxMap.loadStyle(Style.MAPBOX_STREETS) { style ->
             val annotationManager = mapView.annotations.createPointAnnotationManager()
             spots.forEach { spot ->
-                annotationManager.addClickListener(com.mapbox.maps.plugin.annotation.generated.OnPointAnnotationClickListener {
-                    // Handle click event here
-                    homeScreenViewModel.updateSpotUIState(spot.predefinedSpot.coordinates)
-                    homeScreenViewModel.updateClickedUIState(!clicked)
-                    println("$spot")
-                    // For example, you can show a toast message
-                    Toast.makeText(context, "Marker clicked", Toast.LENGTH_SHORT).show()
-                    true // Return true if the click event is consumed
-                })
                 // Load your custom icon as a Bitmap
                 val drawable = iconId[spot.predefinedSpot.coordinates]?.let {
                     AppCompatResources.getDrawable(context, it)
@@ -157,7 +179,23 @@ fun AddAnnotationsToMap(
                     val annotationOptions = PointAnnotationOptions()
                         .withPoint(point)
                         .withIconImage(iconId[spot.predefinedSpot.coordinates].toString())
-                    annotationManager.create(annotationOptions)
+                    // Associate spot information with the annotation
+                    val spotJsonString = Gson().toJson(spot)
+                    val spotJson = JsonParser.parseString(spotJsonString)
+                    annotationOptions.withData(spotJson)
+                    val annotation = annotationManager.create(annotationOptions)
+                    // Store annotation data in the map with annotation ID as key
+                    annotationDataMap[annotation.id] = spotJsonString
+                    // Add click listener to each annotation
+                    annotationManager.addClickListener(com.mapbox.maps.plugin.annotation.generated.OnPointAnnotationClickListener { annotation ->
+                        // Retrieve spot information from the map using annotation ID
+                        val spotJson = annotationDataMap[annotation.id]
+                        val clickedSpot = Gson().fromJson(spotJson, Spot::class.java)
+                        // Update UI with the clicked spot information
+                        homeScreenViewModel.updateSpotUIState(clickedSpot.predefinedSpot.coordinates)
+                        homeScreenViewModel.updateClickedUIState(!clicked)
+                        true // Return true if the click event is consumed
+                    })
                 }
             }
         }
@@ -186,3 +224,4 @@ private fun convertDrawableToBitmap(sourceDrawable: Drawable?): Bitmap? {
         bitmap
     }
 }
+
