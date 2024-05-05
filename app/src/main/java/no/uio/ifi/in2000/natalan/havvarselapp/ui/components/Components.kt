@@ -43,7 +43,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
@@ -513,7 +512,7 @@ fun SpotBox(spot: Spot, navController: NavController) {
 
                             Row (horizontalArrangement = Arrangement.spacedBy(0.dp, Alignment.Start)){
                                 Image(
-                                    painter = painterResource(id = R.drawable.arrow_southwest),
+                                    painter = painterResource(id = R.drawable.arrow_northeast),
                                     contentDescription = "arrow shows wind direction",
                                     contentScale = ContentScale.None,
                                     modifier = Modifier.size(32.dp)
@@ -696,7 +695,7 @@ fun SpotBoxForSpotScreen(spot: Spot?) {
 
                             Row (horizontalArrangement = Arrangement.spacedBy(0.dp, Alignment.Start)){
                                 Image(
-                                    painter = painterResource(id = R.drawable.arrow_southwest),
+                                    painter = painterResource(id = R.drawable.arrow_northeast),
                                     contentDescription = "arrow shows wind direction",
                                     contentScale = ContentScale.None,
                                     modifier = Modifier.size(32.dp)
