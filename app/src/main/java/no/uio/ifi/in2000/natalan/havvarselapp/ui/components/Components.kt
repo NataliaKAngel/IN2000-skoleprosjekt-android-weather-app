@@ -511,12 +511,15 @@ fun SpotBox(spot: Spot, navController: NavController) {
                         ) {
 
                             Row (horizontalArrangement = Arrangement.spacedBy(0.dp, Alignment.Start)){
-                                Image(
-                                    painter = painterResource(id = R.drawable.arrow_northeast),
-                                    contentDescription = "arrow shows wind direction",
-                                    contentScale = ContentScale.None,
-                                    modifier = Modifier.size(32.dp)
-                                )
+                                spot.spotDetails[0].kiteWindDirectionArrowDrawable?.let { painterResource(id = it) }
+                                    ?.let {
+                                        Image(
+                                            painter = it,
+                                            contentDescription = "arrow shows wind direction",
+                                            contentScale = ContentScale.None,
+                                            modifier = Modifier.size(32.dp)
+                                        )
+                                    }
                                 Text(
                                     text = "${spot.spotDetails[0].windDirectionString}",
                                     style = TextStyle(
@@ -694,12 +697,17 @@ fun SpotBoxForSpotScreen(spot: Spot?) {
                         ) {
 
                             Row (horizontalArrangement = Arrangement.spacedBy(0.dp, Alignment.Start)){
-                                Image(
-                                    painter = painterResource(id = R.drawable.arrow_northeast),
-                                    contentDescription = "arrow shows wind direction",
-                                    contentScale = ContentScale.None,
-                                    modifier = Modifier.size(32.dp)
-                                )
+                                if (spot != null) {
+                                    spot.spotDetails[0].kiteWindDirectionArrowDrawable?.let { painterResource(id = it) }
+                                        ?.let {
+                                            Image(
+                                                painter = it,
+                                                contentDescription = "arrow shows wind direction",
+                                                contentScale = ContentScale.None,
+                                                modifier = Modifier.size(32.dp)
+                                            )
+                                        }
+                                }
                                 if (spot != null) {
                                     Text(
                                         text = "${spot.spotDetails[0].windDirectionString}",
@@ -786,7 +794,7 @@ fun TimeBox(detail: SpotInfo) {
             .border(
                 width = 4.dp,
                 //color = spot.color ?? color after calculation
-                color = GreenCircle,
+                color = detail.kiteRecommendationColorDrawable,
                 shape = RoundedCornerShape(size = StandardRadius)
             )
             .width(64.dp)
