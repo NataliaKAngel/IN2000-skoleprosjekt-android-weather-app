@@ -26,6 +26,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
+import com.google.gson.Gson
+import com.google.gson.JsonParser
 import com.mapbox.geojson.Point
 import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.MapView
@@ -34,6 +36,8 @@ import com.mapbox.maps.plugin.annotation.annotations
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
 import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
 import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.Spot
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.components.*
 @OptIn(ExperimentalMaterial3Api::class)
@@ -152,6 +156,72 @@ fun AddAnnotationsToMap(
     iconId: Map<String, Int>, // Name to icon
     navController: NavController,
     homeScreenViewModel: HomeScreenViewModel,
+    clicked: Boolean,
+) {
+    val annotationDataMap = remember { mutableMapOf<String, String>() } // Map to store annotation data
+
+    LaunchedEffect(mapView) {
+        mapView.mapboxMap.loadStyle(Style.MAPBOX_STREETS) { style ->
+            val annotationManager = mapView.annotations.createPointAnnotationManager()
+            spots.forEach { spot ->
+                // Load your custom icon as a Bitmap
+                val drawable = iconId[spot.predefinedSpot.coordinates]?.let {
+                    AppCompatResources.getDrawable(context, it)
+                }
+                val bitmap = convertDrawableToBitmap(drawable)
+                if (bitmap != null) {
+                    // Add the bitmap as a custom icon in the Mapbox style.
+                    style.addImage(iconId[spot.predefinedSpot.coordinates].toString(), bitmap)
+                    val coordinates = spot.predefinedSpot.coordinates.split(",").map { it.toDouble() }
+                    val point = Point.fromLngLat(coordinates[1], coordinates[0])
+                    val annotationOptions = PointAnnotationOptions()
+                        .withPoint(point)
+                        .withIconImage(iconId[spot.predefinedSpot.coordinates].toString())
+
+                    // Associate spot information with the annotation
+                    val spotJsonString = Gson().toJson(spot)
+                    val spotJson = JsonParser.parseString(spotJsonString)
+                    annotationOptions.withData(spotJson)
+
+                    val annotation = annotationManager.create(annotationOptions)
+
+                    // Store annotation data in the map with annotation ID as key
+                    annotationDataMap[annotation.id] = spotJsonString
+
+                    // Add click listener to each annotation
+                    annotationManager.addClickListener(com.mapbox.maps.plugin.annotation.generated.OnPointAnnotationClickListener { annotation ->
+                        // Retrieve spot information from the map using annotation ID
+                        val spotJson = annotationDataMap[annotation.id]
+                        val clickedSpot = Gson().fromJson(spotJson, Spot::class.java)
+
+                        // Update UI with the clicked spot information
+                        homeScreenViewModel.updateSpotUIState(clickedSpot.predefinedSpot.coordinates)
+                        homeScreenViewModel.updateClickedUIState(!clicked)
+                        true // Return true if the click event is consumed
+                    })
+                }
+            }
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+/*
+@Composable
+fun AddAnnotationsToMap(
+    spots: List<Spot>,
+    context: Context,
+    mapView: MapView,
+    iconId: Map<String, Int>, // Name to icon
+    navController: NavController,
+    homeScreenViewModel: HomeScreenViewModel,
     clicked : Boolean,
 ) {
     LaunchedEffect(mapView) {
@@ -183,7 +253,7 @@ fun AddAnnotationsToMap(
         }
     }
 }
-
+*/
 
 // Convert Drawable to Bitmap using this method
 private fun convertDrawableToBitmap(sourceDrawable: Drawable?): Bitmap? {
