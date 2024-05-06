@@ -166,28 +166,34 @@ fun AddAnnotationsToMap(
         mapView.mapboxMap.loadStyle(Style.MAPBOX_STREETS) { style ->
             val annotationManager = mapView.annotations.createPointAnnotationManager()
             spots.forEach { spot ->
-                val kiteRecommendationSmallThumb = spot.spotDetails[0].kiteRecommendationSmallThumb
+                val kiteRecommendationSmallThumb = spot.spotDetails.first().kiteRecommendationSmallThumb
                 val drawable = AppCompatResources.getDrawable(context, kiteRecommendationSmallThumb)
-                val bitmap = convertDrawableToBitmap(drawable)
-                if (bitmap != null) {
-                    style.addImage(kiteRecommendationSmallThumb.toString(), bitmap)
+                val bitmap = drawable?.let { convertDrawableToBitmap(it) }
+
+                bitmap?.let { bitmap1 ->
+                    style.addImage(kiteRecommendationSmallThumb.toString(), bitmap1)
+
                     val coordinates = spot.predefinedSpot.coordinates.split(",").map { it.toDouble() }
                     val point = Point.fromLngLat(coordinates[1], coordinates[0])
-                    val annotationOptions = PointAnnotationOptions()
-                        .withPoint(point)
-                        .withIconImage(kiteRecommendationSmallThumb.toString())
                     val spotJsonString = Gson().toJson(spot)
                     val spotJson = JsonParser.parseString(spotJsonString)
-                    annotationOptions.withData(spotJson)
+
+                    val annotationOptions = PointAnnotationOptions().apply {
+                        withPoint(point)
+                        withIconImage(kiteRecommendationSmallThumb.toString())
+                        withData(spotJson)
+                    }
+
                     val annotation = annotationManager.create(annotationOptions)
                     annotationDataMap[annotation.id] = spotJsonString
-                    annotationManager.addClickListener(com.mapbox.maps.plugin.annotation.generated.OnPointAnnotationClickListener { annotation ->
-                        val spotJson = annotationDataMap[annotation.id]
-                        val clickedSpot = Gson().fromJson(spotJson, Spot::class.java)
+
+                    annotationManager.addClickListener { clickedAnnotation ->
+                        val clickedSpotJson = annotationDataMap[clickedAnnotation.id]
+                        val clickedSpot = Gson().fromJson(clickedSpotJson, Spot::class.java)
                         homeScreenViewModel.updateSpotUIState(clickedSpot.predefinedSpot.coordinates)
                         homeScreenViewModel.updateClickedUIState(!clicked)
                         true
-                    })
+                    }
                 }
             }
         }
