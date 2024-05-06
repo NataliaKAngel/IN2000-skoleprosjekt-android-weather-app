@@ -744,46 +744,83 @@ fun SpotBoxForSpotScreen(spot: Spot?) {
 @Composable
 fun WarningBox (
     spot: Spot
-    //Shows text from warning
-    //spot.description
 ){
-    Box(modifier = Modifier
-        //.widthIn(max = 296.dp)
-        .fillMaxWidth() // Legg til denne linjen for å fylle tilgjengelig bredde
-        .background(
-            color = YellowCircle,
-            shape = RoundedCornerShape(size = StandardRadius)
-        )
-        .padding(StandardRadius))
-
-    {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(
+                color = spot.spotDetails.getOrNull(0)?.kiteRecommendationColorDrawable
+                    ?: LightGrayCircle,
+                shape = RoundedCornerShape(size = StandardRadius)
+            )
+            .padding(StandardRadius)
+    ) {
         Row(
-            horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.Start),
+            modifier = Modifier
+                .padding(horizontal = 4.dp, vertical = 4.dp),
             verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Text(
                 text = "Farevarsel!",
                 style = TextStyle(
-                    fontSize = 22.sp,
+                    fontSize = 14.sp,
                     fontFamily = FontFamily(Font(R.font.inter_font)),
                     fontWeight = FontWeight(600),
                     color = TextColor,
                     letterSpacing = (-0.05).sp
                 )
             )
-            Text(
-                //Text("${spot?.description}") //bruke denne
-                text = "I dag, fredag, sørvest periodevis stiv kuling. I ettermiddag minkende.", //fjerne denne
-                style = TextStyle(
-                    fontSize = 9.sp,
-                    fontFamily = FontFamily(Font(R.font.inter_font)),
-                    fontWeight = FontWeight(400),
-                    color = TextColor,
-                )
-            )
+            LazyRow(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                if (spot.alerts.isNullOrEmpty()) {
+                    item {
+                        Text(
+                            text = "Ingen farevarsler funnet",
+                            style = TextStyle(
+                                fontSize = 9.sp,
+                                fontFamily = FontFamily(Font(R.font.inter_font)),
+                                fontWeight = FontWeight(400),
+                                color = TextColor,
+                            )
+                        )
+                    }
+                } else {
+                    items(spot.alerts) { alert ->
+                        Box(
+                            modifier = Modifier
+                                .background(spot.spotDetails.getOrNull(0)?.kiteRecommendationColorDrawable
+                                    ?: LightGrayCircle, shape = RoundedCornerShape(4.dp))
+                                .padding(8.dp)
+                        ) {
+                            Text(
+                                text = alert?.description ?: "",
+                                style = TextStyle(
+                                    fontSize = 9.sp,
+                                    fontFamily = FontFamily(Font(R.font.inter_font)),
+                                    fontWeight = FontWeight(400),
+                                    color = TextColor,
+                                ),
+                                modifier = Modifier.widthIn(max = 120.dp) // Limiting width to allow text wrapping
+                            )
+                        }
+                    }
+                }
+            }
         }
     }
 }
+
+
+
+
+
+
+
+
+
 
 @Composable
 // lage ny til dag for dag? eller endre denne for å justere seg?
