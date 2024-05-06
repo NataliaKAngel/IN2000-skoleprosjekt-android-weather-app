@@ -748,54 +748,44 @@ fun SpotBoxForSpotScreen(spot: Spot?) {
 fun WarningBox (
     spot: Spot
 ){
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(
-                color = spot.spotDetails.getOrNull(0)?.kiteRecommendationColorDrawable
-                    ?: LightGrayCircle,
-                shape = RoundedCornerShape(size = StandardRadius)
-            )
-            .padding(StandardRadius)
-    ) {
-        Row(
+    if (spot.alerts.isNotEmpty()) {
+        Box(
             modifier = Modifier
-                .padding(horizontal = 4.dp, vertical = 4.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            Text(
-                text = "Farevarsel!",
-                style = TextStyle(
-                    fontSize = 14.sp,
-                    fontFamily = FontFamily(Font(R.font.inter_font)),
-                    fontWeight = FontWeight(600),
-                    color = TextColor,
-                    letterSpacing = (-0.05).sp
+                .fillMaxWidth()
+                .background(
+                    color = spot.spotDetails.getOrNull(0)?.kiteRecommendationColorDrawable
+                        ?: LightGrayCircle,
+                    shape = RoundedCornerShape(size = StandardRadius)
                 )
-            )
-            LazyRow(
+                .padding(StandardRadius)
+        ) {
+            Row(
+                modifier = Modifier
+                    .padding(horizontal = 4.dp, vertical = 4.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                if (spot.alerts.isNullOrEmpty()) {
-                    item {
-                        Text(
-                            text = "Ingen farevarsler funnet",
-                            style = TextStyle(
-                                fontSize = 9.sp,
-                                fontFamily = FontFamily(Font(R.font.inter_font)),
-                                fontWeight = FontWeight(400),
-                                color = TextColor,
-                            )
-                        )
-                    }
-                } else {
+                Text(
+                    text = "Farevarsel!",
+                    style = TextStyle(
+                        fontSize = 14.sp,
+                        fontFamily = FontFamily(Font(R.font.inter_font)),
+                        fontWeight = FontWeight(600),
+                        color = TextColor,
+                        letterSpacing = (-0.05).sp
+                    )
+                )
+                LazyRow(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
                     items(spot.alerts) { alert ->
                         Box(
                             modifier = Modifier
-                                .background(spot.spotDetails.getOrNull(0)?.kiteRecommendationColorDrawable
-                                    ?: LightGrayCircle, shape = RoundedCornerShape(4.dp))
+                                .background(
+                                    spot.spotDetails.getOrNull(0)?.kiteRecommendationColorDrawable
+                                        ?: LightGrayCircle, shape = RoundedCornerShape(4.dp)
+                                )
                                 .padding(8.dp)
                         ) {
                             Text(

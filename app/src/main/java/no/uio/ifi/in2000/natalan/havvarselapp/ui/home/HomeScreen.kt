@@ -12,10 +12,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -57,10 +55,6 @@ fun HomeScreen(
     val spotUIState by homeScreenViewModel.spotUIState.collectAsState()
     val spot = spotUIState.spot
 
-    //UI-state: Map<String, Int>
-    val thumbUIState by homeScreenViewModel.thumbUIState.collectAsState()
-    val thumbs = thumbUIState.thumbs
-
     //UI-state: Boolean
     val clickedUIState by homeScreenViewModel.clickedUIState.collectAsState()
     val clicked = clickedUIState.clicked
@@ -70,8 +64,7 @@ fun HomeScreen(
     val mapView = createMapScreen(context)
 
     homeScreenViewModel.updateThumbsUIState(spots)
-    AddAnnotationsToMap(spots, context, mapView, thumbs, navController, homeScreenViewModel, clicked)
-
+    AddAnnotationsToMap(spots, context, mapView, homeScreenViewModel)
 
     Column(
         verticalArrangement = Arrangement.SpaceBetween,
@@ -82,6 +75,7 @@ fun HomeScreen(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.TopCenter
         ) {
+
             // Map
             AndroidView(
                 factory = { mapView },
@@ -94,7 +88,6 @@ fun HomeScreen(
             ) {
                 TopBar(infoButtonClick = { navController.navigate("InfoScreen") })
             }
-
 
 
             val sheetState = rememberModalBottomSheetState()
@@ -120,8 +113,7 @@ fun HomeScreen(
                             SpotBoxWithFrame(spot, navController)
                         }
                     }
-                    }
-
+                }
             }
 
             // NavBar
@@ -156,64 +148,93 @@ fun AddAnnotationsToMap(
     spots: List<Spot>,
     context: Context,
     mapView: MapView,
-    thumbs: Map<String, Int>,
-    navController: NavController,
-    homeScreenViewModel: HomeScreenViewModel,
-    clicked: Boolean,
+    homeScreenViewModel: HomeScreenViewModel
 ) {
     val annotationDataMap = remember { mutableMapOf<String, String>() } // Map to store annotation data
-    LaunchedEffect(mapView) {
+
+    LaunchedEffect(mapView, spots) {
         mapView.mapboxMap.loadStyle(Style.MAPBOX_STREETS) { style ->
             val annotationManager = mapView.annotations.createPointAnnotationManager()
-            spots.forEach { spot ->
-                val kiteRecommendationSmallThumb = spot.spotDetails[0].kiteRecommendationSmallThumb
-                val drawable = AppCompatResources.getDrawable(context, kiteRecommendationSmallThumb)
-                val bitmap = convertDrawableToBitmap(drawable)
-                if (bitmap != null) {
-                    style.addImage(kiteRecommendationSmallThumb.toString(), bitmap)
-                    val coordinates = spot.predefinedSpot.coordinates.split(",").map { it.toDouble() }
-                    val point = Point.fromLngLat(coordinates[1], coordinates[0])
-                    val annotationOptions = PointAnnotationOptions()
-                        .withPoint(point)
-                        .withIconImage(kiteRecommendationSmallThumb.toString())
-                    val spotJsonString = Gson().toJson(spot)
-                    val spotJson = JsonParser.parseString(spotJsonString)
-                    annotationOptions.withData(spotJson)
-                    val annotation = annotationManager.create(annotationOptions)
-                    annotationDataMap[annotation.id] = spotJsonString
-                    annotationManager.addClickListener(com.mapbox.maps.plugin.annotation.generated.OnPointAnnotationClickListener { annotation ->
-                        val spotJson = annotationDataMap[annotation.id]
-                        val clickedSpot = Gson().fromJson(spotJson, Spot::class.java)
-                        homeScreenViewModel.updateSpotUIState(clickedSpot.predefinedSpot.coordinates)
-                        homeScreenViewModel.updateClickedUIState(!clicked)
-                        true
-                    })
+
+            if (spots.isNotEmpty()) {
+                spots.forEach { spot ->
+                    val kiteRecommendationSmallThumb =
+                        spot.spotDetails.first().kiteRecommendationSmallThumb
+                    val drawable =
+                        AppCompatResources.getDrawable(context, kiteRecommendationSmallThumb)
+                    val bitmap = drawable?.let { convertDrawableToBitmap(it) }
+
+                    bitmap?.let { bitmap1 ->
+                        //Add image to map style
+                        style.addImage(kiteRecommendationSmallThumb.toString(), bitmap1)
+
+                        //Gets the coordinate from the Spot-object and adds a point on the map
+                        val coordinates =
+                            spot.predefinedSpot.coordinates.split(",").map { it.toDouble() }
+                        val point = Point.fromLngLat(coordinates[1], coordinates[0])
+
+                        //Convert Spot to json text and create a json element
+                        val spotJsonString = Gson().toJson(spot)
+                        val spotJson = JsonParser.parseString(spotJsonString)
+
+                        //Create annotation settings
+                        val annotationOptions = PointAnnotationOptions().apply {
+                            withPoint(point)
+                            withIconImage(kiteRecommendationSmallThumb.toString())
+                            withData(spotJson)
+                        }
+
+                        //Create the annotation, add it to the map and save the annotation id in map
+                        val annotation = annotationManager.create(annotationOptions)
+                        annotationDataMap[annotation.id] = spotJsonString
+
+                        //On annotation marker click
+                        annotationManager.addClickListener { clickedAnnotation ->
+                            //Gets the clicked spot and updates UI-state
+                            val clickedSpotJson = annotationDataMap[clickedAnnotation.id]
+                            val clickedSpot = Gson().fromJson(clickedSpotJson, Spot::class.java)
+                            homeScreenViewModel.updateSpotUIState(clickedSpot.predefinedSpot.coordinates)
+
+                            //Update clicked UI-state
+                            homeScreenViewModel.updateClickedUIState(true)
+
+                            //Return true to indicate that the click was handled
+                            true
+                        }
+                    }
                 }
             }
         }
     }
 }
 
-
-
 // Convert Drawable to Bitmap using this method
 private fun convertDrawableToBitmap(sourceDrawable: Drawable?): Bitmap? {
+    // Check if the sourceDrawable is null, if so, return null
     if (sourceDrawable == null) {
         return null
     }
-    return if (sourceDrawable is BitmapDrawable) {
-        sourceDrawable.bitmap
-    } else {
-        // Copy the drawable object to avoid manipulation on the same reference
-        val constantState = sourceDrawable.constantState ?: return null
-        val drawable = constantState.newDrawable().mutate()
-        val bitmap: Bitmap = Bitmap.createBitmap(
-            drawable.intrinsicWidth, drawable.intrinsicHeight,
-            Bitmap.Config.ARGB_8888
-        )
-        val canvas = Canvas(bitmap)
-        drawable.setBounds(0, 0, canvas.width, canvas.height)
-        drawable.draw(canvas)
-        bitmap
+
+    // If the sourceDrawable is a BitmapDrawable, return the bitmap directly
+    if (sourceDrawable is BitmapDrawable) {
+        return sourceDrawable.bitmap
     }
+
+    // If the sourceDrawable is not a BitmapDrawable, create a new Drawable and draw it onto a new Bitmap
+    val constantState = sourceDrawable.constantState ?: return null
+    val drawable = constantState.newDrawable().mutate()
+    val bitmap: Bitmap = Bitmap.createBitmap(
+        drawable.intrinsicWidth,
+        drawable.intrinsicHeight,
+        Bitmap.Config.ARGB_8888
+    )
+
+    // Draw the drawable onto the bitmap using a Canvas
+    Canvas(bitmap).apply {
+        drawable.setBounds(0, 0, width, height)
+        drawable.draw(this)
+    }
+
+    // Return the resulting bitmap
+    return bitmap
 }
