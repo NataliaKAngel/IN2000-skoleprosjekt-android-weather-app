@@ -85,7 +85,7 @@ class WeatherAPIRepository (
                 "nord" -> R.drawable.arrow_north
                 "nordøst" -> R.drawable.arrow_northeast
                 "øst" -> R.drawable.arrow_east
-                "sørøst" -> R.drawable.arrow_southeast
+                "sørøst" -> R.drawable.arrow_south
                 "sør" -> R.drawable.arrow_south
                 "sørvest" -> R.drawable.arrow_southwest
                 "vest" -> R.drawable.arrow_west
