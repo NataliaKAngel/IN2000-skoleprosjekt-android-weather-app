@@ -424,8 +424,10 @@ fun SpotBox(spot: Spot, navController: NavController) {
             Box(
                 modifier = Modifier.fillMaxWidth()
             ) {
+                val painter = painterResource(id = spot.predefinedSpot.spotImage)
+                val defaultPainter = painterResource(id = R.drawable.hamresanden) // Replace R.drawable.default_image with the ID of your default image resource
                 Image(
-                    painter = painterResource(id = spot.predefinedSpot.spotImage),
+                    painter = painter ?: defaultPainter, // Use the defaultPainter if the specified painter is null
                     contentDescription = null,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -434,6 +436,7 @@ fun SpotBox(spot: Spot, navController: NavController) {
                     contentScale = ContentScale.Crop
                 )
             }
+
 
             //Box with condition for kiting (including thumb, color, wind info)
             Box {
