@@ -425,7 +425,7 @@ fun SpotBox(spot: Spot, navController: NavController) {
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.hamresanden),
+                    painter = painterResource(id = spot.predefinedSpot.spotImage),
                     contentDescription = null,
                     modifier = Modifier
                         .fillMaxWidth()

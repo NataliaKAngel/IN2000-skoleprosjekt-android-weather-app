@@ -1,5 +1,6 @@
 package no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.predefinedSpots
 
+import no.uio.ifi.in2000.natalan.havvarselapp.R
 import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.PredefinedSpots
 
 class PredefinedSpotsDataSource {
@@ -11,7 +12,8 @@ class PredefinedSpotsDataSource {
             optimalWindConditions = mapOf(
                 "min" to 180.0,
                 "max" to 270.0
-            )
+            ),
+            spotImage = R.drawable.husebysanden
         ),
 
         PredefinedSpots(
@@ -21,7 +23,8 @@ class PredefinedSpotsDataSource {
             optimalWindConditions = mapOf(
                 "min" to 157.5,
                 "max" to 247.5
-            )
+            ),
+            spotImage = 0
         ),
 
         PredefinedSpots(
@@ -31,7 +34,8 @@ class PredefinedSpotsDataSource {
             optimalWindConditions = mapOf(
                 "min" to 157.5,
                 "max" to 247.5
-            )
+            ),
+            spotImage = R.drawable.hamresanden
         ),
 
 
@@ -43,7 +47,8 @@ class PredefinedSpotsDataSource {
             optimalWindConditions = mapOf(
                 "min" to 157.5,
                 "max" to 247.5
-            )
+            ),
+            spotImage = R.drawable.hollesanden
         ),
 
         PredefinedSpots(
@@ -53,7 +58,8 @@ class PredefinedSpotsDataSource {
             optimalWindConditions = mapOf(
                 "min" to 180.0,
                 "max" to 247.5
-            )
+            ),
+            spotImage = R.drawable.kvaviksanden
         ),
         PredefinedSpots(
             coordinates = "58.0697096704821, 6.685477207426811",
@@ -62,7 +68,8 @@ class PredefinedSpotsDataSource {
             optimalWindConditions = mapOf(
                 "min" to 112.5,
                 "max" to 292.5
-            )
+            ),
+            spotImage = R.drawable.kviljosanden
         ),
         PredefinedSpots(
             coordinates = "58.06814063685252, 6.731489560823652",
@@ -71,7 +78,8 @@ class PredefinedSpotsDataSource {
             optimalWindConditions = mapOf(
                 "min" to 112.5,
                 "max" to 247.5
-            )
+            ),
+            spotImage = R.drawable.haviksanden
         )
     )
     fun getPredefinedSpots(): List<PredefinedSpots>{
