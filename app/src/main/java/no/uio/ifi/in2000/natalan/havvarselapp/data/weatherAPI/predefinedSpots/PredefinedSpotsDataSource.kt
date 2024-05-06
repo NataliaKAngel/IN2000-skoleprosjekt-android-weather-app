@@ -24,7 +24,7 @@ class PredefinedSpotsDataSource {
                 "min" to 157.5,
                 "max" to 247.5
             ),
-            spotImage = 0
+            spotImage = R.drawable.husebysanden
         ),
 
         PredefinedSpots(
