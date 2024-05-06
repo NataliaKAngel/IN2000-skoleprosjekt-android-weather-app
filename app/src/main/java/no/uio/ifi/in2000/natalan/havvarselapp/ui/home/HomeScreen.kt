@@ -70,7 +70,7 @@ fun HomeScreen(
     val mapView = createMapScreen(context)
 
     homeScreenViewModel.updateThumbsUIState(spots)
-    AddAnnotationsToMap(spots, context, mapView, thumbs, navController, homeScreenViewModel, clicked)
+    AddAnnotationsToMap(spots, context, mapView, homeScreenViewModel, clicked)
 
 
     Column(
@@ -156,8 +156,6 @@ fun AddAnnotationsToMap(
     spots: List<Spot>,
     context: Context,
     mapView: MapView,
-    thumbs: Map<String, Int>,
-    navController: NavController,
     homeScreenViewModel: HomeScreenViewModel,
     clicked: Boolean,
 ) {
