@@ -64,8 +64,7 @@ fun HomeScreen(
     val mapView = createMapScreen(context)
 
     homeScreenViewModel.updateThumbsUIState(spots)
-    AddAnnotationsToMap(spots, context, mapView, homeScreenViewModel, clicked)
-
+    AddAnnotationsToMap(spots, context, mapView, homeScreenViewModel)
 
     Column(
         verticalArrangement = Arrangement.SpaceBetween,
@@ -76,6 +75,7 @@ fun HomeScreen(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.TopCenter
         ) {
+
             // Map
             AndroidView(
                 factory = { mapView },
@@ -88,7 +88,6 @@ fun HomeScreen(
             ) {
                 TopBar(infoButtonClick = { navController.navigate("InfoScreen") })
             }
-
 
 
             val sheetState = rememberModalBottomSheetState()
@@ -114,8 +113,7 @@ fun HomeScreen(
                             SpotBoxWithFrame(spot, navController)
                         }
                     }
-                    }
-
+                }
             }
 
             // NavBar
@@ -150,8 +148,7 @@ fun AddAnnotationsToMap(
     spots: List<Spot>,
     context: Context,
     mapView: MapView,
-    homeScreenViewModel: HomeScreenViewModel,
-    clicked: Boolean,
+    homeScreenViewModel: HomeScreenViewModel
 ) {
     val annotationDataMap = remember { mutableMapOf<String, String>() } // Map to store annotation data
     LaunchedEffect(mapView) {
@@ -193,7 +190,7 @@ fun AddAnnotationsToMap(
                         homeScreenViewModel.updateSpotUIState(clickedSpot.predefinedSpot.coordinates)
 
                         //Update clicked UI-state
-                        homeScreenViewModel.updateClickedUIState(!clicked)
+                        homeScreenViewModel.updateClickedUIState(true)
 
                         //Return true to indicate that the click was handled
                         true
@@ -204,26 +201,33 @@ fun AddAnnotationsToMap(
     }
 }
 
-
-
 // Convert Drawable to Bitmap using this method
 private fun convertDrawableToBitmap(sourceDrawable: Drawable?): Bitmap? {
+    // Check if the sourceDrawable is null, if so, return null
     if (sourceDrawable == null) {
         return null
     }
-    return if (sourceDrawable is BitmapDrawable) {
-        sourceDrawable.bitmap
-    } else {
-        // Copy the drawable object to avoid manipulation on the same reference
-        val constantState = sourceDrawable.constantState ?: return null
-        val drawable = constantState.newDrawable().mutate()
-        val bitmap: Bitmap = Bitmap.createBitmap(
-            drawable.intrinsicWidth, drawable.intrinsicHeight,
-            Bitmap.Config.ARGB_8888
-        )
-        val canvas = Canvas(bitmap)
-        drawable.setBounds(0, 0, canvas.width, canvas.height)
-        drawable.draw(canvas)
-        bitmap
+
+    // If the sourceDrawable is a BitmapDrawable, return the bitmap directly
+    if (sourceDrawable is BitmapDrawable) {
+        return sourceDrawable.bitmap
     }
+
+    // If the sourceDrawable is not a BitmapDrawable, create a new Drawable and draw it onto a new Bitmap
+    val constantState = sourceDrawable.constantState ?: return null
+    val drawable = constantState.newDrawable().mutate()
+    val bitmap: Bitmap = Bitmap.createBitmap(
+        drawable.intrinsicWidth,
+        drawable.intrinsicHeight,
+        Bitmap.Config.ARGB_8888
+    )
+
+    // Draw the drawable onto the bitmap using a Canvas
+    Canvas(bitmap).apply {
+        drawable.setBounds(0, 0, width, height)
+        drawable.draw(this)
+    }
+
+    // Return the resulting bitmap
+    return bitmap
 }
