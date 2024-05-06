@@ -114,7 +114,7 @@ class MainActivity : ComponentActivity() {
                         NavHost(navController = navController, startDestination = "HomeScreen") {
                             // Navigating routes
                             composable("TestScreen") { TestScreen(testScreenViewModel = testScreenViewModel)}
-                            composable("HomeScreen") { HomeScreen(navController = navController, homeScreenViewModel = homeScreenViewModel, scope = scope1, scaffoldState = scaffoldState )}
+                            composable("HomeScreen") { HomeScreen(navController = navController, homeScreenViewModel = homeScreenViewModel)}
                             composable("InfoScreen") { InfoScreen(navController = navController)}
                             composable("SpotScreen/{coordinates}",
                                 arguments = listOf(navArgument("coordinates") { type = NavType.StringType })

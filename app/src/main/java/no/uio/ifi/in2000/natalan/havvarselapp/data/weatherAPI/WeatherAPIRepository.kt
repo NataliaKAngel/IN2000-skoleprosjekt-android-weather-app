@@ -11,6 +11,12 @@ import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.PredefinedSpots
 import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.AlertInfo
 import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.SpotInfo
 import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.Spot
+import no.uio.ifi.in2000.natalan.havvarselapp.ui.theme.BlueCircle
+import no.uio.ifi.in2000.natalan.havvarselapp.ui.theme.GreenCircle
+import no.uio.ifi.in2000.natalan.havvarselapp.ui.theme.LightGrayCircle
+import no.uio.ifi.in2000.natalan.havvarselapp.ui.theme.OrangeCircle
+import no.uio.ifi.in2000.natalan.havvarselapp.ui.theme.RedCircle
+import no.uio.ifi.in2000.natalan.havvarselapp.ui.theme.YellowCircle
 import java.text.SimpleDateFormat
 import java.time.LocalTime
 import java.util.Locale
@@ -74,6 +80,28 @@ class WeatherAPIRepository (
             val windSpeedValue = windSpeed[timeStamp]
             val windDirectionValue = windDirection[timeStamp]
             val color = calculateKiteRecommendation(alerts, windSpeedValue, windDirectionValue, optimalWindConditions, timeStamp)
+            val windDirectionimageResourceId = when (windDirectionValue?.let { transformWindDirection(it) }
+                ?.lowercase()) {
+                "nord" -> R.drawable.arrow_north
+                "nordøst" -> R.drawable.arrow_northeast
+                "øst" -> R.drawable.arrow_east
+                "sørøst" -> R.drawable.arrow_southeast
+                "sør" -> R.drawable.arrow_south
+                "sørvest" -> R.drawable.arrow_southwest
+                "vest" -> R.drawable.arrow_west
+                "nordvest" -> R.drawable.arrow_northwest
+                else -> null
+            }
+            val colorimageResourceId = when (color?.lowercase()) {
+                "grey" -> LightGrayCircle
+                "blue" -> BlueCircle
+                "green" -> GreenCircle
+                "yellow" -> YellowCircle
+                "orange" -> OrangeCircle
+                "red" -> RedCircle
+                else -> LightGrayCircle
+            }
+
             SpotInfo(
                 date = transformDate(date),
                 time = transformTime(time),
@@ -84,7 +112,9 @@ class WeatherAPIRepository (
                 windDirectionString = windDirectionValue?.let { transformWindDirection(it) },
                 kiteRecommendationColor = color,
                 kiteRecommendationSmallThumb = getSmallThumb(color),
-                kiteRecommendationBigThumb = getBigThumb(color)
+                kiteRecommendationBigThumb = getBigThumb(color),
+                kiteRecommendationColorDrawable = colorimageResourceId,
+                kiteWindDirectionArrowDrawable = windDirectionimageResourceId
             )
         }
     }
