@@ -10,12 +10,21 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -34,6 +43,7 @@ import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
 import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.Spot
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.components.*
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     navController: NavController,
@@ -85,13 +95,33 @@ fun HomeScreen(
                 TopBar(infoButtonClick = { navController.navigate("InfoScreen") })
             }
 
-            //Spotbox
-            Box {
-                if (clicked) {
-                    if (spot != null) {
-                        SpotBoxWithFrame(spot, navController)
+
+
+            val sheetState = rememberModalBottomSheetState()
+            var isSheetOpen by rememberSaveable {
+                mutableStateOf(false)
+            }
+
+            if (clicked) {
+                ModalBottomSheet(
+                    sheetState = sheetState,
+                    onDismissRequest = {
+                        isSheetOpen = false
+                        homeScreenViewModel.updateClickedUIState(false)
+                        },
+                    modifier = Modifier.fillMaxWidth()
+
+                ) {
+                    Box(
+                        modifier = Modifier.fillMaxWidth().padding(bottom = 64.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        if (spot != null) {
+                            SpotBoxWithFrame(spot, navController)
+                        }
                     }
-                }
+                    }
+
             }
 
             // NavBar
