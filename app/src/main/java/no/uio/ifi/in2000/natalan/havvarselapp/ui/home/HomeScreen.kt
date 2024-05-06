@@ -12,10 +12,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -56,10 +54,6 @@ fun HomeScreen(
     //UI-state: Spot
     val spotUIState by homeScreenViewModel.spotUIState.collectAsState()
     val spot = spotUIState.spot
-
-    //UI-state: Map<String, Int>
-    val thumbUIState by homeScreenViewModel.thumbUIState.collectAsState()
-    val thumbs = thumbUIState.thumbs
 
     //UI-state: Boolean
     val clickedUIState by homeScreenViewModel.clickedUIState.collectAsState()
