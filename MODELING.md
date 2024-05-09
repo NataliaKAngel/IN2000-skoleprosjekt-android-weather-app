@@ -1,5 +1,3 @@
-MODELING.md
-
 I dette dokumentet vil vi beskrive de viktigste funksjonelle kravene til applikasjonen vår ved bruk av diagrammer og figurer. Vi beskriver brukerhistorier i tillegg til å gi et visuelt overblikk over hvordan dataen vil kunne flyte. 
 
 
