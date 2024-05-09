@@ -281,26 +281,6 @@ class WeatherAPIRepository (
         return createOneSpot(predefinedSpot!!, weatherResponse, feature)
     }
 
-    //Returns: Map<String, Int>. Offers a map with a small thumb icon per spot.
-    fun getThumbs(spots: List<Spot>) : Map<String, Int>{
-        return spots.associate { spot ->
-            spot.predefinedSpot.coordinates to getCorrectThumbIcon(spot)
-        }
-    }
-
-    private fun getCorrectThumbIcon(spot: Spot) : Int{
-        val currentTime = LocalTime.now()
-        val hour = currentTime.hour.toString()
-
-        spot.spotDetails.forEach { spotInfo ->
-            val spotTime = spotInfo.time.split(".")
-            if (spotTime[0] == hour){
-                return spotInfo.kiteRecommendationSmallThumb
-            }
-        }
-        return R.drawable.sgreythumb
-    }
-
     //GETS AND TRANSFORM DATA FROM: LocationForecast
     //Gets one WeatherResponse object from locationForecastDataSource
     private suspend fun getWeatherResponse(coordinates: String): WeatherResponse? {
