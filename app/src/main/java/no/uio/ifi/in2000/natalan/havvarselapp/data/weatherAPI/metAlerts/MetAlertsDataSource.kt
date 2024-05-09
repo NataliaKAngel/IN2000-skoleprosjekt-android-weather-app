@@ -47,7 +47,7 @@ class MetAlertsDataSource {
 
         return try {
             // Connects to the API with correct URL
-            val response = client.get(METALERT_CURRENT + coordinatesURL)
+            val response = client.get(METALERT_EXAMPLE + coordinatesURL)
             response.body()
 
         } catch (e: Exception) {

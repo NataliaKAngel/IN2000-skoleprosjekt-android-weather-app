@@ -1,5 +1,6 @@
 package no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI
 
+import androidx.compose.ui.graphics.Color
 import no.uio.ifi.in2000.natalan.havvarselapp.R
 import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.locationForecast.LocationForecastDataSource
 import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.metAlerts.MetAlertsDataSource
@@ -11,14 +12,9 @@ import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.PredefinedSpots
 import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.AlertInfo
 import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.SpotInfo
 import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.Spot
-import no.uio.ifi.in2000.natalan.havvarselapp.ui.theme.BlueCircle
-import no.uio.ifi.in2000.natalan.havvarselapp.ui.theme.GreenCircle
-import no.uio.ifi.in2000.natalan.havvarselapp.ui.theme.LightGrayCircle
-import no.uio.ifi.in2000.natalan.havvarselapp.ui.theme.OrangeCircle
-import no.uio.ifi.in2000.natalan.havvarselapp.ui.theme.RedCircle
-import no.uio.ifi.in2000.natalan.havvarselapp.ui.theme.YellowCircle
 import java.text.SimpleDateFormat
 import java.util.Locale
+import no.uio.ifi.in2000.natalan.havvarselapp.ui.theme.*
 
 class WeatherAPIRepository (
     private val predefinedSpotsDataSource: PredefinedSpotsDataSource,
@@ -70,11 +66,20 @@ class WeatherAPIRepository (
 
     private fun createAlertInfo(feature: Feature?): AlertInfo {
         return AlertInfo(
-            riskMatrixColor = feature?.properties?.riskMatrixColor,
+            riskMatrixColor = feature?.properties?.riskMatrixColor?.let { getAlertColor(it) },
             description = feature?.properties?.description,
             event = feature?.properties?.event,
             endTime = feature?.properties?.eventEndingTime
         )
+    }
+
+    private fun getAlertColor(riskMatrixColor: String): Color {
+        return when(riskMatrixColor){
+            "Yellow" -> YellowCircle
+            "Orange" -> OrangeCircle
+            "Red" -> RedCircle
+            else -> White
+        }
     }
 
     private fun createAllSpotInfos(alerts: List<AlertInfo?>, windSpeed: Map<String, Double>, windDirection: Map<String, Double>, optimalWindConditions: Map<String, Double>): List<SpotInfo> {
@@ -93,7 +98,7 @@ class WeatherAPIRepository (
                 "sørvest" -> R.drawable.arrow_southwest
                 "vest" -> R.drawable.arrow_west
                 "nordvest" -> R.drawable.arrow_northwest
-                else -> null
+                else -> R.drawable.arrow_north
             }
             val colorimageResourceId = when (color?.lowercase()) {
                 "grey" -> LightGrayCircle
@@ -111,7 +116,7 @@ class WeatherAPIRepository (
                 windSpeedValue = windSpeedValue,
                 windDirectionValue = windDirectionValue,
                 windDirectionString = windDirectionValue?.let { transformWindDirection(it) },
-                kiteRecommendationColor = color,
+                kiteRecommendationColorString = color,
                 kiteRecommendationSmallThumb = getSmallThumb(color),
                 kiteRecommendationBigThumb = getBigThumb(color),
                 kiteRecommendationColorDrawable = colorimageResourceId,
