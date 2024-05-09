@@ -218,7 +218,6 @@ fun KiteConditionInfoBox() {
  @Composable
 fun InfoColorsColumn(){
     LazyColumn(modifier = Modifier
-        .verticalScroll(rememberScrollState())
         .height(360.dp)
     ) {
         item {
