@@ -480,7 +480,7 @@ fun SpotBox(spot: Spot, navController: NavController) {
                                 horizontalArrangement = Arrangement.spacedBy(0.dp, Alignment.Start)
                             ){
                                 Image(
-                                    painter = painterResource(id = spot.spotDetails[0].kiteWindDirectionArrowDrawable),
+                                    painter = painterResource(id = spot.spotDetails[0].windDirectionIcon),
                                     contentDescription = "Ikon: Pil som viser vindretning, ${spot.spotDetails[0].windDirectionString}",
                                     contentScale = ContentScale.None,
                                     modifier = Modifier.size(32.dp)
@@ -636,7 +636,7 @@ fun SpotBoxForSpotScreen(spot: Spot) {
                         ) {
                             Row (horizontalArrangement = Arrangement.spacedBy(0.dp, Alignment.Start)){
                                 Image(
-                                    painter = painterResource(id = spot.spotDetails[0].kiteWindDirectionArrowDrawable),
+                                    painter = painterResource(id = spot.spotDetails[0].windDirectionIcon),
                                     contentDescription = "Ikon: Pil som viser vindretning, ${spot.spotDetails[0].windDirectionString}",
                                     contentScale = ContentScale.None,
                                     modifier = Modifier.size(32.dp)
@@ -739,7 +739,7 @@ fun TimeBox(details: SpotInfo) {
         modifier = Modifier
             .border(
                 width = 4.dp,
-                color = details.kiteRecommendationColorDrawable,
+                color = details.kiteRecommendationColor,
                 shape = RoundedCornerShape(size = StandardRadius)
             )
             .width(64.dp)

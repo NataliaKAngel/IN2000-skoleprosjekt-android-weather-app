@@ -21,50 +21,41 @@ class WeatherAPIRepository (
     private val locationForecastDataSource: LocationForecastDataSource,
     private val metAlertsDataSource: MetAlertsDataSource
 ){
-    //METHODS TO CREATE OBJECTS OR TRANSFORM DATA (Helping methods)
+    //METHODS TO CREATE OBJECTS
     //Creates: List<Spot>
     private suspend fun createAllSpots(): List<Spot>{
-        return getPredefinedSpots().map { predefinedSpot ->
-            //Gets WeatherResponse-object from LocationForecast
-            val weatherResponse = getWeatherResponse(predefinedSpot.coordinates)
-
-            //Gets list of Feature objects from MetAlerts
-            val features = getMetAlerts(predefinedSpot.coordinates)?.features
-
-            //Creates a Spot-object for each PredefinedSpot-object
-            createOneSpot(
-                predefinedSpot,
-                weatherResponse = weatherResponse,
-                features = features
-            )
-        }
+        //Creates one Spot-object for each PredefinedSpot-object
+        return getPredefinedSpots().map { createOneSpot(it) }
     }
 
-    private fun createOneSpot(predefinedSpot: PredefinedSpots, weatherResponse: WeatherResponse?, features: List<Feature>?): Spot {
-        //Gets data from LocationForecast-API
+    private suspend fun createOneSpot(predefinedSpot: PredefinedSpots): Spot {
+        //Gets data from LocationForecast
+        val weatherResponse = getWeatherResponse(predefinedSpot.coordinates)
         val windSpeed = getWindSpeedMap(weatherResponse)
         val windDirection = getWindDirectionMap(weatherResponse)
 
-        //Gets data from MetAlerts-API
+        //Gets data from MetAlerts
+        val features = getMetAlerts(predefinedSpot.coordinates)?.features
         val alerts = createAllAlertInfos(features)
+
+        //Combines data from LocationForecast and MetAlerts
+        val spotdetails = createAllSpotInfos(alerts, windSpeed, windDirection, predefinedSpot.optimalWindConditions)
 
         //Creates and returns one Spot-object
         return Spot(
             predefinedSpot = predefinedSpot,
             alerts = alerts,
-            spotDetails = createAllSpotInfos(
-                alerts,
-                windSpeed,
-                windDirection,
-                predefinedSpot.optimalWindConditions)
+            spotDetails = spotdetails
         )
     }
 
     private fun createAllAlertInfos(features: List<Feature>?): List<AlertInfo?> {
-        return features?.map { createAlertInfo(it) } ?: emptyList()
+        //Creates one AlertInfo-object for each Feature-object
+        return features?.map { createOneAlertInfo(it) } ?: emptyList()
     }
 
-    private fun createAlertInfo(feature: Feature?): AlertInfo {
+    private fun createOneAlertInfo(feature: Feature?): AlertInfo {
+        //Creates and returns one AlertInfo-object
         return AlertInfo(
             riskMatrixColor = feature?.properties?.riskMatrixColor?.let { getAlertColor(it) },
             description = feature?.properties?.description,
@@ -74,6 +65,7 @@ class WeatherAPIRepository (
     }
 
     private fun getAlertColor(riskMatrixColor: String): Color {
+        //Returns the correct Color-object
         return when(riskMatrixColor){
             "Yellow" -> YellowCircle
             "Orange" -> OrangeCircle
@@ -83,54 +75,56 @@ class WeatherAPIRepository (
     }
 
     private fun createAllSpotInfos(alerts: List<AlertInfo?>, windSpeed: Map<String, Double>, windDirection: Map<String, Double>, optimalWindConditions: Map<String, Double>): List<SpotInfo> {
+        //Creates one SpotInfo-object for each time stamp in the LocationForecast-API
         return windSpeed.keys.map { timeStamp ->
-            val (date, time) = timeStamp.split("T")
-            val windSpeedValue = windSpeed[timeStamp]
-            val windDirectionValue = windDirection[timeStamp]
-            val color = calculateKiteRecommendation(alerts, windSpeedValue, windDirectionValue, optimalWindConditions, timeStamp)
-            val windDirectionimageResourceId = when (windDirectionValue?.let { transformWindDirection(it) }
-                ?.lowercase()) {
-                "nord" -> R.drawable.arrow_north
-                "nordøst" -> R.drawable.arrow_northeast
-                "øst" -> R.drawable.arrow_east
-                "sørøst" -> R.drawable.arrow_southeast
-                "sør" -> R.drawable.arrow_south
-                "sørvest" -> R.drawable.arrow_southwest
-                "vest" -> R.drawable.arrow_west
-                "nordvest" -> R.drawable.arrow_northwest
-                else -> R.drawable.arrow_north
-            }
-            val colorimageResourceId = when (color?.lowercase()) {
-                "grey" -> LightGrayCircle
-                "blue" -> BlueCircle
-                "green" -> GreenCircle
-                "yellow" -> YellowCircle
-                "orange" -> OrangeCircle
-                "red" -> RedCircle
-                else -> LightGrayCircle
-            }
-
-            SpotInfo(
-                date = transformDate(date),
-                time = transformTime(time),
-                windSpeedValue = windSpeedValue,
-                windDirectionValue = windDirectionValue,
-                windDirectionString = windDirectionValue?.let { transformWindDirection(it) },
-                kiteRecommendationColorString = color,
-                kiteRecommendationSmallThumb = getSmallThumb(color),
-                kiteRecommendationBigThumb = getBigThumb(color),
-                kiteRecommendationColorDrawable = colorimageResourceId,
-                kiteWindDirectionArrowDrawable = windDirectionimageResourceId
-            )
+            createOneSpotInfo(alerts, windSpeed, windDirection, optimalWindConditions, timeStamp)
         }
     }
 
-    //private fun createOneSpotInfo()
+    private fun createOneSpotInfo(alerts: List<AlertInfo?>, windSpeed: Map<String, Double>, windDirection: Map<String, Double>, optimalWindConditions: Map<String, Double>, timeStamp: String): SpotInfo{
+        //Create readable date and time
+        val (date, time) = timeStamp.split("T") //Timestamp format: YYYY-MM-DDThh:mm:ssZ
+        val readableDate = transformDate(date)
+        val readableTime = transformTime(time)
 
+        //Gets the correct wind speed and wind direction
+        val windSpeedValue = windSpeed[timeStamp]
+        val windDirectionValue = windDirection[timeStamp]
+
+        //Creates a readable wind direction string
+        val windDirectionString = windDirectionValue?.let { transformWindDirection(it) }
+
+        //Gets the correct wind direction icon
+        val windDirectionIcon = getWindDirectionIcon(windDirectionString)
+
+        //Calculate kiteRecommendationColor
+        val color = calculateKiteRecommendation(alerts, windSpeedValue, windDirectionValue, optimalWindConditions, timeStamp)
+        val kiteRecommendationColor = getKiteRecommendationColor(color)
+
+        //Gets the correct thumb icons
+        val kiteRecommendationSmallThumb = getSmallThumb(color)
+        val kiteRecommendationBigThumb = getBigThumb(color)
+
+        //Creates and returns one SpotInfo-object
+        return SpotInfo(
+            date = readableDate,
+            time = readableTime,
+            windSpeedValue = windSpeedValue,
+            windDirectionValue = windDirectionValue,
+            windDirectionString = windDirectionString,
+            windDirectionIcon = windDirectionIcon,
+            kiteRecommendationColorString = color,
+            kiteRecommendationSmallThumb = kiteRecommendationSmallThumb,
+            kiteRecommendationBigThumb = kiteRecommendationBigThumb,
+            kiteRecommendationColor = kiteRecommendationColor
+        )
+    }
 
     private fun transformDate(date: String): String {
+        //Date from LocationForecast: YYYY-MM-DD
         val (year, month, day) = date.split("-")
 
+        //Creates and returns the date as a readable string in Norwegian
         return day + (when (month){
             "01" -> ". Januar"
             "02" -> ". Februar"
@@ -149,13 +143,16 @@ class WeatherAPIRepository (
     }
 
     private fun transformTime(time: String): String {
+        //Time from LocationForecast: hh:mm:ssZ
         val (hour) = time.split(":")
         val summerTime = hour.toInt()
 
+        //Creates and returns a timestamp as a string in Norwegian summer time
         return "${summerTime+2}.00"
     }
 
     private fun transformWindDirection(windDirectionValue: Double): String {
+        //Returns the correct wind direction as a readable string in Norwegian
         return when (windDirectionValue) {
             in 337.5..360.0, in 0.0..22.5 -> "nord"
             in 22.5..67.5 -> "nordøst"
@@ -170,6 +167,7 @@ class WeatherAPIRepository (
     }
 
     private fun getSmallThumb(color: String?): Int {
+        //Returns the correct small thumb icon
         return when(color) {
             "grey" -> R.drawable.sgreythumb
             "blue" -> R.drawable.sbluethumb
@@ -182,6 +180,7 @@ class WeatherAPIRepository (
     }
 
     private fun getBigThumb(color: String?): Int {
+        //Returns the correct big thumb icon
         return when(color) {
             "grey" -> R.drawable.bgreythumb
             "blue" -> R.drawable.bbluethumb
@@ -222,14 +221,19 @@ class WeatherAPIRepository (
 
     //Checks the alert validity based on timestamp and start and end time for the alert
     private fun checkAlertValidity(alert: AlertInfo?, timeStamp: String): Boolean {
+        //If there is no end time the alert is not valid
         if (alert?.endTime == null){
             return false
         }
+
+        //Creates a time stamp format
         val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX", Locale.getDefault())
-        //val startTime = alert.startTime.let { format.parse(it) }
+
+        //Parsing endTime and timestamp to match the format created
         val endTime = alert.endTime.let { format.parse(it) }
         val timeToCheck = format.parse(timeStamp)
 
+        //Returns true if timeToCheck is not null and if it is before endTime
         if (timeToCheck != null) {
             return timeToCheck.before(endTime)
         }
@@ -237,9 +241,11 @@ class WeatherAPIRepository (
     }
 
     private fun calculateWindDirection(windDirectionValue: Double?, optimalWindConditions: Map<String, Double>): String{
+        //Extracting maxWind and minWind from optimal wind conditions
         val minWind = optimalWindConditions["min"] ?: 0.0
         val maxWind = optimalWindConditions["max"] ?: 360.0
 
+        //Returns "correct" if the wind direction is in the range of the optimal wind conditions
         if (windDirectionValue != null) {
             return when {
                 windDirectionValue < minWind -> "low"
@@ -251,6 +257,7 @@ class WeatherAPIRepository (
     }
 
     private fun calculateWindSpeed(windSpeedValue: Double): String {
+        //Returns a color for the wind speed based on the optimal wind conditions for kiting
         return when {
             windSpeedValue >= 0.0 && windSpeedValue < 5.0 -> "grey"
             windSpeedValue >= 5.0 && windSpeedValue < 7.0 -> "blue"
@@ -262,7 +269,33 @@ class WeatherAPIRepository (
         }
     }
 
-    //Hjelpemetoder som natalia har ordna med.
+    private fun getKiteRecommendationColor(color: String?): Color{
+        //Returns the correct Color-object
+        return when (color?.lowercase()) {
+            "grey" -> LightGrayCircle
+            "blue" -> BlueCircle
+            "green" -> GreenCircle
+            "yellow" -> YellowCircle
+            "orange" -> OrangeCircle
+            "red" -> RedCircle
+            else -> LightGrayCircle
+        }
+    }
+
+    private fun getWindDirectionIcon(windDirectionString: String?): Int{
+        //Returns the correct wind direction icon
+        return when (windDirectionString?.lowercase()){
+            "nord" -> R.drawable.arrow_north
+            "nordøst" -> R.drawable.arrow_northeast
+            "øst" -> R.drawable.arrow_east
+            "sørøst" -> R.drawable.arrow_southeast
+            "sør" -> R.drawable.arrow_south
+            "sørvest" -> R.drawable.arrow_southwest
+            "vest" -> R.drawable.arrow_west
+            "nordvest" -> R.drawable.arrow_northwest
+            else -> R.drawable.arrow_north
+        }
+    }
 
     //OFFERS UI-STATE DATA TO: ViewModel
     //Creates a list of Spot-objects and returns it.
@@ -274,10 +307,8 @@ class WeatherAPIRepository (
     suspend fun getOneSpot(coordinates: String): Spot {
         //Getting predefinedSpot, WeatherResponse and Feature to create Spot-object
         val predefinedSpot = getPredefinedSpots().find { it.coordinates == coordinates }
-        val weatherResponse = getWeatherResponse(coordinates)
-        val feature = getMetAlerts(coordinates)?.features
 
-        return createOneSpot(predefinedSpot!!, weatherResponse, feature)
+        return createOneSpot(predefinedSpot!!)
     }
 
     //GETS AND TRANSFORM DATA FROM: LocationForecast
@@ -287,13 +318,15 @@ class WeatherAPIRepository (
     }
 
     // Different methods to transform the data from a WeatherResponse.
-    private fun getWindSpeedMap(weatherResponse: WeatherResponse?): Map<String, Double> { //Return value: Map<time: String, windSpeed: Double>
+    private fun getWindSpeedMap(weatherResponse: WeatherResponse?): Map<String, Double> {
+        //Return value: Map<time: String, windSpeed: Double>
         return weatherResponse?.properties?.timeseries?.associate { timeSeries ->
             timeSeries.time to (timeSeries.data.instant.details["wind_speed"] ?: 0.0)
         } ?: emptyMap()
     }
 
-    private fun getWindDirectionMap(weatherResponse: WeatherResponse?): Map<String, Double>{ //Return value: Map<time : String, windDirection: Double>
+    private fun getWindDirectionMap(weatherResponse: WeatherResponse?): Map<String, Double>{
+        //Return value: Map<time : String, windDirection: Double>
         return weatherResponse?.properties?.timeseries?.associate {timeSeries ->
             timeSeries.time to (timeSeries.data.instant.details["wind_from_direction"] ?: 0.0)
         } ?: emptyMap()
@@ -310,6 +343,3 @@ class WeatherAPIRepository (
         return predefinedSpotsDataSource.getPredefinedSpots()
     }
 }
-
-
-
