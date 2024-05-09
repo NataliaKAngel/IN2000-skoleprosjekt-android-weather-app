@@ -15,6 +15,11 @@ import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.Spot
 import java.text.SimpleDateFormat
 import java.util.Locale
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.theme.*
+import java.time.LocalDate
+import java.time.LocalTime
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 
 class WeatherAPIRepository (
     private val predefinedSpotsDataSource: PredefinedSpotsDataSource,
@@ -142,14 +147,21 @@ class WeatherAPIRepository (
         })
     }
 
+    //Creates and returns a timestamp as a string in Norwegian summer time
     private fun transformTime(time: String): String {
-        //Time from LocationForecast: hh:mm:ssZ
-        val (hour) = time.split(":")
-        val summerTime = hour.toInt()
+        // Parse the UTC time as LocalTime
+        val utcTime = LocalTime.parse(time, DateTimeFormatter.ofPattern("HH:mm:ssX"))
+        // Create a ZonedDateTime from the UTC time, with UTC as the time zone
+        val utcZonedDateTime = ZonedDateTime.of(LocalDate.now(), utcTime, ZoneId.of("UTC"))
+        // Convert to a specific timezone, Oslo UTC+2
+        val localZonedDateTime = utcZonedDateTime.withZoneSameInstant(ZoneId.of("Europe/Oslo"))
+        // Get only the hour part of the local time
+        val localHour = localZonedDateTime.hour
 
-        //Creates and returns a timestamp as a string in Norwegian summer time
-        return "${summerTime+2}.00"
+        // Return the hour in the desired format
+        return "$localHour:00"
     }
+
 
     private fun transformWindDirection(windDirectionValue: Double): String {
         //Returns the correct wind direction as a readable string in Norwegian
