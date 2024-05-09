@@ -26,14 +26,21 @@ class WeatherAPIRepository (
     private val locationForecastDataSource: LocationForecastDataSource,
     private val metAlertsDataSource: MetAlertsDataSource
 ){
-    //METHODS TO CREATE OBJECTS OR TRANSFORM DATA: Helping methods
+    //METHODS TO CREATE OBJECTS OR TRANSFORM DATA (Helping methods)
     //Creates: List<Spot>
     private suspend fun createAllSpots(): List<Spot>{
         return getPredefinedSpots().map { predefinedSpot ->
+            //Gets WeatherResponse-object from LocationForecast
+            val weatherResponse = getWeatherResponse(predefinedSpot.coordinates)
+
+            //Gets list of Feature objects from MetAlerts
+            val features = getMetAlerts(predefinedSpot.coordinates)?.features
+
+            //Creates a Spot-object for each PredefinedSpot-object
             createOneSpot(
                 predefinedSpot,
-                getWeatherResponse(predefinedSpot.coordinates),
-                getMetAlerts(predefinedSpot.coordinates)?.features
+                weatherResponse = weatherResponse,
+                features = features
             )
         }
     }
@@ -44,6 +51,8 @@ class WeatherAPIRepository (
         val windDirection = getWindDirectionMap(weatherResponse)
         val windSpeedUnit = getWindSpeedUnit(weatherResponse)
         val windDirectionUnit = getWindDirectionUnit(weatherResponse)
+
+        //Gets data from MetAlerts-API
         val alerts = createAllAlertInfos(features)
 
         //Creates and returns one Spot-object
