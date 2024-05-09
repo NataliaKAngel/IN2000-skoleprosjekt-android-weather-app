@@ -329,7 +329,6 @@ fun KiteConditionColorBox(icon: Int, contentDescription: String, title: String, 
 fun SpotBox(spot: Spot, navController: NavController) {
     Box(
         modifier = Modifier
-            .widthIn(max = 296.dp)
     ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.Top),
@@ -946,7 +945,7 @@ fun SwitchSettings() {
 @Composable
 fun SpotBoxWithFrame(spot: Spot, navController: NavController){
     Column(modifier = Modifier
-        .width(296.dp)
+        .width(328.dp)
         .background(White, shape = RoundedCornerShape(size = StandardRadius))
         .padding(StandardRadius)
     ) {
