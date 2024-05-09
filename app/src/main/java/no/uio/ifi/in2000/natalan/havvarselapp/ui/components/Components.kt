@@ -927,7 +927,7 @@ fun FavouriteScreenText() {
 //Switch to turn on or of push notifications
 @Composable
 fun SwitchSettings() {
-    var checked by remember { mutableStateOf(true) }
+    var checked by remember { mutableStateOf(false) }
 
     Switch(
         checked = checked,
