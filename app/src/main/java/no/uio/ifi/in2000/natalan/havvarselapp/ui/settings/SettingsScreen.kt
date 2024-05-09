@@ -22,8 +22,7 @@ import no.uio.ifi.in2000.natalan.havvarselapp.ui.theme.White
 fun SettingsScreen (
     navController: NavController
 ) {
-
- //Define constraints
+    //Define constraints
     val constraints = ConstraintSet {
         // Create refs to use
         val whiteBox = createRefFor("whiteBox")
@@ -49,7 +48,8 @@ fun SettingsScreen (
             end.linkTo(parent.end)
         }
     }
-// Apply constraints to ConstraintLayout
+
+    // Apply constraints to ConstraintLayout
     ConstraintLayout(
         constraints,
         modifier = Modifier
@@ -80,20 +80,5 @@ fun SettingsScreen (
         ) {
             NavBar(navController = navController)
         }
-
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
