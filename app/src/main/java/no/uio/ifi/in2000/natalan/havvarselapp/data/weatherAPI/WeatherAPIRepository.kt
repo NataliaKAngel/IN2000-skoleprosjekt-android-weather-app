@@ -18,7 +18,6 @@ import no.uio.ifi.in2000.natalan.havvarselapp.ui.theme.OrangeCircle
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.theme.RedCircle
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.theme.YellowCircle
 import java.text.SimpleDateFormat
-import java.time.LocalTime
 import java.util.Locale
 
 class WeatherAPIRepository (
@@ -49,8 +48,6 @@ class WeatherAPIRepository (
         //Gets data from LocationForecast-API
         val windSpeed = getWindSpeedMap(weatherResponse)
         val windDirection = getWindDirectionMap(weatherResponse)
-        val windSpeedUnit = getWindSpeedUnit(weatherResponse)
-        val windDirectionUnit = getWindDirectionUnit(weatherResponse)
 
         //Gets data from MetAlerts-API
         val alerts = createAllAlertInfos(features)
@@ -63,8 +60,6 @@ class WeatherAPIRepository (
                 alerts,
                 windSpeed,
                 windDirection,
-                windSpeedUnit,
-                windDirectionUnit,
                 predefinedSpot.optimalWindConditions)
         )
     }
@@ -82,7 +77,7 @@ class WeatherAPIRepository (
         )
     }
 
-    private fun createAllSpotInfos(alerts: List<AlertInfo?>, windSpeed: Map<String, Double>, windDirection: Map<String, Double>, windSpeedUnit: String?, windDirectionUnit: String?, optimalWindConditions: Map<String, Double>): List<SpotInfo> {
+    private fun createAllSpotInfos(alerts: List<AlertInfo?>, windSpeed: Map<String, Double>, windDirection: Map<String, Double>, optimalWindConditions: Map<String, Double>): List<SpotInfo> {
         return windSpeed.keys.map { timeStamp ->
             val (date, time) = timeStamp.split("T")
             val windSpeedValue = windSpeed[timeStamp]
@@ -114,9 +109,7 @@ class WeatherAPIRepository (
                 date = transformDate(date),
                 time = transformTime(time),
                 windSpeedValue = windSpeedValue,
-                windSpeedUnit = windSpeedUnit,
                 windDirectionValue = windDirectionValue,
-                windDirectionUnit = windDirectionUnit,
                 windDirectionString = windDirectionValue?.let { transformWindDirection(it) },
                 kiteRecommendationColor = color,
                 kiteRecommendationSmallThumb = getSmallThumb(color),
@@ -300,17 +293,7 @@ class WeatherAPIRepository (
         } ?: emptyMap()
     }
 
-    private fun getWindSpeedUnit(weatherResponse: WeatherResponse?): String? {
-        val units = weatherResponse?.properties?.meta?.units
-        return units?.get("wind_speed")
-    }
-
-    private fun getWindDirectionUnit(weatherResponse: WeatherResponse?): String?{
-        val units = weatherResponse?.properties?.meta?.units
-        return units?.get("wind_from_direction")
-    }
-
-    //GETS AND TRANSFORM DATA FROM: MetAlerts
+    //GETS DATA FROM: MetAlerts
     //Gets one MetAlertDataClass object from metAlertsDataSource
     private suspend fun getMetAlerts(coordinates: String) : MetAlertDataClass?{
         return metAlertsDataSource.getMetAlert(coordinates)
