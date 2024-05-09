@@ -25,11 +25,6 @@ class HomeScreenViewModel(
     private val _spotUIState = MutableStateFlow(SpotUIState())
     var spotUIState: StateFlow<SpotUIState> = _spotUIState.asStateFlow()
 
-
-    // UI-state: Thumbs
-    private val _thumbsUIState = MutableStateFlow(ThumbUIState())
-    var thumbUIState : StateFlow<ThumbUIState> = _thumbsUIState.asStateFlow()
-
     // UI-state: Clicked
     private val _clickedUIState = MutableStateFlow(ClickedUIState())
     var clickedUIState : StateFlow<ClickedUIState> = _clickedUIState.asStateFlow()
@@ -42,7 +37,6 @@ class HomeScreenViewModel(
                     spots = weatherAPIRepository.getAllSpots()
                 )
             }
-
         }
     }
 
@@ -54,14 +48,6 @@ class HomeScreenViewModel(
                     spot = weatherAPIRepository.getOneSpot(coordinates)
                 )
             }
-        }
-    }
-
-    fun updateThumbsUIState(spots: List<Spot>){
-        _thumbsUIState.update {
-            it.copy(
-                thumbs = weatherAPIRepository.getThumbs(spots)
-            )
         }
     }
 
