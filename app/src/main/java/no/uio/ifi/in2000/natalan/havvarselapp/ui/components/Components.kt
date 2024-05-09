@@ -810,9 +810,11 @@ fun DaysBoxRow(details: List<SpotInfo>){
                 Spacer(modifier = Modifier.width(8.dp))
             }
         }
+        Spacer(modifier=Modifier.height(12.dp))
     }
 }
 
+//Used on top of SpotScreen
 @Composable
 fun ButtonRow(navController : NavController){
     Row(

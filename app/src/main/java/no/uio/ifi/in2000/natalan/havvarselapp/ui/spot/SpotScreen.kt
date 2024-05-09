@@ -99,8 +99,6 @@ fun SpotScreen (
                 .padding(start = 28.dp, top = 28.dp, end = 28.dp)
         ) {
             LazyColumn {
-                //spotBoxForSpotScreen
-
                 item {
                     Box(
                         modifier = Modifier
@@ -124,7 +122,7 @@ fun SpotScreen (
                         }
                     }
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(28.dp))
 
                     spotDetailsByDate.forEach { detailsForDate ->
                         Box(
@@ -135,7 +133,6 @@ fun SpotScreen (
                             DaysBoxRow(detailsForDate)
                         }
                     }
-
                     Spacer(modifier = Modifier.height(120.dp))
                 }
             }
