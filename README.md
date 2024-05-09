@@ -8,7 +8,7 @@ Appen vår er en varslingsapp for kitere som forteller brukeren når og hvor man
 1.1.	Åpne prosjektet ditt og naviger til plasseringen av prosjektmappen. Velg prosjektmappen og klikk på «Open»
 1.2.	Android Studios vil laste inn prosjektet og konfigurere det for bygging.  
 1.3.	Klargjør en emulator eller enhet
-1.3.1.	En kan teste appen på en fysisk Android-enhet eller ved bruk av emulator. For å konfigurere en emulator, gå til «Tools  Device Manager» og opprett en ny virtuell enhet, helst en resizable emulator. 
+1.3.1.	En kan teste appen på en fysisk Android-enhet eller ved bruk av emulator. For å konfigurere en emulator, gå til «Tools -> Device Manager» og opprett en ny virtuell enhet, helst en resizable emulator. 
 1.4.	Start så appen på en enhet eller emulator. Dette gjør du ved å trykke på «Run App», eller kun Run og velger deretter hvilken emulator du vil kjøre appen på.
 2.	Dersom du ikke har Android Studios på maskinen din, må du installere programmet, og dette gjør du gjennom developer.android.com
 2.1.	Her finner du en detaljert beskrivelse om hvordan programmet skal lastes ned med hensyn til hva slags maskin du har. 
