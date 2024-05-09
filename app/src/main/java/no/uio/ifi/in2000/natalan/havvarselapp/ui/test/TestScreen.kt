@@ -14,7 +14,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.Spot
 
 @Composable
@@ -68,11 +67,11 @@ fun SpotCard(
                 Spacer(modifier = Modifier.height(5.dp))
             }
             //WindSpeed - LocationForecast
-            Text("Vindstyrke: ${spot?.spotDetails?.get(0)?.windSpeedValue}, ${spot?.spotDetails?.get(0)?.windSpeedUnit}")
-            Spacer(modifier = Modifier.height(5.dp))
+            //Text("Vindstyrke: ${spot?.spotDetails?.get(0)?.windSpeedValue}, ${spot?.spotDetails?.get(0)?.windSpeedUnit}")
+            //Spacer(modifier = Modifier.height(5.dp))
             //WindDirection - LocationForecast
-            Text("Vindretning: ${spot?.spotDetails?.get(0)?.windDirectionString}, ${spot?.spotDetails?.get(0)?.windDirectionUnit}")
-            Spacer(modifier = Modifier.height(5.dp))
+            //Text("Vindretning: ${spot?.spotDetails?.get(0)?.windDirectionString}, ${spot?.spotDetails?.get(0)?.windDirectionUnit}")
+            //Spacer(modifier = Modifier.height(5.dp))
             //Text("Beregning: ${spot?.spotDetails?.get(0)?.kiteRecommendationColor}")
             Spacer(modifier = Modifier.height(5.dp))
             Text("Dato: ${spot?.spotDetails?.get(0)?.date}")

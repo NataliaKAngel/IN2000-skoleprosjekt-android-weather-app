@@ -23,8 +23,7 @@ fun FavouriteScreen (
     navController: NavController,
     favouriteScreenViewModel: FavouriteScreenViewModel
 ) {
-
-// Define constraints
+    // Define constraints
     val constraints = ConstraintSet {
         // Create refs to use
         val whiteBox = createRefFor("whiteBox")
@@ -51,7 +50,7 @@ fun FavouriteScreen (
         }
     }
 
-// Apply constraints to ConstraintLayout
+    // Apply constraints to ConstraintLayout
     ConstraintLayout(
         constraints,
         modifier = Modifier
@@ -73,7 +72,6 @@ fun FavouriteScreen (
                 ) {
                     FavouriteScreenText()
                 }
-
             }
         }
 

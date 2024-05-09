@@ -8,11 +8,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.WeatherAPIRepository
-import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.Spot
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.state.ClickedUIState
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.state.SpotUIState
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.state.SpotsUIState
-import no.uio.ifi.in2000.natalan.havvarselapp.ui.state.ThumbUIState
 
 class HomeScreenViewModel(
     private val weatherAPIRepository: WeatherAPIRepository
@@ -24,11 +22,6 @@ class HomeScreenViewModel(
     //UI-state: Spot?
     private val _spotUIState = MutableStateFlow(SpotUIState())
     var spotUIState: StateFlow<SpotUIState> = _spotUIState.asStateFlow()
-
-
-    // UI-state: Thumbs
-    private val _thumbsUIState = MutableStateFlow(ThumbUIState())
-    var thumbUIState : StateFlow<ThumbUIState> = _thumbsUIState.asStateFlow()
 
     // UI-state: Clicked
     private val _clickedUIState = MutableStateFlow(ClickedUIState())
@@ -42,7 +35,6 @@ class HomeScreenViewModel(
                     spots = weatherAPIRepository.getAllSpots()
                 )
             }
-
         }
     }
 
@@ -54,14 +46,6 @@ class HomeScreenViewModel(
                     spot = weatherAPIRepository.getOneSpot(coordinates)
                 )
             }
-        }
-    }
-
-    fun updateThumbsUIState(spots: List<Spot>){
-        _thumbsUIState.update {
-            it.copy(
-                thumbs = weatherAPIRepository.getThumbs(spots)
-            )
         }
     }
 

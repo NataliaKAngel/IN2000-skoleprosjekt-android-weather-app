@@ -6,10 +6,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -23,8 +21,6 @@ import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.SpotInfo
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.components.ButtonRow
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.components.DaysBoxRow
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.components.NavBar
-//import no.uio.ifi.in2000.natalan.havvarselapp.ui.components.NextDaysRows
-//import no.uio.ifi.in2000.natalan.havvarselapp.ui.components.NextHoursRow
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.components.SpotBoxForSpotScreen
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.theme.DefaultBlue
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.theme.White
@@ -34,131 +30,121 @@ fun SpotScreen (
     navController: NavController,
     spotScreenViewModel: SpotScreenViewModel
 ) {
-    //Collecting the state flow from spotScreenViewModel
+    //UI-state: Spot
     val spotUIState by spotScreenViewModel.spotUIState.collectAsState()
-
-    //Getting the spot from the UI-state (type: Spot?)
     val spot = spotUIState.spot
 
-
-// Define constraints
-        val constraints = ConstraintSet {
-            // Create refs to use
-            val whiteBox = createRefFor("whiteBox")
-            val buttonRow = createRefFor("buttonRow")
-            val spotBoxForSpotScreen = createRefFor("spotBoxForSpotScreen")
-            val daysBoxRow = createRefFor("daysBoxRow")
-            val nextHoursRow = createRefFor("nextHoursRow")
-            val navBar = createRefFor("navBar")
+    //Creates lists of SpotInfo-objects grouped by date
+    val spotDetailsByDate: List<List<SpotInfo>> = spot?.spotDetails
+        ?.groupBy { it.date }
+        ?.values
+        ?.toList()
+        ?: emptyList()
 
 
-            // Set constraints for whiteBox to fill the screen
-            constrain(whiteBox) {
-                top.linkTo(parent.top)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-            }
+    // Define constraints
+    val constraints = ConstraintSet {
+        // Create refs to use
+        val whiteBox = createRefFor("whiteBox")
+        val buttonRow = createRefFor("buttonRow")
+        val spotBoxForSpotScreen = createRefFor("spotBoxForSpotScreen")
+        val daysBoxRow = createRefFor("daysBoxRow")
+        val nextHoursRow = createRefFor("nextHoursRow")
+        val navBar = createRefFor("navBar")
 
-            constrain(buttonRow) {
-                top.linkTo(parent.top)
-            }
-
-            constrain(spotBoxForSpotScreen) {
-                top.linkTo(buttonRow.top)
-            }
-
-            constrain(nextHoursRow) {
-                top.linkTo(spotBoxForSpotScreen.top)
-            }
-
-            constrain(daysBoxRow) {
-                top.linkTo(nextHoursRow.top)
-            }
-
-            // Set constraints for navBar to be at the bottom of the whiteBox
-            constrain(navBar) {
-                bottom.linkTo(parent.bottom)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-            }
+        // Set constraints for whiteBox to fill the screen
+        constrain(whiteBox) {
+            top.linkTo(parent.top)
+            start.linkTo(parent.start)
+            end.linkTo(parent.end)
         }
 
-// Apply constraints to ConstraintLayout
-        ConstraintLayout(
-            constraints,
+        constrain(buttonRow) {
+            top.linkTo(parent.top)
+        }
+
+        constrain(spotBoxForSpotScreen) {
+            top.linkTo(buttonRow.top)
+        }
+
+        constrain(nextHoursRow) {
+            top.linkTo(spotBoxForSpotScreen.top)
+        }
+
+        constrain(daysBoxRow) {
+            top.linkTo(nextHoursRow.top)
+        }
+
+        // Set constraints for navBar to be at the bottom of the whiteBox
+        constrain(navBar) {
+            bottom.linkTo(parent.bottom)
+            start.linkTo(parent.start)
+            end.linkTo(parent.end)
+        }
+    }
+
+    // Apply constraints to ConstraintLayout
+    ConstraintLayout(
+        constraints,
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = DefaultBlue)
+            .padding(16.dp)
+    ) {
+        Box(
             modifier = Modifier
-                .fillMaxSize()
-                .background(color = DefaultBlue)
-                .padding(16.dp)
+                .layoutId("whiteBox")
+                .fillMaxSize() // Fill the entire ConstraintLayout
+                .background(color = White, shape = RoundedCornerShape(size = 16.dp))
+                .padding(start = 28.dp, top = 28.dp, end = 28.dp)
         ) {
-            Box(
-                modifier = Modifier
-                    .layoutId("whiteBox")
-                    .fillMaxSize() // Fill the entire ConstraintLayout
-                    .background(color = White, shape = RoundedCornerShape(size = 16.dp))
-                    .padding(start = 28.dp, top = 28.dp, end = 28.dp)
-            ) {
-                LazyColumn {
-                    //spotBoxForSpotScreen
+            LazyColumn {
+                //spotBoxForSpotScreen
 
-                    item {
-                        Box(
-                            modifier = Modifier
-                                .layoutId("buttonRow")
-                                .background(White, shape = RoundedCornerShape(size = 16.dp))
+                item {
+                    Box(
+                        modifier = Modifier
+                            .layoutId("buttonRow")
+                            .background(White, shape = RoundedCornerShape(size = 16.dp))
 
-                        ) {
-                            ButtonRow(navController)
-                        }
-
-                        Spacer(modifier = Modifier.height(16.dp))
-
-                        Box(
-                            modifier = Modifier
-                                .layoutId("spotBoxForSpotScreen")
-                                .background(White, shape = RoundedCornerShape(size = 16.dp))
-
-                        ) {
-                            SpotBoxForSpotScreen(spot)
-                        }
-
-                        Spacer(modifier = Modifier.height(16.dp))
-
-                        val spotDetailsByDate: List<List<SpotInfo>> = spot?.spotDetails
-                            ?.groupBy { it.date }
-                            ?.values
-                            ?.toList()
-                            ?: emptyList()
-
-                        spotDetailsByDate.forEach { detailsForDate ->
-                            Box(
-                                modifier = Modifier
-                                    .layoutId("daysRowBox")
-                                    .background(White, shape = RoundedCornerShape(size = 16.dp))
-                            ) {
-                                DaysBoxRow(detailsForDate)
-                            }
-
-                        }
-                        // To make sure all the days are shown, simple solution, should be changed
-                        repeat(2) {
-                            Spacer(modifier = Modifier.height(48.dp))
-                            Box(modifier = Modifier) {
-                                Text(text = "ikke mer tilgjenglig data")
-                            }
-                        }
-
+                    ) {
+                        ButtonRow(navController)
                     }
 
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Box(
+                        modifier = Modifier
+                            .layoutId("spotBoxForSpotScreen")
+                            .background(White, shape = RoundedCornerShape(size = 16.dp))
+
+                    ) {
+                        if (spot != null) {
+                            SpotBoxForSpotScreen(spot)
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    spotDetailsByDate.forEach { detailsForDate ->
+                        Box(
+                            modifier = Modifier
+                                .layoutId("daysRowBox")
+                                .background(White, shape = RoundedCornerShape(size = 16.dp))
+                        ) {
+                            DaysBoxRow(detailsForDate)
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(120.dp))
                 }
             }
-            Box(
-                modifier = Modifier
-                    .layoutId("navBar")
-            ) {
-                NavBar(navController = navController)
-            }
         }
+        Box(
+            modifier = Modifier
+                .layoutId("navBar")
+        ) {
+            NavBar(navController = navController)
+        }
+    }
 }
-
-
