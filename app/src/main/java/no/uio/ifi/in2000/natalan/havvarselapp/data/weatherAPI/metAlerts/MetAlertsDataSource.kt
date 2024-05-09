@@ -10,7 +10,9 @@ import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.request.get
 import io.ktor.serialization.gson.gson
 import io.ktor.util.appendIfNameAbsent
+import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.Endpoint.METALERT_CURRENT
 import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.Endpoint.METALERT_EXAMPLE
+import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.Endpoint.METALERT_TEST
 import no.uio.ifi.in2000.natalan.havvarselapp.model.metAlerts.MetAlertDataClass
 
 class MetAlertsDataSource {
@@ -45,7 +47,7 @@ class MetAlertsDataSource {
 
         return try {
             // Connects to the API with correct URL
-            val response = client.get(METALERT_EXAMPLE + coordinatesURL)
+            val response = client.get(METALERT_CURRENT + coordinatesURL)
             response.body()
 
         } catch (e: Exception) {
