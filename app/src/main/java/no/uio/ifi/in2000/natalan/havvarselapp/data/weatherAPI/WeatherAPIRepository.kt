@@ -149,9 +149,10 @@ class WeatherAPIRepository (
     }
 
     private fun transformTime(time: String): String {
-        val (hour, minutes) = time.split(":")
+        val (hour) = time.split(":")
+        val summerTime = hour.toInt()
 
-        return "$hour.$minutes"
+        return "${summerTime+2}.00"
     }
 
     private fun transformWindDirection(windDirectionValue: Double): String {
