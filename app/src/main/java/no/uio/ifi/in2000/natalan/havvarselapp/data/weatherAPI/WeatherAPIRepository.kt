@@ -127,10 +127,13 @@ class WeatherAPIRepository (
         }
     }
 
+    //private fun createOneSpotInfo()
+
+
     private fun transformDate(date: String): String {
         val (year, month, day) = date.split("-")
 
-        val dateString = day + (when (month){
+        return day + (when (month){
             "01" -> ". Januar"
             "02" -> ". Februar"
             "03" -> ". Mars"
@@ -145,11 +148,10 @@ class WeatherAPIRepository (
             "12" -> ". Desember"
             else -> ""
         })
-        return dateString
     }
 
     private fun transformTime(time: String): String {
-        val (hour, minutes, seconds) = time.split(":")
+        val (hour, minutes) = time.split(":")
 
         return "$hour.$minutes"
     }
@@ -260,6 +262,8 @@ class WeatherAPIRepository (
             else -> "unknown"
         }
     }
+
+    //Hjelpemetoder som natalia har ordna med.
 
     //OFFERS UI-STATE DATA TO: ViewModel
     //Creates a list of Spot-objects and returns it.
