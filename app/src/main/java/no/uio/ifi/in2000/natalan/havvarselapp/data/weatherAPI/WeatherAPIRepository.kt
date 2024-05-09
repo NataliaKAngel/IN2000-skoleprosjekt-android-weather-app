@@ -78,7 +78,6 @@ class WeatherAPIRepository (
             riskMatrixColor = feature?.properties?.riskMatrixColor,
             description = feature?.properties?.description,
             event = feature?.properties?.event,
-            startTime = "",
             endTime = feature?.properties?.eventEndingTime
         )
     }
