@@ -5,6 +5,4 @@ import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.WeatherAPIReposito
 
 class FavouriteScreenViewModel (
     private val weatherAPIRepository: WeatherAPIRepository
-) : ViewModel() {
-
-}
+) : ViewModel()

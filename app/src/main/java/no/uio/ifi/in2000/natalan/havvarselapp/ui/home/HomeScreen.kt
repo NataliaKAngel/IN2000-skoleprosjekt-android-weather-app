@@ -59,11 +59,16 @@ fun HomeScreen(
     val clickedUIState by homeScreenViewModel.clickedUIState.collectAsState()
     val clicked = clickedUIState.clicked
 
-    //Variables for map
+    //Variables for MapBox
     val context = LocalContext.current.applicationContext
-    val mapView = createMapScreen(context)
+    val mapView = createMapView(context)
 
-    homeScreenViewModel.updateThumbsUIState(spots)
+    //Variables for ModalBottomSheet
+    val sheetState = rememberModalBottomSheetState()
+    var isSheetOpen by rememberSaveable {
+        mutableStateOf(false)
+    }
+
     AddAnnotationsToMap(spots, context, mapView, homeScreenViewModel)
 
     Column(
@@ -75,24 +80,18 @@ fun HomeScreen(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.TopCenter
         ) {
-
             // Map
             AndroidView(
                 factory = { mapView },
                 modifier = Modifier.fillMaxSize()
             )
+
             Box(
                 modifier = Modifier
                     .padding(top = 16.dp, start = 16.dp, end = 16.dp)
                     .align(Alignment.TopCenter)
             ) {
                 TopBar(infoButtonClick = { navController.navigate("InfoScreen") })
-            }
-
-
-            val sheetState = rememberModalBottomSheetState()
-            var isSheetOpen by rememberSaveable {
-                mutableStateOf(false)
             }
 
             if (clicked) {
@@ -129,7 +128,7 @@ fun HomeScreen(
 }
 
 @Composable
-fun createMapScreen(context: Context): MapView {
+fun createMapView(context: Context): MapView {
     val mapView = remember { MapView(context) }
 
     mapView.mapboxMap.setCamera(
