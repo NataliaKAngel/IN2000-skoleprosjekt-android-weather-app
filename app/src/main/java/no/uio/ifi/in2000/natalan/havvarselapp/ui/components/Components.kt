@@ -552,10 +552,13 @@ fun SpotBoxForSpotScreen(spot: Spot) {
                     }
                 }
                 Spacer(modifier = Modifier.width(8.dp))
-                Box {
+
+                Box (
+                    contentAlignment = Alignment.CenterEnd
+                ){
                     Image(
-                        painter = painterResource(id = R.drawable.setfavourite),
-                        contentDescription = "Knapp: Sett som favoritt",
+                        painter = painterResource(id = R.drawable.infospotbutton),
+                        contentDescription = "Knapp: Mer info om kitespot.",
                         contentScale = ContentScale.Fit
                     )
                 }
@@ -833,12 +836,12 @@ fun ButtonRow(navController : NavController){
                 contentScale = ContentScale.Fit
             )
         }
-        Box (
+        Box(
             contentAlignment = Alignment.CenterEnd
-        ){
+        ) {
             Image(
-                painter = painterResource(id = R.drawable.infospotbutton),
-                contentDescription = "Knapp: Mer info om kitespot.",
+                painter = painterResource(id = R.drawable.setfavourite),
+                contentDescription = "Knapp: Sett som favoritt",
                 contentScale = ContentScale.Fit
             )
         }

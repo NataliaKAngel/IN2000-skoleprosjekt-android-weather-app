@@ -99,7 +99,8 @@ fun SpotScreen (
                 .padding(
                     start = 16.dp,
                     top = 28.dp,
-                    end = 16.dp)
+                    end = 16.dp,
+                    bottom = 104.dp)
         ) {
             LazyColumn {
                 item {
@@ -136,7 +137,6 @@ fun SpotScreen (
                             DaysBoxRow(detailsForDate)
                         }
                     }
-                    Spacer(modifier = Modifier.height(120.dp))
                 }
             }
         }
