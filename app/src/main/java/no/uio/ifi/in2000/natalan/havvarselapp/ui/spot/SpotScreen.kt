@@ -96,7 +96,10 @@ fun SpotScreen (
                 .layoutId("whiteBox")
                 .fillMaxSize() // Fill the entire ConstraintLayout
                 .background(color = White, shape = RoundedCornerShape(size = 16.dp))
-                .padding(start = 28.dp, top = 28.dp, end = 28.dp)
+                .padding(
+                    start = 16.dp,
+                    top = 28.dp,
+                    end = 16.dp)
         ) {
             LazyColumn {
                 item {
