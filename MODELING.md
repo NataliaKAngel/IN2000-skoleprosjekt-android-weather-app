@@ -13,10 +13,13 @@ Dette kravet innebærer at appen skal kunne gi en tydelig samlet anbefaling ved 
 # Diagrammer:  
  
 ## Use-case:  
-Slik det funksjonelle kravet også forklarer vil en kiter alltid starte med hjemskjermen vår som er et kart med predefinerte kiteplasser. I dette use-caset har vi tatt utgangspunkt i to typiske brukere; en som ansees som erfaren og en som ansees som ikke like erfaren. Begge brukere vil ha nytte av applikasjonen ved at den erfarne brukeren vil kunne få nytte av både en rask anbefaling og ekstra kite-relatert vær-data, mens den ikke så erfarne brukeren trykker direkte på kun de kiteplassene som er relevante (i den forstand at de har en god anbefaling den dagen).  
+Slik det funksjonelle kravet også forklarer vil en kiter alltid starte med hjemskjermen vår som er et kart med predefinerte kiteplasser. I dette use-caset har vi tatt utgangspunkt i to typiske brukere; en som ansees som erfaren og en som ansees som ikke like erfaren. Begge brukere vil ha nytte av applikasjonen ved at den erfarne brukeren vil kunne få nytte av både en rask anbefaling og ekstra kite-relatert vær-data, mens den ikke så erfarne brukeren trykker direkte på kun de kiteplassene som er relevante (i den forstand at de har en god anbefaling den dagen). 
+
+
 
 ## Sekvensdiagram:  
 I dette sekvensdiagrammet har vi fokusert på hvordan applikasjonen vår vil reagere på brukeren sine valg. Brukeren sine ønsker og valg vil bestemme hvilke klasser og filer som blir kalt og brukt. Dette gir en oversikt over hvordan brukere får tillgang på informasjonen de ønsker og hvor informasjonen kommer fra.  
+
 
 ## Klassediagram:  
 Klassediagrammet vårt viser en overiskt over strukturen til klassene våre og hvordan de henger sammen. Det viser hvordan det er mulig å navigere seg fra de ulike klassene og hvor de får eventuell vær-data fra. Klassene farget grønt er klasser som inngår i brukerhistoriene inspirert av de funksjonelle kravene.  
