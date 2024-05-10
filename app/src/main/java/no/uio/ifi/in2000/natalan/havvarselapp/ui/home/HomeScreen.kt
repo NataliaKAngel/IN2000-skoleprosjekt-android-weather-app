@@ -157,48 +157,50 @@ fun AddAnnotationsToMap(
 
             if (spots.isNotEmpty()) {
                 spots.forEach { spot ->
-                    val kiteRecommendationSmallThumb =
-                        spot.spotDetails.first().kiteRecommendationSmallThumb
-                    val drawable =
-                        AppCompatResources.getDrawable(context, kiteRecommendationSmallThumb)
-                    val bitmap = drawable?.let { convertDrawableToBitmap(it) }
+                    if (spot.spotDetails.isNotEmpty()) { // Check if spotDetails is not empty
+                        val kiteRecommendationSmallThumb =
+                            spot.spotDetails.first().kiteRecommendationSmallThumb
+                        val drawable =
+                            AppCompatResources.getDrawable(context, kiteRecommendationSmallThumb)
+                        val bitmap = drawable?.let { convertDrawableToBitmap(it) }
 
-                    bitmap?.let { bitmap1 ->
-                        //Add image to map style
-                        style.addImage(kiteRecommendationSmallThumb.toString(), bitmap1)
+                        bitmap?.let { bitmap1 ->
+                            //Add image to map style
+                            style.addImage(kiteRecommendationSmallThumb.toString(), bitmap1)
 
-                        //Gets the coordinate from the Spot-object and adds a point on the map
-                        val coordinates =
-                            spot.predefinedSpot.coordinates.split(",").map { it.toDouble() }
-                        val point = Point.fromLngLat(coordinates[1], coordinates[0])
+                            //Gets the coordinate from the Spot-object and adds a point on the map
+                            val coordinates =
+                                spot.predefinedSpot.coordinates.split(",").map { it.toDouble() }
+                            val point = Point.fromLngLat(coordinates[1], coordinates[0])
 
-                        //Convert Spot to json text and create a json element
-                        val spotJsonString = Gson().toJson(spot)
-                        val spotJson = JsonParser.parseString(spotJsonString)
+                            //Convert Spot to json text and create a json element
+                            val spotJsonString = Gson().toJson(spot)
+                            val spotJson = JsonParser.parseString(spotJsonString)
 
-                        //Create annotation settings
-                        val annotationOptions = PointAnnotationOptions().apply {
-                            withPoint(point)
-                            withIconImage(kiteRecommendationSmallThumb.toString())
-                            withData(spotJson)
-                        }
+                            //Create annotation settings
+                            val annotationOptions = PointAnnotationOptions().apply {
+                                withPoint(point)
+                                withIconImage(kiteRecommendationSmallThumb.toString())
+                                withData(spotJson)
+                            }
 
-                        //Create the annotation, add it to the map and save the annotation id in map
-                        val annotation = annotationManager.create(annotationOptions)
-                        annotationDataMap[annotation.id] = spotJsonString
+                            //Create the annotation, add it to the map and save the annotation id in map
+                            val annotation = annotationManager.create(annotationOptions)
+                            annotationDataMap[annotation.id] = spotJsonString
 
-                        //On annotation marker click
-                        annotationManager.addClickListener { clickedAnnotation ->
-                            //Gets the clicked spot and updates UI-state
-                            val clickedSpotJson = annotationDataMap[clickedAnnotation.id]
-                            val clickedSpot = Gson().fromJson(clickedSpotJson, Spot::class.java)
-                            homeScreenViewModel.updateSpotUIState(clickedSpot.predefinedSpot.coordinates)
+                            //On annotation marker click
+                            annotationManager.addClickListener { clickedAnnotation ->
+                                //Gets the clicked spot and updates UI-state
+                                val clickedSpotJson = annotationDataMap[clickedAnnotation.id]
+                                val clickedSpot = Gson().fromJson(clickedSpotJson, Spot::class.java)
+                                homeScreenViewModel.updateSpotUIState(clickedSpot.predefinedSpot.coordinates)
 
-                            //Update clicked UI-state
-                            homeScreenViewModel.updateClickedUIState(true)
+                                //Update clicked UI-state
+                                homeScreenViewModel.updateClickedUIState(true)
 
-                            //Return true to indicate that the click was handled
-                            true
+                                //Return true to indicate that the click was handled
+                                true
+                            }
                         }
                     }
                 }
@@ -206,6 +208,7 @@ fun AddAnnotationsToMap(
         }
     }
 }
+
 
 // Convert Drawable to Bitmap using this method
 private fun convertDrawableToBitmap(sourceDrawable: Drawable?): Bitmap? {
