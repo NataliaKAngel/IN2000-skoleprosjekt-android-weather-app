@@ -89,6 +89,17 @@ fun InfoButton(text: String, onClick: () -> Unit){
     }
 }
 
+
+
+
+
+
+
+
+
+
+
+
 @Composable
 fun NavButton(navController: NavController, route: String, text: String, icon: Int, contentDescription: String) { // Parameters: Text and icon
     var clicked by remember { mutableStateOf(false) }
@@ -283,6 +294,7 @@ fun InfoColorsColumn(){
             )
             Spacer(modifier = Modifier.height(104.dp))
         }
+
     }
 }
 
@@ -347,7 +359,7 @@ fun SpotBox(spot: Spot, navController: NavController) {
                         Text(
                             text = spot.predefinedSpot.spotName,
                             style = TextStyle(
-                                fontSize = 32.sp,
+                                fontSize = 24.sp,
                                 fontFamily = FontFamily(Font(R.font.inter_font)),
                                 fontWeight = FontWeight(700),
                                 color = TextColor,
@@ -357,7 +369,7 @@ fun SpotBox(spot: Spot, navController: NavController) {
                         Text(
                             text = spot.predefinedSpot.cityName,
                             style = TextStyle(
-                                fontSize = 18.sp,
+                                fontSize = 16.sp,
                                 fontFamily = FontFamily(Font(R.font.inter_font)),
                                 fontWeight = FontWeight(400),
                                 color = TextColor
@@ -411,7 +423,7 @@ fun SpotBox(spot: Spot, navController: NavController) {
                     Text(
                         text = "Akkurat nå:",
                         style = TextStyle(
-                            fontSize = 12.sp,
+                            fontSize = 14.sp,
                             fontFamily = FontFamily(Font(R.font.inter_font)),
                             fontWeight = FontWeight(500),
                             color = TextColor
@@ -462,7 +474,7 @@ fun SpotBox(spot: Spot, navController: NavController) {
                             Text(
                                 text = "vindstyrke",
                                 style = TextStyle(
-                                    fontSize = 12.sp,
+                                    fontSize = 14.sp,
                                     fontFamily = FontFamily(Font(R.font.inter_font)),
                                     fontWeight = FontWeight(400),
                                     color = TextColor
@@ -497,7 +509,7 @@ fun SpotBox(spot: Spot, navController: NavController) {
                             Text(
                                 text = "vindretning",
                                 style = TextStyle(
-                                    fontSize = 12.sp,
+                                    fontSize = 14.sp,
                                     fontFamily = FontFamily(Font(R.font.inter_font)),
                                     fontWeight = FontWeight(400),
                                     color = TextColor
@@ -552,17 +564,6 @@ fun SpotBoxForSpotScreen(spot: Spot) {
                         )
                     }
                 }
-                Spacer(modifier = Modifier.width(8.dp))
-
-                Box (
-                    contentAlignment = Alignment.CenterEnd
-                ){
-                    Image(
-                        painter = painterResource(id = R.drawable.infospotbutton),
-                        contentDescription = "Knapp: Mer info om kitespot.",
-                        contentScale = ContentScale.Fit
-                    )
-                }
             }
             //Box with condition for kiting (including thumb, color, wind info)
             Box {
@@ -574,7 +575,7 @@ fun SpotBoxForSpotScreen(spot: Spot) {
                     Text(
                         text = "Akkurat nå:",
                         style = TextStyle(
-                            fontSize = 12.sp,
+                            fontSize = 14.sp,
                             fontFamily = FontFamily(Font(R.font.inter_font)),
                             fontWeight = FontWeight(500),
                             color = TextColor
@@ -623,7 +624,7 @@ fun SpotBoxForSpotScreen(spot: Spot) {
                             Text(
                                 text = "vindstyrke",
                                 style = TextStyle(
-                                    fontSize = 12.sp,
+                                    fontSize = 14.sp,
                                     fontFamily = FontFamily(Font(R.font.inter_font)),
                                     fontWeight = FontWeight(400),
                                     color = TextColor
@@ -656,7 +657,7 @@ fun SpotBoxForSpotScreen(spot: Spot) {
                             Text(
                                 text = "vindretning",
                                 style = TextStyle(
-                                    fontSize = 12.sp,
+                                    fontSize = 14.sp,
                                     fontFamily = FontFamily(Font(R.font.inter_font)),
                                     fontWeight = FontWeight(400),
                                     color = TextColor

@@ -103,6 +103,7 @@ fun InfoScreen(navController: NavController) {
                 }
             }
         }
+
         
         Box(
             modifier = Modifier.layoutId("navBar")
