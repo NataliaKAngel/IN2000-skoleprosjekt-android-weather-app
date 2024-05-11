@@ -100,11 +100,12 @@ val AppTypography = Typography(
     ),
     displaySmall = TextStyle(
         fontFamily = InterFontFamily,
-        fontSize = 18.sp,
-        fontWeight = FontWeight.Medium,
+        fontSize = 24.sp,
+        fontWeight = FontWeight.Normal,
         letterSpacing = (-0.05).sp,
         color = TextColor
     ),
+
     headlineLarge = TextStyle(
         fontFamily = InterFontFamily,
         fontSize = 18.sp,
@@ -115,9 +116,17 @@ val AppTypography = Typography(
     headlineMedium = TextStyle(
         fontFamily = InterFontFamily,
         fontSize = 14.sp,
+        fontWeight = FontWeight.Bold,
+        color = TextColor
+    ),
+    headlineSmall = TextStyle(
+        fontFamily = InterFontFamily,
+        fontSize = 14.sp,
         fontWeight = FontWeight.Medium,
         color = TextColor
     ),
+
+
     bodyLarge = TextStyle(
         fontFamily = InterFontFamily,
         fontSize = 14.sp,
@@ -130,6 +139,13 @@ val AppTypography = Typography(
         fontWeight = FontWeight.Medium,
         color = TextColor
     ),
+    bodySmall = TextStyle(
+        fontFamily = InterFontFamily,
+        fontSize = 12.sp,
+        fontWeight = FontWeight.Normal,
+        color = TextColor
+    ),
+
     labelLarge = TextStyle(
         fontFamily = InterFontFamily,
         fontSize = 12.sp,

@@ -12,6 +12,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -190,7 +191,7 @@ fun KiteConditionInfoBox() {
             )
             Text(
                 text = "Informasjon",
-                style = MaterialTheme.typography.displaySmall
+                style = MaterialTheme.typography.headlineSmall
             )
             Spacer(modifier = Modifier.height(12.dp))
             Text(
@@ -212,7 +213,7 @@ fun InfoColorsColumn(){
                 icon = R.drawable.sgreythumb,
                 contentDescription = "Ikon: Grå tommel ned",
                 title ="Ingen kiteforhold",
-                info = "0-5 m/s og/eller feil vindretning.\nUmulig å kite."
+                info = "0<5 m/s og/eller feil vindretning.\nUmulig å kite."
             )
         }
         item {
@@ -292,16 +293,17 @@ fun KiteConditionColorBox(icon: Int, contentDescription: String, title: String, 
         ) {
             Text(
                 text = title,
-                style = MaterialTheme.typography.headlineLarge
+                style = MaterialTheme.typography.headlineSmall
             )
             Text(
                 text = info,
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodySmall
             )
         }
     }
 }
 
+//Used on HomeScreen
 @Composable
 fun SpotBox(spot: Spot, navController: NavController) {
     Box(
@@ -329,7 +331,7 @@ fun SpotBox(spot: Spot, navController: NavController) {
                         )
                         Text(
                             text = spot.predefinedSpot.cityName,
-                            style = MaterialTheme.typography.headlineMedium
+                            style = MaterialTheme.typography.bodyLarge
                         )
                     }
                 }
@@ -365,6 +367,7 @@ fun SpotBox(spot: Spot, navController: NavController) {
                     contentScale = ContentScale.Crop
                 )
             }
+            //Spacer(modifier = Modifier.width(12.dp))
             //Box with condition for kiting (including thumb, color, wind info)
             Box {
                 Column(
@@ -398,11 +401,11 @@ fun SpotBox(spot: Spot, navController: NavController) {
                             ) {
                                 Text(
                                     text = "${spot.spotDetails[0].windSpeedValue}",
-                                    style = MaterialTheme.typography.displayMedium
+                                    style = MaterialTheme.typography.displaySmall
                                 )
                                 Text(
                                     text = "m/s",
-                                    style = MaterialTheme.typography.displayMedium
+                                    style = MaterialTheme.typography.displaySmall
                                 )
                             }
                             Text(
@@ -416,17 +419,20 @@ fun SpotBox(spot: Spot, navController: NavController) {
                             horizontalAlignment = Alignment.End,
                         ) {
                             Row (
-                                horizontalArrangement = Arrangement.spacedBy(0.dp, Alignment.Start)
+                                horizontalArrangement = Arrangement.spacedBy(0.dp, Alignment.Start),
+                                verticalAlignment = Alignment.Bottom
                             ){
                                 Image(
                                     painter = painterResource(id = spot.spotDetails[0].windDirectionIcon),
                                     contentDescription = "Ikon: Pil som viser vindretning, ${spot.spotDetails[0].windDirectionString}",
+                                    modifier = Modifier.size(32.dp),
                                     contentScale = ContentScale.None,
-                                    modifier = Modifier.size(32.dp)
+
+
                                 )
                                 Text(
                                     text = "${spot.spotDetails[0].windDirectionString}",
-                                    style = MaterialTheme.typography.displayMedium
+                                    style = MaterialTheme.typography.displaySmall
                                 )
                             }
                             Text(
@@ -467,7 +473,7 @@ fun SpotBoxForSpotScreen(spot: Spot) {
                         //CityName
                         Text(
                             text = spot.predefinedSpot.cityName,
-                            style = MaterialTheme.typography.displaySmall
+                            style = MaterialTheme.typography.headlineLarge
                         )
                     }
                 }
@@ -481,7 +487,7 @@ fun SpotBoxForSpotScreen(spot: Spot) {
                     Spacer(modifier = Modifier.height(12.dp))
                     Text(
                         text = "Akkurat nå:",
-                        style = MaterialTheme.typography.bodyMedium
+                        style = MaterialTheme.typography.bodyLarge
                     )
                     Row(
                         Modifier.fillMaxWidth(),
@@ -506,11 +512,11 @@ fun SpotBoxForSpotScreen(spot: Spot) {
                             ) {
                                 Text(
                                     text = "${spot.spotDetails[0].windSpeedValue}",
-                                    style = MaterialTheme.typography.displayMedium
+                                    style = MaterialTheme.typography.displaySmall
                                 )
                                 Text(
                                     text = "m/s",
-                                    style = MaterialTheme.typography.displayMedium
+                                    style = MaterialTheme.typography.displaySmall
                                 )
                             }
                             Text(
@@ -524,16 +530,18 @@ fun SpotBoxForSpotScreen(spot: Spot) {
                             verticalArrangement = Arrangement.SpaceBetween,
                             horizontalAlignment = Alignment.End,
                         ) {
-                            Row (horizontalArrangement = Arrangement.spacedBy(0.dp, Alignment.Start)){
+                            Row (
+                                horizontalArrangement = Arrangement.spacedBy(0.dp, Alignment.Start),
+                                    verticalAlignment = Alignment.Bottom,){
                                 Image(
                                     painter = painterResource(id = spot.spotDetails[0].windDirectionIcon),
                                     contentDescription = "Ikon: Pil som viser vindretning, ${spot.spotDetails[0].windDirectionString}",
                                     contentScale = ContentScale.None,
-                                    modifier = Modifier.size(32.dp)
+                                    modifier = Modifier.size(38.dp)
                                 )
                                 Text(
                                     text = "${spot.spotDetails[0].windDirectionString}",
-                                    style = MaterialTheme.typography.displayMedium
+                                    style = MaterialTheme.typography.displaySmall
                                 )
                             }
                             Text(
@@ -590,7 +598,7 @@ fun WarningBox (
                             ) {
                                 Text(
                                     text = alert?.description ?: "",
-                                    style = MaterialTheme.typography.bodyMedium,
+                                    style = MaterialTheme.typography.bodySmall,
                                     modifier = Modifier.widthIn(max = 124.dp) // Limiting width to allow text wrapping
                                 )
                             }
@@ -712,7 +720,7 @@ fun SettingsScreenText() {
         ) {
             Text(
                 text = "Skru på push-varsler\nfor favorittsted",
-                style = MaterialTheme.typography.headlineLarge
+                style = MaterialTheme.typography.bodyLarge
             )
             SwitchSettings()
         }
