@@ -73,11 +73,7 @@ fun InfoButton(text: String, onClick: () -> Unit){
         ) {
             Text(
                 text = text,
-                style = TextStyle(
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.W500,
-                    color = BlueSignature
-                )
+                style = MaterialTheme.typography.labelLarge
             )
             Image(
                 painter = painterResource(id = R.drawable.info),
@@ -117,12 +113,7 @@ fun NavButton(navController: NavController, route: String, text: String, icon: I
             )
             Text(
                 text = text, // Using the text sent to the component as a parameter
-                style = TextStyle(
-                    fontSize = 12.sp,
-                    fontFamily = FontFamily(Font(R.font.inter_font)),
-                    fontWeight = FontWeight(500),
-                    color = BlueSignature
-                )
+                style = MaterialTheme.typography.labelLarge
             )
         }
     }
@@ -174,11 +165,7 @@ fun GoToMap(navController: NavController){
         )
         Text(
             text = "Gå til kart",
-            style = TextStyle(
-                fontSize = 12.sp,
-                fontWeight = FontWeight.W500,
-                color = ActionBlue
-            )
+            style = MaterialTheme.typography.labelSmall
         )
       }
     }
@@ -199,34 +186,18 @@ fun KiteConditionInfoBox() {
 
             Text(
                 text = "Kitevarsel",
-                style = TextStyle(
-                    letterSpacing = (-0.05).em,
-                    fontSize = 32.sp,
-                    fontFamily = FontFamily(Font(R.font.inter_font)),
-                    fontWeight = FontWeight(600),
-                    color = TextColor,
-                )
+                style = MaterialTheme.typography.displayLarge
             )
             Text(
                 text = "Informasjon",
-                style = TextStyle(
-                    fontSize = 18.sp,
-                    fontFamily = FontFamily(Font(R.font.inter_font)),
-                    fontWeight = FontWeight(400),
-                    color = TextColor,
-                )
+                style = MaterialTheme.typography.displaySmall
             )
             Spacer(modifier = Modifier.height(12.dp))
             Text(
                 modifier = Modifier.width(300.dp),
                 text = "Kitevarsel gir kitere anbefalinger om kiteforhold på utvalgte kitespotter langs kysten av Norge.\nAnbefalingene er fargekodet slik:",
-                style = TextStyle(
-                    fontSize = 14.sp,
-                    fontFamily = FontFamily(Font(R.font.inter_font)),
-                    fontWeight = FontWeight(400),
-                    color = TextColor,
+                style = MaterialTheme.typography.bodyLarge
                 )
-            )
         }
     }
 }
@@ -241,7 +212,7 @@ fun InfoColorsColumn(){
                 icon = R.drawable.sgreythumb,
                 contentDescription = "Ikon: Grå tommel ned",
                 title ="Ingen kiteforhold",
-                info = "0-5 m/s og/eller feil\n vindretning. Umulig å kite."
+                info = "0-5 m/s og/eller feil vindretning.\nUmulig å kite."
             )
         }
         item {
@@ -263,7 +234,7 @@ fun InfoColorsColumn(){
                 icon = R.drawable.sgreenthumb,
                 contentDescription = "Ikon: Grønn tommel opp",
                 title = "Anbefalte kiteforhold",
-                info ="7<11 m/s. Riktig vindstyrke\nog vindretning."
+                info ="7<11 m/s\nRiktig vindstyrke og vindretning."
             )
         }
         item {
@@ -274,7 +245,7 @@ fun InfoColorsColumn(){
                 icon = R.drawable.syellowthumb,
                 contentDescription = "Ikon: Gul tommel opp",
                 title = "Vanskelige kiteforhold",
-                info = "11<15 m/s. Sterk vind\nFare for overrigging"
+                info = "11<15 m/s\nSterk vind. Fare for overrigging."
             )
         }
         item {
@@ -296,7 +267,7 @@ fun InfoColorsColumn(){
                 icon = R.drawable.sredthumb,
                 contentDescription = "Ikon: Rød tommel ned",
                 title = "Ingen kiteforhold",
-                info = "19< m/s. Ekstrem fare\nog ekstremvær"
+                info = "19< m/s\nEkstrem fare og ekstremvær."
             )
             Spacer(modifier = Modifier.height(104.dp))
         }
@@ -321,21 +292,11 @@ fun KiteConditionColorBox(icon: Int, contentDescription: String, title: String, 
         ) {
             Text(
                 text = title,
-                style = TextStyle(
-                    fontSize = 14.sp,
-                    fontFamily = FontFamily(Font(R.font.inter_font)),
-                    fontWeight = FontWeight(400),
-                    color = TextColor,
-                )
+                style = MaterialTheme.typography.headlineLarge
             )
             Text(
                 text = info,
-                style = TextStyle(
-                    fontSize = 12.sp,
-                    fontFamily = FontFamily(Font(R.font.inter_font)),
-                    fontWeight = FontWeight(400),
-                    color = TextColor,
-                )
+                style = MaterialTheme.typography.bodyMedium
             )
         }
     }
@@ -347,7 +308,7 @@ fun SpotBox(spot: Spot, navController: NavController) {
         modifier = Modifier
     ) {
         Column(
-            verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.Top),
+            verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Top),
             horizontalAlignment = Alignment.Start,
         ) {
             //Row with title of spot and "goToSpot" button
@@ -364,27 +325,14 @@ fun SpotBox(spot: Spot, navController: NavController) {
                     ) {
                         Text(
                             text = spot.predefinedSpot.spotName,
-                            style = TextStyle(
-                                fontSize = 24.sp,
-                                fontFamily = FontFamily(Font(R.font.inter_font)),
-                                fontWeight = FontWeight(700),
-                                color = TextColor,
-                                letterSpacing = (-0.05).sp
-                            )
+                            style = MaterialTheme.typography.displayMedium
                         )
                         Text(
                             text = spot.predefinedSpot.cityName,
-                            style = TextStyle(
-                                fontSize = 16.sp,
-                                fontFamily = FontFamily(Font(R.font.inter_font)),
-                                fontWeight = FontWeight(400),
-                                color = TextColor
-                            )
+                            style = MaterialTheme.typography.headlineMedium
                         )
                     }
                 }
-                Spacer(modifier = Modifier.width(12.dp))
-
                 //Button: More detailed information about the spot
                 Box (
                     modifier = Modifier
@@ -401,7 +349,7 @@ fun SpotBox(spot: Spot, navController: NavController) {
                     )
                 }
             }
-
+            //Spacer(modifier = Modifier.height(4.dp))
             // Picture of spot
             Box(
                 modifier = Modifier.fillMaxWidth()
@@ -417,9 +365,6 @@ fun SpotBox(spot: Spot, navController: NavController) {
                     contentScale = ContentScale.Crop
                 )
             }
-
-            Spacer(modifier = Modifier.width(12.dp))
-
             //Box with condition for kiting (including thumb, color, wind info)
             Box {
                 Column(
@@ -428,14 +373,8 @@ fun SpotBox(spot: Spot, navController: NavController) {
                 ) {
                     Text(
                         text = "Akkurat nå:",
-                        style = TextStyle(
-                            fontSize = 14.sp,
-                            fontFamily = FontFamily(Font(R.font.inter_font)),
-                            fontWeight = FontWeight(500),
-                            color = TextColor
-                        )
+                        style = MaterialTheme.typography.bodyMedium
                     )
-
                     Row(
                         Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween,
@@ -449,7 +388,6 @@ fun SpotBox(spot: Spot, navController: NavController) {
                                 contentScale = ContentScale.None
                             )
                         }
-
                         Column(
                             verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.Top),
                             horizontalAlignment = Alignment.End,
@@ -460,34 +398,18 @@ fun SpotBox(spot: Spot, navController: NavController) {
                             ) {
                                 Text(
                                     text = "${spot.spotDetails[0].windSpeedValue}",
-                                    style = TextStyle(
-                                        fontSize = 24.sp,
-                                        fontFamily = FontFamily(Font(R.font.inter_font)),
-                                        fontWeight = FontWeight(300),
-                                        color = TextColor
-                                    )
+                                    style = MaterialTheme.typography.displayMedium
                                 )
                                 Text(
                                     text = "m/s",
-                                    style = TextStyle(
-                                        fontSize = 24.sp,
-                                        fontFamily = FontFamily(Font(R.font.inter_font)),
-                                        fontWeight = FontWeight(400),
-                                        color = TextColor
-                                    )
+                                    style = MaterialTheme.typography.displayMedium
                                 )
                             }
                             Text(
                                 text = "vindstyrke",
-                                style = TextStyle(
-                                    fontSize = 14.sp,
-                                    fontFamily = FontFamily(Font(R.font.inter_font)),
-                                    fontWeight = FontWeight(400),
-                                    color = TextColor
-                                )
+                                style = MaterialTheme.typography.bodyMedium
                             )
                         }
-
                         //Column with wind direction
                         Column(
                             verticalArrangement = Arrangement.SpaceBetween,
@@ -504,22 +426,12 @@ fun SpotBox(spot: Spot, navController: NavController) {
                                 )
                                 Text(
                                     text = "${spot.spotDetails[0].windDirectionString}",
-                                    style = TextStyle(
-                                        fontSize = 24.sp,
-                                        fontFamily = FontFamily(Font(R.font.inter_font)),
-                                        fontWeight = FontWeight(400),
-                                        color = TextColor
-                                    )
+                                    style = MaterialTheme.typography.displayMedium
                                 )
                             }
                             Text(
                                 text = "vindretning",
-                                style = TextStyle(
-                                    fontSize = 14.sp,
-                                    fontFamily = FontFamily(Font(R.font.inter_font)),
-                                    fontWeight = FontWeight(400),
-                                    color = TextColor
-                                )
+                                style = MaterialTheme.typography.bodyMedium
                             )
                         }
                     }
@@ -550,23 +462,12 @@ fun SpotBoxForSpotScreen(spot: Spot) {
                         //SpotName
                         Text(
                             text = spot.predefinedSpot.spotName,
-                            style = TextStyle(
-                                fontSize = 32.sp,
-                                fontFamily = FontFamily(Font(R.font.inter_font)),
-                                fontWeight = FontWeight(700),
-                                color = TextColor,
-                                letterSpacing = (-0.05).sp
-                            )
+                            style = MaterialTheme.typography.displayLarge
                         )
                         //CityName
                         Text(
                             text = spot.predefinedSpot.cityName,
-                            style = TextStyle(
-                                fontSize = 18.sp,
-                                fontFamily = FontFamily(Font(R.font.inter_font)),
-                                fontWeight = FontWeight(400),
-                                color = TextColor
-                            )
+                            style = MaterialTheme.typography.displaySmall
                         )
                     }
                 }
@@ -580,12 +481,7 @@ fun SpotBoxForSpotScreen(spot: Spot) {
                     Spacer(modifier = Modifier.height(12.dp))
                     Text(
                         text = "Akkurat nå:",
-                        style = TextStyle(
-                            fontSize = 12.sp,
-                            fontFamily = FontFamily(Font(R.font.inter_font)),
-                            fontWeight = FontWeight(500),
-                            color = TextColor
-                        )
+                        style = MaterialTheme.typography.bodyMedium
                     )
                     Row(
                         Modifier.fillMaxWidth(),
@@ -610,31 +506,16 @@ fun SpotBoxForSpotScreen(spot: Spot) {
                             ) {
                                 Text(
                                     text = "${spot.spotDetails[0].windSpeedValue}",
-                                    style = TextStyle(
-                                        fontSize = 24.sp,
-                                        fontFamily = FontFamily(Font(R.font.inter_font)),
-                                        fontWeight = FontWeight(300),
-                                        color = TextColor
-                                    )
+                                    style = MaterialTheme.typography.displayMedium
                                 )
                                 Text(
                                     text = "m/s",
-                                    style = TextStyle(
-                                        fontSize = 24.sp,
-                                        fontFamily = FontFamily(Font(R.font.inter_font)),
-                                        fontWeight = FontWeight(400),
-                                        color = TextColor
-                                    )
+                                    style = MaterialTheme.typography.displayMedium
                                 )
                             }
                             Text(
                                 text = "vindstyrke",
-                                style = TextStyle(
-                                    fontSize = 14.sp,
-                                    fontFamily = FontFamily(Font(R.font.inter_font)),
-                                    fontWeight = FontWeight(400),
-                                    color = TextColor
-                                )
+                                style = MaterialTheme.typography.bodyLarge
                             )
                         }
 
@@ -652,22 +533,12 @@ fun SpotBoxForSpotScreen(spot: Spot) {
                                 )
                                 Text(
                                     text = "${spot.spotDetails[0].windDirectionString}",
-                                    style = TextStyle(
-                                        fontSize = 24.sp,
-                                        fontFamily = FontFamily(Font(R.font.inter_font)),
-                                        fontWeight = FontWeight(400),
-                                        color = TextColor
-                                    )
+                                    style = MaterialTheme.typography.displayMedium
                                 )
                             }
                             Text(
                                 text = "vindretning",
-                                style = TextStyle(
-                                    fontSize = 14.sp,
-                                    fontFamily = FontFamily(Font(R.font.inter_font)),
-                                    fontWeight = FontWeight(400),
-                                    color = TextColor
-                                )
+                                style = MaterialTheme.typography.bodyLarge
                             )
                         }
                     }
@@ -705,13 +576,7 @@ fun WarningBox (
                 ) {
                     Text(
                         text = "Farevarsel!",
-                        style = TextStyle(
-                            fontSize = 18.sp,
-                            fontFamily = FontFamily(Font(R.font.inter_font)),
-                            fontWeight = FontWeight(600),
-                            color = TextColor,
-                            letterSpacing = (-0.05).sp
-                        )
+                        style = MaterialTheme.typography.headlineLarge
                     )
                     LazyColumn {
                         item {
@@ -725,12 +590,7 @@ fun WarningBox (
                             ) {
                                 Text(
                                     text = alert?.description ?: "",
-                                    style = TextStyle(
-                                        fontSize = 12.sp,
-                                        fontFamily = FontFamily(Font(R.font.inter_font)),
-                                        fontWeight = FontWeight(400),
-                                        color = TextColor,
-                                    ),
+                                    style = MaterialTheme.typography.bodyMedium,
                                     modifier = Modifier.widthIn(max = 124.dp) // Limiting width to allow text wrapping
                                 )
                             }
@@ -768,32 +628,17 @@ fun TimeBox(details: SpotInfo) {
             Text(
                 //Timestamp
                 text = details.time,
-                style = TextStyle(
-                    fontSize = 12.sp,
-                    fontFamily = FontFamily(Font(R.font.inter_font)),
-                    fontWeight = FontWeight(400),
-                    color = TextColor,
-                )
+                style = MaterialTheme.typography.bodyMedium
             )
             Text(
                 //Wind speed
                 text = "${details.windSpeedValue} m/s",
-                style = TextStyle(
-                    fontSize = 12.sp,
-                    fontFamily = FontFamily(Font(R.font.inter_font)),
-                    fontWeight = FontWeight(400),
-                    color = TextColor,
-                    )
+                style = MaterialTheme.typography.bodyMedium
             )
             Text(
                 //Wind direction
                 text = "${details.windDirectionString}",
-                style = TextStyle(
-                    fontSize = 12.sp,
-                    fontFamily = FontFamily(Font(R.font.inter_font)),
-                    fontWeight = FontWeight(400),
-                    color = TextColor,
-                )
+                style = MaterialTheme.typography.bodyMedium
             )
         }
     }
@@ -808,12 +653,7 @@ fun DaysBoxRow(details: List<SpotInfo>){
         //Date
         Text(
             text = details[0].date,
-            style = TextStyle(
-                fontSize = 12.sp,
-                fontFamily = FontFamily(Font(R.font.inter_font)),
-                fontWeight = FontWeight(400),
-                color = TextColor
-            )
+            style = MaterialTheme.typography.bodyLarge
         )
         LazyRow {
             items(details) { detail ->
@@ -843,11 +683,7 @@ fun SetAsFavouriteButton() {
         ) {
             Text(
                 text = "Sett som favoritt",
-                style = TextStyle(
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.W500,
-                    color = BlueSignature
-                )
+                style = MaterialTheme.typography.labelLarge
             )
             Image(
                 painter = painterResource(id = R.drawable.favourite),
@@ -866,12 +702,7 @@ fun SettingsScreenText() {
     ) {
         Text(
             text = "Innstillinger",
-            style = TextStyle(
-                fontSize = 32.sp,
-                fontFamily = FontFamily(Font(R.font.inter_font)),
-                fontWeight = FontWeight(600),
-                color = TextColor,
-            )
+            style = MaterialTheme.typography.displayLarge
         )
         Spacer(modifier = Modifier.height(24.dp))
         Row(
@@ -881,14 +712,7 @@ fun SettingsScreenText() {
         ) {
             Text(
                 text = "Skru på push-varsler\nfor favorittsted",
-                style = TextStyle(
-                    fontSize = 14.sp,
-                    lineHeight = 20.sp,
-                    fontFamily = FontFamily(Font(R.font.inter_font)),
-                    fontWeight = FontWeight(400),
-                    color = TextColor,
-                    letterSpacing = 0.5.sp,
-                )
+                style = MaterialTheme.typography.headlineLarge
             )
             SwitchSettings()
         }
@@ -903,12 +727,7 @@ fun FavouriteScreenText() {
     ) {
         Text(
             text = "Favoritter",
-            style = TextStyle(
-                fontSize = 32.sp,
-                fontFamily = FontFamily(Font(R.font.inter_font)),
-                fontWeight = FontWeight(600),
-                color = TextColor,
-            )
+            style = MaterialTheme.typography.displayLarge
         )
         Spacer(modifier = Modifier.height(24.dp))
         Row(
@@ -918,14 +737,7 @@ fun FavouriteScreenText() {
         ) {
             Text(
                 text = "Her kan du legge til\nditt favorittsted.\nTrykk på knappen\netter at du har valgt\nstedet på kartet.",
-                style = TextStyle(
-                    fontSize = 14.sp,
-                    //lineHeight = 20.sp,
-                    fontFamily = FontFamily(Font(R.font.inter_font)),
-                    fontWeight = FontWeight(400),
-                    color = TextColor,
-                    letterSpacing = 0.5.sp,
-                )
+                style = MaterialTheme.typography.bodyLarge
             )
             Spacer(modifier = Modifier.width(24.dp))
             Image(

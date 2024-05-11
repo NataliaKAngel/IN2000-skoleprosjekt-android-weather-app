@@ -4,16 +4,24 @@ import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Typography
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowCompat
+import no.uio.ifi.in2000.natalan.havvarselapp.R
 
 private val DarkColorScheme = darkColorScheme(
     primary = Purple80,
@@ -64,7 +72,74 @@ fun HavvarselAppTheme(
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = Typography,
+        typography = AppTypography,
         content = content
     )
 }
+
+
+
+// Font we use in app
+val InterFontFamily = FontFamily(Font(R.font.inter_font))
+
+// Typography we use in app
+val AppTypography = Typography(
+    displayLarge = TextStyle(
+        fontFamily = InterFontFamily,
+        fontSize = 32.sp,
+        fontWeight = FontWeight.Bold,
+        letterSpacing = (-0.05).sp,
+        color = TextColor
+    ),
+    displayMedium = TextStyle(
+        fontFamily = InterFontFamily,
+        fontSize = 24.sp,
+        fontWeight = FontWeight.Bold,
+        letterSpacing = (-0.05).sp,
+        color = TextColor
+    ),
+    displaySmall = TextStyle(
+        fontFamily = InterFontFamily,
+        fontSize = 18.sp,
+        fontWeight = FontWeight.Medium,
+        letterSpacing = (-0.05).sp,
+        color = TextColor
+    ),
+    headlineLarge = TextStyle(
+        fontFamily = InterFontFamily,
+        fontSize = 18.sp,
+        fontWeight = FontWeight.Bold,
+        letterSpacing = (-0.05).sp,
+        color = TextColor
+    ),
+    headlineMedium = TextStyle(
+        fontFamily = InterFontFamily,
+        fontSize = 14.sp,
+        fontWeight = FontWeight.Medium,
+        color = TextColor
+    ),
+    bodyLarge = TextStyle(
+        fontFamily = InterFontFamily,
+        fontSize = 14.sp,
+        fontWeight = FontWeight.Normal,
+        color = TextColor
+    ),
+    bodyMedium = TextStyle(
+        fontFamily = InterFontFamily,
+        fontSize = 12.sp,
+        fontWeight = FontWeight.Medium,
+        color = TextColor
+    ),
+    labelLarge = TextStyle(
+        fontFamily = InterFontFamily,
+        fontSize = 12.sp,
+        fontWeight = FontWeight.W500,
+        color = BlueSignature
+    ),
+    labelSmall = TextStyle(
+        fontFamily = InterFontFamily,
+        fontSize = 12.sp,
+        fontWeight = FontWeight.W500,
+        color = ActionBlue
+    )
+)
