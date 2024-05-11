@@ -867,7 +867,7 @@ fun SettingsScreenText() {
         Text(
             text = "Innstillinger",
             style = TextStyle(
-                fontSize = 24.sp,
+                fontSize = 32.sp,
                 fontFamily = FontFamily(Font(R.font.inter_font)),
                 fontWeight = FontWeight(600),
                 color = TextColor,
@@ -904,7 +904,7 @@ fun FavouriteScreenText() {
         Text(
             text = "Favoritter",
             style = TextStyle(
-                fontSize = 24.sp,
+                fontSize = 32.sp,
                 fontFamily = FontFamily(Font(R.font.inter_font)),
                 fontWeight = FontWeight(600),
                 color = TextColor,
