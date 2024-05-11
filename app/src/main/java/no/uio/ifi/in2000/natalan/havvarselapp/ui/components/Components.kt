@@ -120,7 +120,7 @@ fun NavButton(navController: NavController, route: String, text: String, icon: I
             Text(
                 text = text, // Using the text sent to the component as a parameter
                 style = TextStyle(
-                    fontSize = 9.sp,
+                    fontSize = 12.sp,
                     fontFamily = FontFamily(Font(R.font.inter_font)),
                     fontWeight = FontWeight(500),
                     color = BlueSignature
@@ -185,7 +185,7 @@ fun KiteConditionInfoBox() {
                 text = "Kitevarsel",
                 style = TextStyle(
                     letterSpacing = (-0.05).em,
-                    fontSize = 24.sp,
+                    fontSize = 32.sp,
                     fontFamily = FontFamily(Font(R.font.inter_font)),
                     fontWeight = FontWeight(600),
                     color = TextColor,
@@ -194,7 +194,7 @@ fun KiteConditionInfoBox() {
             Text(
                 text = "Informasjon",
                 style = TextStyle(
-                    fontSize = 12.sp,
+                    fontSize = 18.sp,
                     fontFamily = FontFamily(Font(R.font.inter_font)),
                     fontWeight = FontWeight(400),
                     color = TextColor,
@@ -205,7 +205,7 @@ fun KiteConditionInfoBox() {
                 modifier = Modifier.width(300.dp),
                 text = "Kitevarsel gir kitere anbefalinger om kiteforhold på utvalgte kitespotter langs kysten av Norge. Anbefalingene er fargekodet slik:",
                 style = TextStyle(
-                    fontSize = 9.sp,
+                    fontSize = 14.sp,
                     fontFamily = FontFamily(Font(R.font.inter_font)),
                     fontWeight = FontWeight(400),
                     color = TextColor,
@@ -218,7 +218,7 @@ fun KiteConditionInfoBox() {
  @Composable
 fun InfoColorsColumn(){
     LazyColumn(modifier = Modifier
-        .height(360.dp)
+      //  .height(360.dp)
     ) {
         item {
             KiteConditionColorBox(
@@ -229,7 +229,7 @@ fun InfoColorsColumn(){
             )
         }
         item {
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(12.dp))
         }
         item {
             KiteConditionColorBox(
@@ -240,7 +240,7 @@ fun InfoColorsColumn(){
             )
         }
         item {
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(12.dp))
         }
         item {
             KiteConditionColorBox(
@@ -251,7 +251,7 @@ fun InfoColorsColumn(){
             )
         }
         item {
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(12.dp))
         }
         item {
             KiteConditionColorBox(
@@ -262,7 +262,7 @@ fun InfoColorsColumn(){
             )
         }
         item {
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(12.dp))
         }
         item {
             KiteConditionColorBox(
@@ -273,7 +273,7 @@ fun InfoColorsColumn(){
             )
         }
         item {
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(12.dp))
         }
         item {
             KiteConditionColorBox(
@@ -282,7 +282,7 @@ fun InfoColorsColumn(){
                 title = "Ingen kiteforhold",
                 info = "19< m/s. Ekstrem fare\nog ekstremvær"
             )
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(104.dp))
         }
     }
 }
@@ -305,7 +305,7 @@ fun KiteConditionColorBox(icon: Int, contentDescription: String, title: String, 
             Text(
                 text = title,
                 style = TextStyle(
-                    fontSize = 12.sp,
+                    fontSize = 14.sp,
                     fontFamily = FontFamily(Font(R.font.inter_font)),
                     fontWeight = FontWeight(400),
                     color = TextColor,
@@ -314,7 +314,7 @@ fun KiteConditionColorBox(icon: Int, contentDescription: String, title: String, 
             Text(
                 text = info,
                 style = TextStyle(
-                    fontSize = 9.sp,
+                    fontSize = 12.sp,
                     fontFamily = FontFamily(Font(R.font.inter_font)),
                     fontWeight = FontWeight(400),
                     color = TextColor,
