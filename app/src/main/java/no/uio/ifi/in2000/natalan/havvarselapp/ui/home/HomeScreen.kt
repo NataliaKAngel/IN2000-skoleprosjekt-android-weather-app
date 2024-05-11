@@ -137,9 +137,9 @@ fun createMapView(context: Context): MapView {
 
     mapView.mapboxMap.setCamera(
         CameraOptions.Builder()
-            .center(Point.fromLngLat(7.99, 58.146))
+            .center(Point.fromLngLat(7.46, 58.02))
             .pitch(0.0)
-            .zoom(6.0)
+            .zoom(6.8)
             .bearing(0.0)
             .build()
     )

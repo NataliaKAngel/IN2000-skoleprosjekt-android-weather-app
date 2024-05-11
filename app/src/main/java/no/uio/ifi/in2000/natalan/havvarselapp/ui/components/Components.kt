@@ -54,6 +54,7 @@ fun TopBar(infoButtonClick: () -> Unit) {
         }
     }
 }
+
 @Composable
 fun InfoButton(text: String, onClick: () -> Unit){
     Box(
@@ -86,17 +87,6 @@ fun InfoButton(text: String, onClick: () -> Unit){
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
 
 @Composable
 fun NavButton(navController: NavController, route: String, text: String, icon: Int, contentDescription: String) { // Parameters: Text and icon
@@ -166,13 +156,31 @@ fun GoToMap(navController: NavController){
     Box(
         Modifier
             .clickable {
-            navController.popBackStack() },
-    ){
+            navController.popBackStack() }
+        .height(48.dp)
+        .background(
+            color = TextColor,
+            shape = RoundedCornerShape(size = 12.dp)
+        )
+        .padding(12.dp)
+    ){ Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.Start)
+    ) {
         Image(
-            painter = painterResource(id = R.drawable.gotomap),
+            painter = painterResource(id = R.drawable.arrowleft),
             contentDescription = "Knapp: Tilbake til kart",
             contentScale = ContentScale.None
         )
+        Text(
+            text = "Gå til kart",
+            style = TextStyle(
+                fontSize = 12.sp,
+                fontWeight = FontWeight.W500,
+                color = ActionBlue
+            )
+        )
+      }
     }
 }
 
@@ -573,7 +581,7 @@ fun SpotBoxForSpotScreen(spot: Spot) {
                     Text(
                         text = "Akkurat nå:",
                         style = TextStyle(
-                            fontSize = 14.sp,
+                            fontSize = 12.sp,
                             fontFamily = FontFamily(Font(R.font.inter_font)),
                             fontWeight = FontWeight(500),
                             color = TextColor
@@ -698,7 +706,7 @@ fun WarningBox (
                     Text(
                         text = "Farevarsel!",
                         style = TextStyle(
-                            fontSize = 14.sp,
+                            fontSize = 18.sp,
                             fontFamily = FontFamily(Font(R.font.inter_font)),
                             fontWeight = FontWeight(600),
                             color = TextColor,
@@ -718,12 +726,12 @@ fun WarningBox (
                                 Text(
                                     text = alert?.description ?: "",
                                     style = TextStyle(
-                                        fontSize = 9.sp,
+                                        fontSize = 12.sp,
                                         fontFamily = FontFamily(Font(R.font.inter_font)),
                                         fontWeight = FontWeight(400),
                                         color = TextColor,
                                     ),
-                                    modifier = Modifier.widthIn(max = 120.dp) // Limiting width to allow text wrapping
+                                    modifier = Modifier.widthIn(max = 124.dp) // Limiting width to allow text wrapping
                                 )
                             }
                         }
@@ -743,7 +751,7 @@ fun TimeBox(details: SpotInfo) {
                 color = details.kiteRecommendationColor,
                 shape = RoundedCornerShape(size = StandardRadius)
             )
-            .width(72.dp)
+            .width(80.dp)
             .height(88.dp)
             .background(
                 color = White,
@@ -819,30 +827,32 @@ fun DaysBoxRow(details: List<SpotInfo>){
 
 //Used on top of SpotScreen
 @Composable
-fun ButtonRow(navController : NavController){
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Box (
-            Modifier.clickable {
-                navController.popBackStack()},
-            contentAlignment = Alignment.CenterStart
-        ){
-            Image(
-                painter = painterResource(id = R.drawable.gotomap),
-                contentDescription = "Knapp: Gå til kart",
-                contentScale = ContentScale.Fit
+fun SetAsFavouriteButton() {
+    Box(
+        modifier = Modifier
+            .height(48.dp)
+            .background(
+                color = DefaultBlue,
+                shape = RoundedCornerShape(size = 12.dp)
             )
-        }
-        Box(
-            contentAlignment = Alignment.CenterEnd
+            .padding(12.dp)
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.Start)
         ) {
+            Text(
+                text = "Sett som favoritt",
+                style = TextStyle(
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.W500,
+                    color = BlueSignature
+                )
+            )
             Image(
-                painter = painterResource(id = R.drawable.setfavourite),
+                painter = painterResource(id = R.drawable.favourite),
                 contentDescription = "Knapp: Sett som favoritt",
-                contentScale = ContentScale.Fit
+                contentScale = ContentScale.None
             )
         }
     }

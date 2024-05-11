@@ -1,9 +1,12 @@
 package no.uio.ifi.in2000.natalan.havvarselapp.ui.spot
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -11,6 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.unit.dp
@@ -18,9 +22,10 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import androidx.navigation.NavController
 import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.SpotInfo
-import no.uio.ifi.in2000.natalan.havvarselapp.ui.components.ButtonRow
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.components.DaysBoxRow
+import no.uio.ifi.in2000.natalan.havvarselapp.ui.components.GoToMap
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.components.NavBar
+import no.uio.ifi.in2000.natalan.havvarselapp.ui.components.SetAsFavouriteButton
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.components.SpotBoxForSpotScreen
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.theme.DefaultBlue
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.theme.White
@@ -100,7 +105,8 @@ fun SpotScreen (
                     start = 16.dp,
                     top = 28.dp,
                     end = 16.dp,
-                    bottom = 104.dp)
+                    bottom = 104.dp
+                )
         ) {
             LazyColumn {
                 item {
@@ -110,10 +116,17 @@ fun SpotScreen (
                             .background(White, shape = RoundedCornerShape(size = 16.dp))
 
                     ) {
-                        ButtonRow(navController)
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            GoToMap(navController = navController)
+                            SetAsFavouriteButton()
+                        }
                     }
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(24.dp))
 
                     Box(
                         modifier = Modifier
