@@ -61,8 +61,7 @@ fun InfoButton(text: String, onClick: () -> Unit){
     Box(
         modifier = Modifier
             .clickable(onClick = onClick)
-            .width(65.dp)
-            .height(44.dp)
+            .height(48.dp)
             .background(
                 color = DefaultBlue,
                 shape = RoundedCornerShape(size = 12.dp)
@@ -76,7 +75,7 @@ fun InfoButton(text: String, onClick: () -> Unit){
             Text(
                 text = text,
                 style = TextStyle(
-                    fontSize = 9.sp,
+                    fontSize = 12.sp,
                     fontWeight = FontWeight.W500,
                     color = BlueSignature
                 )
@@ -200,10 +199,10 @@ fun KiteConditionInfoBox() {
                     color = TextColor,
                 )
             )
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(12.dp))
             Text(
                 modifier = Modifier.width(300.dp),
-                text = "Kitevarsel gir kitere anbefalinger om kiteforhold på utvalgte kitespotter langs kysten av Norge. Anbefalingene er fargekodet slik:",
+                text = "Kitevarsel gir kitere anbefalinger om kiteforhold på utvalgte kitespotter langs kysten av Norge.\nAnbefalingene er fargekodet slik:",
                 style = TextStyle(
                     fontSize = 14.sp,
                     fontFamily = FontFamily(Font(R.font.inter_font)),
@@ -348,7 +347,7 @@ fun SpotBox(spot: Spot, navController: NavController) {
                         Text(
                             text = spot.predefinedSpot.spotName,
                             style = TextStyle(
-                                fontSize = 24.sp,
+                                fontSize = 32.sp,
                                 fontFamily = FontFamily(Font(R.font.inter_font)),
                                 fontWeight = FontWeight(700),
                                 color = TextColor,
@@ -358,7 +357,7 @@ fun SpotBox(spot: Spot, navController: NavController) {
                         Text(
                             text = spot.predefinedSpot.cityName,
                             style = TextStyle(
-                                fontSize = 12.sp,
+                                fontSize = 18.sp,
                                 fontFamily = FontFamily(Font(R.font.inter_font)),
                                 fontWeight = FontWeight(400),
                                 color = TextColor
@@ -366,7 +365,7 @@ fun SpotBox(spot: Spot, navController: NavController) {
                         )
                     }
                 }
-                Spacer(modifier = Modifier.width(8.dp))
+                Spacer(modifier = Modifier.width(12.dp))
 
                 //Button: More detailed information about the spot
                 Box (
@@ -401,6 +400,8 @@ fun SpotBox(spot: Spot, navController: NavController) {
                 )
             }
 
+            Spacer(modifier = Modifier.width(12.dp))
+
             //Box with condition for kiting (including thumb, color, wind info)
             Box {
                 Column(
@@ -410,7 +411,7 @@ fun SpotBox(spot: Spot, navController: NavController) {
                     Text(
                         text = "Akkurat nå:",
                         style = TextStyle(
-                            fontSize = 9.sp,
+                            fontSize = 12.sp,
                             fontFamily = FontFamily(Font(R.font.inter_font)),
                             fontWeight = FontWeight(500),
                             color = TextColor
@@ -461,7 +462,7 @@ fun SpotBox(spot: Spot, navController: NavController) {
                             Text(
                                 text = "vindstyrke",
                                 style = TextStyle(
-                                    fontSize = 9.sp,
+                                    fontSize = 12.sp,
                                     fontFamily = FontFamily(Font(R.font.inter_font)),
                                     fontWeight = FontWeight(400),
                                     color = TextColor
@@ -496,7 +497,7 @@ fun SpotBox(spot: Spot, navController: NavController) {
                             Text(
                                 text = "vindretning",
                                 style = TextStyle(
-                                    fontSize = 9.sp,
+                                    fontSize = 12.sp,
                                     fontFamily = FontFamily(Font(R.font.inter_font)),
                                     fontWeight = FontWeight(400),
                                     color = TextColor
@@ -514,10 +515,10 @@ fun SpotBox(spot: Spot, navController: NavController) {
 fun SpotBoxForSpotScreen(spot: Spot) {
     Box {
         Column(
-            verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.Top),
+            verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Top),
             horizontalAlignment = Alignment.Start,
         ) {
-            //Row with title of spot and "goToSpot" button
+            //Row with title of spot and "infospotbutton" button
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -532,7 +533,7 @@ fun SpotBoxForSpotScreen(spot: Spot) {
                         Text(
                             text = spot.predefinedSpot.spotName,
                             style = TextStyle(
-                                fontSize = 24.sp,
+                                fontSize = 32.sp,
                                 fontFamily = FontFamily(Font(R.font.inter_font)),
                                 fontWeight = FontWeight(700),
                                 color = TextColor,
@@ -543,7 +544,7 @@ fun SpotBoxForSpotScreen(spot: Spot) {
                         Text(
                             text = spot.predefinedSpot.cityName,
                             style = TextStyle(
-                                fontSize = 12.sp,
+                                fontSize = 18.sp,
                                 fontFamily = FontFamily(Font(R.font.inter_font)),
                                 fontWeight = FontWeight(400),
                                 color = TextColor
@@ -573,7 +574,7 @@ fun SpotBoxForSpotScreen(spot: Spot) {
                     Text(
                         text = "Akkurat nå:",
                         style = TextStyle(
-                            fontSize = 9.sp,
+                            fontSize = 12.sp,
                             fontFamily = FontFamily(Font(R.font.inter_font)),
                             fontWeight = FontWeight(500),
                             color = TextColor
@@ -622,7 +623,7 @@ fun SpotBoxForSpotScreen(spot: Spot) {
                             Text(
                                 text = "vindstyrke",
                                 style = TextStyle(
-                                    fontSize = 9.sp,
+                                    fontSize = 12.sp,
                                     fontFamily = FontFamily(Font(R.font.inter_font)),
                                     fontWeight = FontWeight(400),
                                     color = TextColor
@@ -655,7 +656,7 @@ fun SpotBoxForSpotScreen(spot: Spot) {
                             Text(
                                 text = "vindretning",
                                 style = TextStyle(
-                                    fontSize = 9.sp,
+                                    fontSize = 12.sp,
                                     fontFamily = FontFamily(Font(R.font.inter_font)),
                                     fontWeight = FontWeight(400),
                                     color = TextColor
@@ -743,8 +744,8 @@ fun TimeBox(details: SpotInfo) {
                 color = details.kiteRecommendationColor,
                 shape = RoundedCornerShape(size = StandardRadius)
             )
-            .width(64.dp)
-            .height(72.dp)
+            .width(72.dp)
+            .height(88.dp)
             .background(
                 color = White,
                 shape = RoundedCornerShape(size = StandardRadius)
@@ -761,7 +762,7 @@ fun TimeBox(details: SpotInfo) {
                 //Timestamp
                 text = details.time,
                 style = TextStyle(
-                    fontSize = 9.sp,
+                    fontSize = 12.sp,
                     fontFamily = FontFamily(Font(R.font.inter_font)),
                     fontWeight = FontWeight(400),
                     color = TextColor,
@@ -771,7 +772,7 @@ fun TimeBox(details: SpotInfo) {
                 //Wind speed
                 text = "${details.windSpeedValue} m/s",
                 style = TextStyle(
-                    fontSize = 9.sp,
+                    fontSize = 12.sp,
                     fontFamily = FontFamily(Font(R.font.inter_font)),
                     fontWeight = FontWeight(400),
                     color = TextColor,
@@ -781,7 +782,7 @@ fun TimeBox(details: SpotInfo) {
                 //Wind direction
                 text = "${details.windDirectionString}",
                 style = TextStyle(
-                    fontSize = 9.sp,
+                    fontSize = 12.sp,
                     fontFamily = FontFamily(Font(R.font.inter_font)),
                     fontWeight = FontWeight(400),
                     color = TextColor,
@@ -801,7 +802,7 @@ fun DaysBoxRow(details: List<SpotInfo>){
         Text(
             text = details[0].date,
             style = TextStyle(
-                fontSize = 9.sp,
+                fontSize = 12.sp,
                 fontFamily = FontFamily(Font(R.font.inter_font)),
                 fontWeight = FontWeight(400),
                 color = TextColor
@@ -810,10 +811,10 @@ fun DaysBoxRow(details: List<SpotInfo>){
         LazyRow {
             items(details) { detail ->
                 TimeBox(detail)
-                Spacer(modifier = Modifier.width(8.dp))
+                Spacer(modifier = Modifier.width(12.dp))
             }
         }
-        Spacer(modifier=Modifier.height(12.dp))
+        Spacer(modifier=Modifier.height(16.dp))
     }
 }
 
@@ -910,7 +911,7 @@ fun FavouriteScreenText() {
                 text = "Her kan du legge til\nditt favorittsted.\nTrykk på knappen\netter at du har valgt\nstedet på kartet.",
                 style = TextStyle(
                     fontSize = 14.sp,
-                    lineHeight = 20.sp,
+                    //lineHeight = 20.sp,
                     fontFamily = FontFamily(Font(R.font.inter_font)),
                     fontWeight = FontWeight(400),
                     color = TextColor,
