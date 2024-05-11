@@ -362,8 +362,6 @@ fun SpotBox(spot: Spot, navController: NavController) {
                     contentScale = ContentScale.Crop
                 )
             }
-            //Spacer(modifier = Modifier.width(12.dp))
-            //Box with condition for kiting (including thumb, color, wind info)
             Box {
                 Column(
                     verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.Top),
@@ -422,8 +420,6 @@ fun SpotBox(spot: Spot, navController: NavController) {
                                     contentDescription = "Ikon: Pil som viser vindretning, ${spot.spotDetails[0].windDirectionString}",
                                     modifier = Modifier.size(32.dp),
                                     contentScale = ContentScale.None,
-
-
                                 )
                                 Text(
                                     text = "${spot.spotDetails[0].windDirectionString}",
