@@ -1,13 +1,14 @@
 package no.uio.ifi.in2000.natalan.havvarselapp
 
+import androidx.compose.ui.graphics.Color
 import org.junit.Assert
 import org.junit.Test
-import no.uio.ifi.in2000.natalan.havvarselapp.data.weatherAPI.WeatherAPIRepository
 import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.AlertInfo
+import no.uio.ifi.in2000.natalan.havvarselapp.ui.theme.RedCircle
+import no.uio.ifi.in2000.natalan.havvarselapp.ui.theme.YellowCircle
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-/*
 class KiteRecommendationUnitTest {
     data class Feature(
         val geometry: Geometry,
@@ -22,7 +23,7 @@ class KiteRecommendationUnitTest {
     )
 
     data class Properties(
-        val riskMatrixColor: String,
+        val riskMatrixColor: Color,
         val description: String,
         val event: String
     )
@@ -33,7 +34,7 @@ class KiteRecommendationUnitTest {
 
     /*
     data class AlertInfo(
-        val riskMatrixColor: String,
+        val riskMatrixColor: Color,
         val description: String,
         val event: String,
         val startTime: String,
@@ -42,7 +43,6 @@ class KiteRecommendationUnitTest {
 
      */
 
-
     @Test
     fun testCreateAllAlertsInfos() {
 
@@ -50,7 +50,7 @@ class KiteRecommendationUnitTest {
             Feature(
                 geometry = Geometry(listOf(listOf(listOf(1.0, 2.0)))),
                 properties = Properties(
-                    riskMatrixColor = "color1",
+                    riskMatrixColor = YellowCircle,
                     description = "desc1",
                     event = "event1",
                     //whenField = When(listOf("2024-04-23T10:00:00Z", "2024-04-23T12:00:00Z"))
@@ -61,7 +61,7 @@ class KiteRecommendationUnitTest {
             Feature(
                 geometry = Geometry(listOf(listOf(listOf(3.0, 4.0)))),
                 properties = Properties(
-                    riskMatrixColor = "color2",
+                    riskMatrixColor = RedCircle,
                     description = "desc2",
                     event = "event2",
                     //whenField = When(listOf("2024-04-23T13:00:00Z", "2024-04-23T15:00:00Z"))
@@ -72,8 +72,8 @@ class KiteRecommendationUnitTest {
         )
 
         val expected = listOf(
-            AlertInfo("color1", "desc1", "event1", "2024-04-23T10:00:00Z", "2024-04-23T12:00:00Z"),
-            AlertInfo("color2", "desc2", "event2", "2024-04-23T13:00:00Z", "2024-04-23T15:00:00Z")
+            AlertInfo(YellowCircle, "desc1", "event1", "2024-04-23T10:00:00Z"),
+            AlertInfo(RedCircle, "desc2", "event2", "2024-04-23T13:00:00Z")
         )
         Assert.assertEquals(expected, createAllAlertInfos(features))
     }
@@ -160,8 +160,8 @@ class KiteRecommendationUnitTest {
     fun testCalculateKiteRecommendation_RedAlert_Current() {
         // Given
         val alerts = listOf(
-            AlertInfo("rainFlood", "Heavy rain", "rainFlood", "2024-04-30T10:00:00Z", "2024-04-30T12:00:00Z"),
-            AlertInfo("lightning", "Thunderstorm", "lightning", "2024-04-30T09:00:00Z", "2024-04-30T11:00:00Z")
+            AlertInfo(YellowCircle, "Heavy rain", "rainFlood", "2024-04-30T10:00:00Z"),
+            AlertInfo(RedCircle, "Thunderstorm", "lightning", "2024-04-30T09:00:00Z")
         )
         val windSpeedValue: Double = 15.0
         val windDirectionValue: Double = 180.0
@@ -227,8 +227,8 @@ class KiteRecommendationUnitTest {
     fun testCalculateKiteRecommendation_DefaultCondition() {
         // Given
         val alerts = emptyList<AlertInfo?>()
-        val windSpeedValue: Double? = 5.0
-        val windDirectionValue: Double? = 240.0
+        val windSpeedValue = 5.0
+        val windDirectionValue = 240.0
         val optimalWindConditions = mapOf("min" to 180.0, "max" to 270.0)
         val timeStamp = "2024-04-30T14:00:00Z"
 
@@ -255,7 +255,6 @@ class KiteRecommendationUnitTest {
             riskMatrixColor = feature.properties.riskMatrixColor,
             description = feature.properties.description,
             event = feature.properties.event,
-            startTime = feature.whenField.interval[0],
             endTime = feature.whenField.interval[1]
         )
     }
@@ -362,6 +361,3 @@ private fun checkAlertValidity(alert: AlertInfo?, timeStamp: String): Boolean {
     }
     return false
 }
-
- */
-
