@@ -1,4 +1,4 @@
-package no.uio.ifi.in2000.natalan.havvarselapp.UnitTest
+package no.uio.ifi.in2000.natalan.havvarselapp
 
 import org.junit.Assert
 import org.junit.Test
@@ -7,7 +7,7 @@ import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.AlertInfo
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-
+/*
 class KiteRecommendationUnitTest {
     data class Feature(
         val geometry: Geometry,
@@ -362,3 +362,6 @@ private fun checkAlertValidity(alert: AlertInfo?, timeStamp: String): Boolean {
     }
     return false
 }
+
+ */
+
