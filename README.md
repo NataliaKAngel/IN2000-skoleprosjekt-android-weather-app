@@ -1,7 +1,7 @@
 # Prosjektnavn 
  Kitevarsel
 ## Beskrivelse: 
-Appen vår er en varslingsapp for kitere som forteller brukeren når og hvor man burde, og ikke burde kite. Gjennom brukerundersøkelse har kitere formidlet at de har savnet en app der man får all informasjon om værforholdet knyttet til kiting samlet på ett sted, og det er nettopp dette behovet vi ønsker å dekke. Appen presenterer et kart, hvor allerede definerte områder er markert med tomler. Disse områdene er populære kite steder på Sørlandet, som vi fikk kjennskap til gjennom brukerundersøkelse. På hvert område er det en tommel som enten er rød, grønn, grå eller blå, og som enten peker opp eller ned. Dette representerer kite forholdet til det gitte området. Dersom brukeren ønsker å se nærmere på værvarselet og kite forholdet på et av områdene, er det bare å trykke på selve tommelen, og en mer detaljert værbeskrivelse blir presentert for brukeren. 
+Appen vår er en varslingsapp for kitere som forteller brukeren når og hvor man burde, og ikke burde kite. Gjennom brukerundersøkelse har kitere formidlet at de har savnet en app der man får all informasjon om værforholdet knyttet til kiting samlet på ett sted, og det er nettopp dette behovet vi ønsker å dekke. Appen presenterer et kart, hvor allerede definerte områder er markert med tomler. Disse områdene er populære kite steder på Sørlandet, som vi fikk kjennskap til gjennom brukerundersøkelse. På hvert område er det en tommel som enten er rød, oransje,grønn, gul, grå eller blå, og som enten peker opp eller ned. Dette representerer kite forholdet til det gitte området. Dersom brukeren ønsker å se nærmere på værvarselet og kite forholdet på et av områdene, er det bare å trykke på selve tommelen, og en mer detaljert værbeskrivelse blir presentert for brukeren. 
  
 ## Installasjon: 
 1.	Dersom du allerede har Android Studios installert på maskinen din, så åpner du dette programmet. 
@@ -17,7 +17,19 @@ Appen vår er en varslingsapp for kitere som forteller brukeren når og hvor man
 
 
 ## Kjøring av applikasjonen 
+Faktorer man må ta hensyn til ved kjøring av applikasjonen:
+- URL-en vi valgte å bruke til MetAlers API-et er den som viser pågående farevarsler. Det er for tiden ingen utstedte farevarsler for våre valgte kite-områder. Dersom vedkommende ønsker å se hvordan appen blir med et pågående farevarsel, kan vedkommende endre URL-en i client.get i metoden getMetAlert() i MetAlertsDataSource fra METALERT_CURRENT til METALERT_EXAMPLE.
+- For best brukeropplevelse anbefales det å bruke en liten til medium stor skjerm i emulatoren. 
+
+
 Etter man har trykket på Run, så kommer det opp et kart. Vedkommende som kjører appen, må trykke på Kart en gang til for å få opp de ulike markerte områdene. For å få mer informasjon om et spesifikt område, så er det bare å trykke på området og deretter trykke på «gå til spot». Da blir informasjon og værdata presentert. 
+
+Andre faktorer -Warnings:
+- Det er ubrukte variabler i WeatherAPIRepository som er nødvendige å opprette for at splitting av String skal skje riktig.
+- Model-mappen: Vi har også advarsler som følge av ubrukte klasser som vi har opprettet for å deserialisere API-ene. 
+- FavouriteScreen: Vi har ikke rukket å implementere funksjonaliteten
+- FavouriteScreenViewModel: Ubrukt Repository
+
  
 ## Brukte biblioteker: List opp alle biblioteker og rammeverk du har brukt, sammen med deres versjoner og formål. 
 Fra build.gradle:
