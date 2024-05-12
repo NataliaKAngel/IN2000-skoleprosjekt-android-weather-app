@@ -657,7 +657,7 @@ fun DaysBoxRow(details: List<SpotInfo>){
         LazyRow {
             items(details) { detail ->
                 TimeBox(detail)
-                Spacer(modifier = Modifier.width(12.dp))
+                Spacer(modifier = Modifier.width(8.dp))
             }
         }
         Spacer(modifier=Modifier.height(16.dp))
