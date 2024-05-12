@@ -358,7 +358,7 @@ fun SpotBox(spot: Spot, navController: NavController) {
                     contentDescription = "Bilde: Strand",
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(96.dp)
+                        .height(112.dp)
                         .clip(shape = RoundedCornerShape(8.dp)),
                     contentScale = ContentScale.Crop
                 )
@@ -771,7 +771,7 @@ fun SwitchSettings() {
 @Composable
 fun SpotBoxWithFrame(spot: Spot, navController: NavController){
     Column(modifier = Modifier
-        .width(328.dp)
+        .widthIn(min = 328.dp, max = 368.dp)
         .background(White, shape = RoundedCornerShape(size = StandardRadius))
         .padding(StandardRadius)
     ) {
