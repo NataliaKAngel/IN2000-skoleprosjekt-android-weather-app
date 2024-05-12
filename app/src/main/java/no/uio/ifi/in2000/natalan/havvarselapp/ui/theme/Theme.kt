@@ -148,13 +148,13 @@ val AppTypography = Typography(
     labelLarge = TextStyle(
         fontFamily = InterFontFamily,
         fontSize = 12.sp,
-        fontWeight = FontWeight.W500,
+        fontWeight = FontWeight.Medium,
         color = BlueSignature
     ),
     labelSmall = TextStyle(
         fontFamily = InterFontFamily,
         fontSize = 12.sp,
-        fontWeight = FontWeight.W500,
+        fontWeight = FontWeight.Medium,
         color = ActionBlue
     )
 )
