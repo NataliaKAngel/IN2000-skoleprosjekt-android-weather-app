@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.*
 import androidx.navigation.NavController
 import no.uio.ifi.in2000.natalan.havvarselapp.R
@@ -186,7 +187,7 @@ fun KiteConditionInfoBox() {
             )
             Text(
                 text = "Informasjon",
-                style = MaterialTheme.typography.displaySmall
+                style = MaterialTheme.typography.headlineLarge
             )
             Spacer(modifier = Modifier.height(12.dp))
             Text(
@@ -464,7 +465,7 @@ fun SpotBoxForSpotScreen(spot: Spot) {
                         //CityName
                         Text(
                             text = spot.predefinedSpot.cityName,
-                            style = MaterialTheme.typography.displaySmall
+                            style = MaterialTheme.typography.headlineLarge
                         )
                     }
                 }
@@ -528,7 +529,7 @@ fun SpotBoxForSpotScreen(spot: Spot) {
                                     painter = painterResource(id = spot.spotDetails[0].windDirectionIcon),
                                     contentDescription = "Ikon: Pil som viser vindretning, ${spot.spotDetails[0].windDirectionString}",
                                     contentScale = ContentScale.None,
-                                    modifier = Modifier.size(38.dp)
+                                    modifier = Modifier.size(32.dp)
                                 )
                                 Text(
                                     text = "${spot.spotDetails[0].windDirectionString}",
@@ -575,7 +576,7 @@ fun WarningBox (
                 ) {
                     Text(
                         text = "Farevarsel!",
-                        style = MaterialTheme.typography.headlineLarge
+                        style = MaterialTheme.typography.headlineLarge.copy(fontWeight = FontWeight.Bold)
                     )
                     LazyColumn {
                         item {

@@ -99,7 +99,7 @@ val AppTypography = Typography(
     ),
     displaySmall = TextStyle(
         fontFamily = InterFontFamily,
-        fontSize = 18.sp,
+        fontSize = 24.sp,
         fontWeight = FontWeight.Normal,
         letterSpacing = (-0.05).sp,
         color = TextColor
@@ -108,7 +108,7 @@ val AppTypography = Typography(
     headlineLarge = TextStyle(
         fontFamily = InterFontFamily,
         fontSize = 18.sp,
-        fontWeight = FontWeight.Bold,
+        fontWeight = FontWeight.Normal,
         letterSpacing = (-0.05).sp,
         color = TextColor
     ),
