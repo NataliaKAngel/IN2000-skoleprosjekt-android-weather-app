@@ -653,7 +653,7 @@ fun DaysBoxRow(details: List<SpotInfo>){
         //Date
         Text(
             text = details[0].date,
-            style = MaterialTheme.typography.bodyLarge
+            style = MaterialTheme.typography.bodySmall
         )
         LazyRow {
             items(details) { detail ->
