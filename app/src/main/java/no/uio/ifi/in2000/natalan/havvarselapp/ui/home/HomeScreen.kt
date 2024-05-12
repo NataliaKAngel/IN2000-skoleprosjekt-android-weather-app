@@ -40,6 +40,7 @@ import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
 import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
 import no.uio.ifi.in2000.natalan.havvarselapp.model.spot.Spot
 import no.uio.ifi.in2000.natalan.havvarselapp.ui.components.*
+import no.uio.ifi.in2000.natalan.havvarselapp.ui.theme.DefaultBlue
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -101,11 +102,14 @@ fun HomeScreen(
                         isSheetOpen = false
                         homeScreenViewModel.updateClickedUIState(false)
                         },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    containerColor= DefaultBlue,
 
                 ) {
                     Box(
-                        modifier = Modifier.fillMaxWidth().padding(bottom = 64.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 64.dp),
                         contentAlignment = Alignment.Center
                     ) {
                         if (spot != null) {
@@ -133,9 +137,9 @@ fun createMapView(context: Context): MapView {
 
     mapView.mapboxMap.setCamera(
         CameraOptions.Builder()
-            .center(Point.fromLngLat(7.99, 58.146))
+            .center(Point.fromLngLat(7.46, 58.02))
             .pitch(0.0)
-            .zoom(6.0)
+            .zoom(6.8)
             .bearing(0.0)
             .build()
     )
