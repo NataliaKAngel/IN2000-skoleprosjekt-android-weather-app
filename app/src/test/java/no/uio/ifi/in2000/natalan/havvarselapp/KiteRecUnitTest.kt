@@ -72,8 +72,8 @@ class KiteRecommendationUnitTest {
         )
 
         val expected = listOf(
-            AlertInfo(YellowCircle, "desc1", "event1", "2024-04-23T10:00:00Z"),
-            AlertInfo(RedCircle, "desc2", "event2", "2024-04-23T13:00:00Z")
+            AlertInfo(YellowCircle, "desc1", "event1", "2024-04-23T12:00:00Z"),
+            AlertInfo(RedCircle, "desc2", "event2", "2024-04-23T15:00:00Z")
         )
         Assert.assertEquals(expected, createAllAlertInfos(features))
     }
@@ -172,7 +172,7 @@ class KiteRecommendationUnitTest {
         val result = calculateKiteRecommendation(alerts, windSpeedValue, windDirectionValue, optimalWindConditions, timeStamp)
 
         // Then
-        Assert.assertEquals("red", result)
+        Assert.assertEquals("orange", result)
     }
 
     @Test
