@@ -186,7 +186,7 @@ fun KiteConditionInfoBox() {
             )
             Text(
                 text = "Informasjon",
-                style = MaterialTheme.typography.headlineSmall
+                style = MaterialTheme.typography.displaySmall
             )
             Spacer(modifier = Modifier.height(12.dp))
             Text(
@@ -464,7 +464,7 @@ fun SpotBoxForSpotScreen(spot: Spot) {
                         //CityName
                         Text(
                             text = spot.predefinedSpot.cityName,
-                            style = MaterialTheme.typography.headlineLarge
+                            style = MaterialTheme.typography.displaySmall
                         )
                     }
                 }
