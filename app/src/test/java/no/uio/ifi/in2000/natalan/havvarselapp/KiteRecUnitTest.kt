@@ -163,8 +163,8 @@ class KiteRecommendationUnitTest {
             AlertInfo(YellowCircle, "Heavy rain", "rainFlood", "2024-04-30T10:00:00Z"),
             AlertInfo(RedCircle, "Thunderstorm", "lightning", "2024-04-30T09:00:00Z")
         )
-        val windSpeedValue: Double = 15.0
-        val windDirectionValue: Double = 180.0
+        val windSpeedValue = 15.0
+        val windDirectionValue = 180.0
         val optimalWindConditions = mapOf("min" to 180.0, "max" to 270.0)
         val timeStamp = "2024-04-30T11:30:00Z"
 
@@ -179,8 +179,8 @@ class KiteRecommendationUnitTest {
     fun testCalculateKiteRecommendation_WrongWindDirection() {
         // Given
         val alerts = emptyList<AlertInfo?>()
-        val windSpeedValue: Double = 10.0
-        val windDirectionValue: Double = 350.0
+        val windSpeedValue = 10.0
+        val windDirectionValue = 350.0
         val optimalWindConditions = mapOf("min" to 180.0, "max" to 270.0)
         val timeStamp = "2024-04-30T14:00:00Z"
 
@@ -195,8 +195,8 @@ class KiteRecommendationUnitTest {
     fun testCalculateKiteRecommendation_CorrectWindConditions_Green() {
         // Given
         val alerts = emptyList<AlertInfo?>()
-        val windSpeedValue: Double = 10.0
-        val windDirectionValue: Double = 220.0
+        val windSpeedValue = 10.0
+        val windDirectionValue = 220.0
         val optimalWindConditions = mapOf("min" to 180.0, "max" to 270.0)
         val timeStamp = "2024-04-30T14:00:00Z"
 
