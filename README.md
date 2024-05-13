@@ -22,14 +22,13 @@ Faktorer man må ta hensyn til ved kjøring av applikasjonen:
 - For best brukeropplevelse anbefales det å bruke en liten til medium stor skjerm i emulatoren. 
 
 
-Etter man har trykket på Run, så kommer det opp et kart. Vedkommende som kjører appen, må trykke på Kart en gang til for å få opp de ulike markerte områdene. For å få mer informasjon om et spesifikt område, så er det bare å trykke på området og deretter trykke på «gå til spot». Da blir informasjon og værdata presentert. 
+Etter man har trykket på Run, så kommer det opp et kart. Det tar litt tid før markørene blir synlige på kartet, så det er bare å lene seg tilbake og vente i spenning. For å få mer informasjon om et spesifikt område, så er det bare å trykke på området og deretter trykke på «gå til spot». Da blir informasjon og værdata presentert. 
 
-Andre faktorer -Warnings:
+Andre faktorer - Warnings:
 - Det er ubrukte variabler i WeatherAPIRepository som er nødvendige å opprette for at splitting av String skal skje riktig.
 - Model-mappen: Vi har også advarsler som følge av ubrukte klasser som vi har opprettet for å deserialisere API-ene. 
-- FavouriteScreen: Vi har ikke rukket å implementere funksjonaliteten
-- FavouriteScreenViewModel: Ubrukt Repository
-
+- FavouriteScreen: Vi har ikke rukket å implementere funksjonaliteten, og derfor er FavouriteScreenViewModel ubrukt 
+- KiteRecUnitTest: To warnings knyttet til at to variabler alltid har samme verdi. Det er fordi verdiene til variablene er hardkodet slik at det ble enklere å teste. I tillegg er to variabler ikke i bruk, årsaken til dette er den samme som for WeatherAPiRepository, altså at variablene er nødvendige for at splitting av String skal skje riktig. Den siste Warning er knyttet til en type mismatch (String? vs. String), men siden dette er en testfil så vet vi at vi alltid kommer til å sende inn en String. 
  
 ## Brukte biblioteker: List opp alle biblioteker og rammeverk du har brukt, sammen med deres versjoner og formål. 
 Fra build.gradle:
@@ -68,6 +67,10 @@ Fra build.gradle:
 33.	Bitmap, Canvas, Drawable: Android-grafikkrelaterte klasser som brukes til å manipulere bilder og tegne grafikk på skjermen.
 34.	Mapbox-relaterte klasser (Point, CameraOptions, MapView, Style): Klasser og komponenter fra Mapboc Maps SDK som brukes til å integrere kartvisning og interaksjon i appen.
 35.	ConstraintLayout-relaterte klasser (ConstraintLayout, ConstraintSet): Klasser for å opprette og håndtere komplekse layouter med ConstraintLayout-biblioteket i Jetpack Compose. 
+
+NB!
+- Flere av avhengighetene i build.gradle.kts filen har warnings knyttet til dem. Årsaken til dette er fordi det har kommet nyere versjoner av samtlige avhengigheter underveis i prosjektet. Vi har valgt å ikke endre avhengighetene til nyere versjoner ettersom vi ikke ønsket nye potensielle problemer å oppstå såpass nærme fristen. 
+
 ## Dokumentasjon 
 Dokumentasjon som `ARCHITECTURE.md` og `MODELING.md` finnes som filer sammen med prosjektet, utenfor alle mappene
 
