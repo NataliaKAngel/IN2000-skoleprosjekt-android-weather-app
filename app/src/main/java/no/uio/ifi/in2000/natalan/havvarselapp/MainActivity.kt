@@ -105,7 +105,6 @@ class MainActivity : ComponentActivity() {
                     Scaffold (
                         snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
                     ) {
-
                         // Creates navController and NavHost
                         val navController = rememberNavController()
                         NavHost(navController = navController, startDestination = "HomeScreen") {
@@ -122,7 +121,6 @@ class MainActivity : ComponentActivity() {
                             composable("FavouriteScreen") { FavouriteScreen(navController = navController, favouriteScreenViewModel = favouriteScreenViewModel)}
                             composable("SettingsScreen") { SettingsScreen(navController = navController)}
                         }
-
                     }
                 }
             }
