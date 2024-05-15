@@ -72,5 +72,5 @@ NB!
 - Flere av avhengighetene i build.gradle.kts filen har warnings knyttet til dem. Årsaken til dette er fordi det har kommet nyere versjoner av samtlige avhengigheter underveis i prosjektet. Vi har valgt å ikke endre avhengighetene til nyere versjoner ettersom vi ikke ønsket nye potensielle problemer å oppstå såpass nærme fristen. 
 
 ## Dokumentasjon 
-Dokumentasjon som `ARCHITECTURE.md` og `MODELING.md` finnes som filer sammen med prosjektet, utenfor alle mappene
+Dokumentasjon som `ARCHITECTURE.md` og `MODELING.md` finnes som filer sammen med prosjektet, innenfor rotmappene. 
 
