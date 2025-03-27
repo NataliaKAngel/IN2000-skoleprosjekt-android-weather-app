@@ -91,9 +91,6 @@ class MainActivity : ComponentActivity() {
                         }
                     }
 
-                    val scope1 = rememberCoroutineScope()
-                    val scaffoldState = rememberBottomSheetScaffoldState()
-
                     //Creates instances of datasources and repositories
                     val predefinedSpotsDataSource = PredefinedSpotsDataSource()
                     val locationForecastDataSource = LocationForecastDataSource()
@@ -107,8 +104,7 @@ class MainActivity : ComponentActivity() {
 
                     Scaffold (
                         snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
-                    ) {padding ->
-
+                    ) {
                         // Creates navController and NavHost
                         val navController = rememberNavController()
                         NavHost(navController = navController, startDestination = "HomeScreen") {
@@ -125,29 +121,6 @@ class MainActivity : ComponentActivity() {
                             composable("FavouriteScreen") { FavouriteScreen(navController = navController, favouriteScreenViewModel = favouriteScreenViewModel)}
                             composable("SettingsScreen") { SettingsScreen(navController = navController)}
                         }
-
-                        Box(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(padding)
-                        ) {
-                            /*
-                        //Manual check of internet connection
-                        // TODO ta vekk dette når vi er ferdig med å teste snackbaren
-                            Button(onClick = {
-                                scope.launch {
-                                    snackbarHostState.showSnackbar(
-                                        message = "Network connection: $status"
-                                    )
-                                }
-                            }
-                            ) {
-                                Text(text = "Show Snackbar")
-                            }
-
-                         */
-                        }
-
                     }
                 }
             }
